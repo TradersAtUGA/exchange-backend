@@ -4,5 +4,6 @@ int main() {
     // This is the main entrie of the engine
     
     // Place holder
-    std::cout << "Running the exchange" << std::endl;
+    std::cout << "Docker is docking" << std::endl;
+    std::cout << "Exchange is exchanging" << std::endl;
 }
