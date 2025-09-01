@@ -1,18 +1,25 @@
-FROM ubuntu:24.04
+# Base image with build tools
+FROM ubuntu:22.04
 
-# download necessary dependencies
+
+# Install essentials
 RUN apt-get update && apt-get install -y \
-    build-essential \
-    cmake \
-    gcc-12 \
-    g++-12 \
-    git \
-    && rm -rf /var/lib/apt/lists/*
+    build-essential cmake git curl unzip zip python3 pkg-config && \
+    rm -rf /var/lib/apt/lists/*
 
-RUN update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-12 100 \
-    && update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-12 100
 
-WORKDIR /app
+# Set working directory
+WORKDIR /workspace
 
-COPY . /app/
+# Clone and bootstrap vcpkg
+RUN git clone https://github.com/microsoft/vcpkg.git /vcpkg && \
+    /vcpkg/bootstrap-vcpkg.sh
 
+# Copy project files
+COPY . /workspace
+
+# Install dependencies from manifest
+RUN /vcpkg/vcpkg install --triplet x64-linux
+
+# Default command
+CMD ["bash"]

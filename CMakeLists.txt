@@ -1,36 +1,19 @@
 cmake_minimum_required(VERSION 3.14)
-project(MyProject VERSION 1.0 LANGUAGES CXX)
+project(ExchangeBackend VERSION 1.0 LANGUAGES CXX)
 
-# Require at least C++17
-set(CMAKE_CXX_STANDARD 17)
+# Require at least C++20
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
-# -----------------------------
-# Fetch ASIO (header-only)
-# -----------------------------
-include(FetchContent)
+add_executable(exchange_backend apps/exchange_server.cpp)
 
-FetchContent_Declare(
-    asio
-    GIT_REPOSITORY https://github.com/chriskohlhoff/asio.git
-    GIT_TAG asio-1-28-1  # Specify the version you want
-)
+# Include project headers
+target_include_directories(exchange_backend PRIVATE ${CMAKE_SOURCE_DIR}/include)
 
-FetchContent_MakeAvailable(asio)
+# ASIO standalone
+target_compile_definitions(exchange_backend PRIVATE ASIO_STANDALONE)
 
-# -----------------------------
-# Add your executable
-# -----------------------------
-add_executable(MyApp main.cpp)
-
-# Include ASIO headers
-target_include_directories(MyApp PRIVATE ${asio_SOURCE_DIR}/asio/include)
-
-# Optionally, enable ASIO standalone mode (no Boost needed)
-target_compile_definitions(MyApp PRIVATE ASIO_STANDALONE)
-
-# -----------------------------
-# Optional: Add threading support if using ASIO io_context
-# -----------------------------
+# Threads for ASIO io_context
 find_package(Threads REQUIRED)
-target_link_libraries(MyApp PRIVATE Threads::Threads)
+target_link_libraries(exchange_backend PRIVATE Threads::Threads)
