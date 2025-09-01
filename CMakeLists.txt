@@ -1,22 +1,19 @@
 cmake_minimum_required(VERSION 3.14)
-project(MyProject VERSION 1.0 LANGUAGES CXX)
+project(ExchangeBackend VERSION 1.0 LANGUAGES CXX)
 
-# Require at least C++17
-set(CMAKE_CXX_STANDARD 17)
+# Require at least C++20
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
-add_executable(MyApp main.cpp)
+add_executable(exchange_backend apps/exchange_server.cpp)
 
 # Include project headers
-target_include_directories(MyApp PRIVATE include)
-
-# Include vcpkg-installed headers (ASIO, Boost.Beast)
-set(VCPKG_INSTALLED_DIR "${CMAKE_SOURCE_DIR}/vcpkg_installed/x64-linux")
-target_include_directories(MyApp PRIVATE ${VCPKG_INSTALLED_DIR}/include)
+target_include_directories(exchange_backend PRIVATE ${CMAKE_SOURCE_DIR}/include)
 
 # ASIO standalone
-target_compile_definitions(MyApp PRIVATE ASIO_STANDALONE)
+target_compile_definitions(exchange_backend PRIVATE ASIO_STANDALONE)
 
 # Threads for ASIO io_context
 find_package(Threads REQUIRED)
-target_link_libraries(MyApp PRIVATE Threads::Threads)
+target_link_libraries(exchange_backend PRIVATE Threads::Threads)
