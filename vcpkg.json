@@ -2,6 +2,9 @@
   "name": "exchange-backend",
   "version": "1.0.0",
   "dependencies": [
-    "asio"
+    "concurrentqueue",
+    "boost-asio",
+    "boost-beast",
+    "nlohmann-json"
   ]
 }
