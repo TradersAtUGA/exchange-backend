@@ -12,5 +12,5 @@ int main() {
 
     crow::SimpleApp app;
 
-    network_inbound::start_input_server(app);
+    network_input::start_input_server(app); // start input server
 }

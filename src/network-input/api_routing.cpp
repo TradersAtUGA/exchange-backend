@@ -28,10 +28,22 @@ This is where orders will be sent to
 /order-get/<id>
 */
 
-namespace network_inbound {
+namespace network_input {
+
 void register_order_send_route(crow::SimpleApp& app) {
     CROW_ROUTE(app, "/order-send").methods("POST"_method)([](const crow::request& req) {
-        return "temp";
+        
+
+
+        auto x = crow::json::load(req.body);
+        if (!x) return crow::response(400);
+
+
+
+
+
+
+        return crow::response(200, "ok");
 
         /*
         First validate the inbound JSON order
@@ -51,15 +63,23 @@ void register_order_modify_route(crow::SimpleApp& app) {
     });
 }
 
+void register_order_cancel_route(crow::SimpleApp& app) {
+    CROW_ROUTE(app, "/order-cancel/<uint>")([](uint64_t id) {
+        return "temp";
+    });
+}
 
+void register_order_get_route(crow::SimpleApp& app) {
+    CROW_ROUTE(app, "/order-get/<uint>")([](uint64_t id) {
+        return "temp";
+    });
+}
 
 
 void start_input_server(crow::SimpleApp& app) {
+    register_order_send_route(app);
+    // add other routes here before startring the server 
     app.port(PORT_NUMBER).concurrency(THREAD_POOL_THREAD_COUNT).run();
 }
 
-
-void add(int a, int b) {
-    std::cout << a + b << "\n";
-}
-}
+} // network_input

@@ -8,7 +8,7 @@ inline constexpr uint32_t PORT_NUMBER = 10000;
 // number of threads in the thread pool
 inline constexpr uint8_t THREAD_POOL_THREAD_COUNT = 4;
 
-namespace network_inbound {
+namespace network_input {
 
 /**
  * @brief sets up the order send route for the inbound network API
@@ -24,5 +24,5 @@ void register_order_send_route(crow::SimpleApp& app);
  */
 void start_input_server(crow::SimpleApp& app);
 
-}
+} // network_input
 
