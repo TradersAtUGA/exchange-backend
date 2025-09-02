@@ -8,6 +8,7 @@ namespace network_input {
     
     /**
      * @brief validates a JSON coming from the /order-send endpoint
+     * only checks if price and quantity are non negative
      * 
      * @param json the JSON payload from the client side
      */

@@ -23,15 +23,15 @@ namespace network_input {
     void register_order_send_route(crow::SimpleApp& app) {
         CROW_ROUTE(app, "/order-send").methods("POST"_method)([](const crow::request& req) {
             
-
-
             auto x = crow::json::load(req.body);
             if (!x) return crow::response(400);
 
 
-         
+            uint8_t valid = network_input::validate_order_send_json(x);
 
+            std::cout << x << "\n";
 
+            if (!network_input::validate_order_send_json(x)) return crow::response(400, "invalid argument(s)");
 
             return crow::response(200, "ok");
 

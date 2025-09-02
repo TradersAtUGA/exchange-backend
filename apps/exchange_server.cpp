@@ -1,5 +1,6 @@
 #include <iostream>
 #include "../include/network-input/api_routing.hpp"
+#include "../include/network-input/data_validation.hpp"
 #include "../include/order.hpp"
 #include "crow.h"
 
