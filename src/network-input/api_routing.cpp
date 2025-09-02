@@ -9,77 +9,66 @@
 #include "crow.h"
 #include "../../include/order.hpp"
 #include "../../include/network-input/api_routing.hpp"
+#include "../../include/network-input/data_validation.hpp"
 
 /*
 1. Set up API endpoints using crow
 2. Create handlers to receive JSONs and then validate them 
 3. Once validated they should be converted to a order struct
 4. Return the order struct since this will be handed to the MPMC LFQ
-
-
-API ROUTES
-/order-send
-
-This is where orders will be sent to 
-
-
-/order-modify/<id>
-/order-cancel/<id>
-/order-get/<id>
 */
 
 namespace network_input {
 
-void register_order_send_route(crow::SimpleApp& app) {
-    CROW_ROUTE(app, "/order-send").methods("POST"_method)([](const crow::request& req) {
-        
+    void register_order_send_route(crow::SimpleApp& app) {
+        CROW_ROUTE(app, "/order-send").methods("POST"_method)([](const crow::request& req) {
+            
 
 
-        auto x = crow::json::load(req.body);
-        if (!x) return crow::response(400);
+            auto x = crow::json::load(req.body);
+            if (!x) return crow::response(400);
+
+
+         
 
 
 
+            return crow::response(200, "ok");
 
+            /*
+            First validate the inbound JSON order
 
+            if its good return 200 to the user
 
-        return crow::response(200, "ok");
+            put the order onto the deque somehow
 
-        /*
-        First validate the inbound JSON order
+            else return 400 for a bad order and simply return 
+            */
+        });
+    }
 
-        if its good return 200 to the user
+    void register_order_modify_route(crow::SimpleApp& app) {
+        CROW_ROUTE(app, "/order-modify/<uint>").methods("POST"_method)([](uint64_t id) {
+            return "temp";
+        });
+    }
 
-        put the order onto the deque somehow
+    void register_order_cancel_route(crow::SimpleApp& app) {
+        CROW_ROUTE(app, "/order-cancel/<uint>").methods("POST"_method)([](uint64_t id) {
+            return "temp";
+        });
+    }
 
-        else return 400 for a bad order and simply return 
-        */
-    });
-}
+    void register_order_get_route(crow::SimpleApp& app) {
+        CROW_ROUTE(app, "/order-get/<uint>").methods("GET"_method)([](uint64_t id) {
+            return "temp";
+        });
+    }
 
-void register_order_modify_route(crow::SimpleApp& app) {
-    CROW_ROUTE(app, "/order-modify/<uint>")([](uint64_t id) {
-        return "temp";
-    });
-}
-
-void register_order_cancel_route(crow::SimpleApp& app) {
-    CROW_ROUTE(app, "/order-cancel/<uint>")([](uint64_t id) {
-        return "temp";
-    });
-}
-
-void register_order_get_route(crow::SimpleApp& app) {
-    CROW_ROUTE(app, "/order-get/<uint>")([](uint64_t id) {
-        return "temp";
-    });
-}
-
-
-void start_input_server(crow::SimpleApp& app) {
-    register_order_send_route(app);
-    // add other routes here before startring the server 
-    app.port(PORT_NUMBER).concurrency(THREAD_POOL_THREAD_COUNT).run();
-}
+    void start_input_server(crow::SimpleApp& app) {
+        register_order_send_route(app);
+        // add other routes here before startring the server 
+        app.port(PORT_NUMBER).concurrency(THREAD_POOL_THREAD_COUNT).run();
+    }
 
 } // network_input

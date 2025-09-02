@@ -2,9 +2,15 @@
 #include<cstdint>
 #include "crow.h"
 
-/**
- * @brief validates a order json from the inbound network 
- * 
- * @param json the json from the client side for a order send
- */
-uint8_t validate_order_send(crow::json::rvalue& json);
+
+namespace network_input {
+
+    
+    /**
+     * @brief validates a JSON coming from the /order-send endpoint
+     * 
+     * @param json the JSON payload from the client side
+     */
+    uint8_t validate_order_send_json(const crow::json::rvalue& json);
+
+}
