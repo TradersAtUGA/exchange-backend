@@ -8,9 +8,7 @@
 #include <cstdint>
 #include "crow.h"
 #include "../../include/order.hpp"
-
-constexpr PORT_NUMBER = 10000
-constexpr THREAD_POOL_THREAD_COUNT = 4
+#include "../../include/network-input/api_routing.hpp"
 
 /*
 1. Set up API endpoints using crow
@@ -30,17 +28,10 @@ This is where orders will be sent to
 /order-get/<id>
 */
 
-
+namespace network_inbound {
 void register_order_send_route(crow::SimpleApp& app) {
     CROW_ROUTE(app, "/order-send").methods("POST"_method)([](const crow::request& req) {
-        
-        auto body = crow::json::load(req.body);
-
-        if (!body) {
-            return crow::response(400, "Invalid JSON");
-        }
-
-        
+        return "temp";
 
         /*
         First validate the inbound JSON order
@@ -50,23 +41,25 @@ void register_order_send_route(crow::SimpleApp& app) {
         put the order onto the deque somehow
 
         else return 400 for a bad order and simply return 
-         
-
         */
     });
 }
 
 void register_order_modify_route(crow::SimpleApp& app) {
-    CROW_ROUTE(app, "/order-modify/<id>")([](uint64_t id) {
-        
+    CROW_ROUTE(app, "/order-modify/<uint>")([](uint64_t id) {
+        return "temp";
     });
 }
 
 
-void start_inbound_server() {
-    crow::SimpleApp app;
 
-    // call methods that depend on app
 
-    app.port(PORT_NUMBER).multithreaded(THREAD_POOL_THREAD_COUNT).run();
+void start_input_server(crow::SimpleApp& app) {
+    app.port(PORT_NUMBER).concurrency(THREAD_POOL_THREAD_COUNT).run();
+}
+
+
+void add(int a, int b) {
+    std::cout << a + b << "\n";
+}
 }
