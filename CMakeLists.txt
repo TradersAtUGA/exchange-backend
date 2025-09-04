@@ -11,6 +11,7 @@ add_executable(exchange_backend
     apps/exchange_server.cpp
     src/network-input/api_routing.cpp
     src/network-input/data_validation.cpp
+    src/network-input/data_conversion.cpp
 )
 
 # Include project headers
@@ -27,3 +28,8 @@ target_link_libraries(exchange_backend PRIVATE Threads::Threads)
 # Crow
 find_package(Crow CONFIG REQUIRED)
 target_link_libraries(exchange_backend PRIVATE Crow::Crow asio::asio)
+
+# gtest
+find_package(GTest REQUIRED)
+target_link_libraries(exchange_backend PRIVATE GTest::gtest GTest::gtest_main)
+

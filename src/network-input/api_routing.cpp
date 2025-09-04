@@ -23,27 +23,16 @@ namespace network_input {
     void register_order_send_route(crow::SimpleApp& app) {
         CROW_ROUTE(app, "/order-send").methods("POST"_method)([](const crow::request& req) {
             
-            auto x = crow::json::load(req.body);
-            if (!x) return crow::response(400);
-
-
-            uint8_t valid = network_input::validate_order_send_json(x);
-
-            std::cout << x << "\n";
+            crow::json::rvalue x = crow::json::load(req.body);
+            if (!x) return crow::response(400, "malformed input");
 
             if (!network_input::validate_order_send_json(x)) return crow::response(400, "invalid argument(s)");
 
+            // convert to Order struct
+
+            // put onto deque, which should be passed by ref here inside the top level void method
+
             return crow::response(200, "ok");
-
-            /*
-            First validate the inbound JSON order
-
-            if its good return 200 to the user
-
-            put the order onto the deque somehow
-
-            else return 400 for a bad order and simply return 
-            */
         });
     }
 
@@ -68,7 +57,7 @@ namespace network_input {
     void start_input_server(crow::SimpleApp& app) {
         register_order_send_route(app);
         // add other routes here before startring the server 
-        app.port(PORT_NUMBER).concurrency(THREAD_POOL_THREAD_COUNT).run();
+        app.port(network_input::PORT_NUMBER).concurrency(network_input::THREAD_POOL_THREAD_COUNT).run();
     }
 
 } // network_input

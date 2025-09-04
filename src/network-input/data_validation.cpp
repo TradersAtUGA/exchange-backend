@@ -7,7 +7,6 @@
 
 #include <cstdint>
 #include "crow.h"
-#include "../../include/order.hpp"
 #include "../../include/network-input/data_validation.hpp"
 
 namespace network_input {
@@ -19,6 +18,12 @@ namespace network_input {
 
         int64_t price = static_cast<int64_t>(json["price"].i());
         if (price <= 0) return 0;
+
+        /*
+        Big question here do we validate some of the stuff on the client side
+        before recieving the JSON here or do we take time to validate the JSON 
+        once it was sent before it comes to this server
+        */
 
         return 1;
     }

@@ -2,14 +2,13 @@
 #include "crow.h"
 #include <cstdint>
 
-
-// port number to run the inbound server on
-inline constexpr uint32_t PORT_NUMBER = 10000;
-
-// number of threads in the thread pool
-inline constexpr uint8_t THREAD_POOL_THREAD_COUNT = 4;
-
 namespace network_input {
+
+    // port number to run the inbound server on
+    constexpr uint32_t PORT_NUMBER = 10000;
+
+    // number of threads in the thread pool
+    constexpr uint8_t THREAD_POOL_THREAD_COUNT = 4;
 
     /**
      * @brief sets up the order send route for the inbound network API
