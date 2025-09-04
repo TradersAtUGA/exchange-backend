@@ -10,6 +10,7 @@
 #include "../../include/order.hpp"
 #include "../../include/network-input/api_routing.hpp"
 #include "../../include/network-input/data_validation.hpp"
+#include "../../include/network-input/data_conversion.hpp"
 
 /*
 1. Set up API endpoints using crow
@@ -28,9 +29,9 @@ namespace network_input {
 
             if (!network_input::validate_order_send_json(x)) return crow::response(400, "invalid argument(s)");
 
-            // convert to Order struct
+            exchange::Order user_order = network_input::json_to_exchange_order(x);
 
-            // put onto deque, which should be passed by ref here inside the top level void method
+            // put onto deque, which should be passed by ref here inside the lambda capture
 
             return crow::response(200, "ok");
         });
@@ -54,6 +55,9 @@ namespace network_input {
         });
     }
 
+    // deque should be passed here by ref as well so the first 
+    // route can place orders onto it 
+    
     void start_input_server(crow::SimpleApp& app) {
         register_order_send_route(app);
         // add other routes here before startring the server 
