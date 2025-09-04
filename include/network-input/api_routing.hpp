@@ -1,5 +1,7 @@
 #pragma once
 #include "crow.h"
+#include "moodycamel/concurrentqueue.h"
+#include "../order.hpp"
 #include <cstdint>
 
 namespace network_input {
@@ -16,7 +18,7 @@ namespace network_input {
      * 
      * @param app the main crow::SimpleApp 
      */
-    void register_order_send_route(crow::SimpleApp& app);
+    void register_order_send_route(crow::SimpleApp& app, moodycamel::ConcurrentQueue<exchange::Order>& q);
 
     /**
      * @brief sets up the endpoint to modify orders that have been 
@@ -47,7 +49,7 @@ namespace network_input {
      * 
      * @param app the main crow::SimpleApp
      */
-    void start_input_server(crow::SimpleApp& app);
+    void start_input_server(crow::SimpleApp& app, moodycamel::ConcurrentQueue<exchange::Order>& q);
 
 } // network_input
 

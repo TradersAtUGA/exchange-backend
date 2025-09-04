@@ -33,3 +33,8 @@ target_link_libraries(exchange_backend PRIVATE Crow::Crow asio::asio)
 find_package(GTest REQUIRED)
 target_link_libraries(exchange_backend PRIVATE GTest::gtest GTest::gtest_main)
 
+# lock free queue
+find_package(concurrentqueue CONFIG REQUIRED)
+target_link_libraries(exchange_backend PRIVATE concurrentqueue::concurrentqueue)
+
+
