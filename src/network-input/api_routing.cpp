@@ -1,9 +1,3 @@
-/**
- * @file api_routing.cpp
- * @author Vikas Katari 
- * @date 2025-09-01
- * @brief setup crow App for API routing 
- */
 #include <iostream>
 #include <cstdint>
 #include "crow.h"
@@ -13,21 +7,11 @@
 #include "../../include/network-input/data_validation.hpp"
 #include "../../include/network-input/data_conversion.hpp"
 
-/*
-1. Set up API endpoints using crow
-2. Create handlers to receive JSONs and then validate them 
-3. Once validated they should be converted to a order struct
-4. Return the order struct since this will be handed to the MPMC LFQ
-*/
-
 namespace network_input {
 
     void register_order_send_route(crow::SimpleApp& app, moodycamel::ConcurrentQueue<exchange::Order>& q) {
         CROW_ROUTE(app, "/order-send").methods("POST"_method)([&q](const crow::request& req) {
-            
             crow::json::rvalue x = crow::json::load(req.body);
-
-           
 
             if (!x) return crow::response(400, "malformed input");
 
@@ -59,9 +43,6 @@ namespace network_input {
             return "temp";
         });
     }
-
-    // deque should be passed here by ref as well so the first 
-    // route can place orders onto it 
 
     void start_input_server(crow::SimpleApp& app, moodycamel::ConcurrentQueue<exchange::Order>& q) {
         register_order_send_route(app, q);

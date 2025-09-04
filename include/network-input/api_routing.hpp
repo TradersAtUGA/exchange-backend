@@ -17,6 +17,7 @@ namespace network_input {
      * for users to create orders
      * 
      * @param app the main crow::SimpleApp 
+     * @param q the queue that orders will be placed onto
      */
     void register_order_send_route(crow::SimpleApp& app, moodycamel::ConcurrentQueue<exchange::Order>& q);
 
@@ -48,6 +49,7 @@ namespace network_input {
      * @brief starts the input network server for all input requests
      * 
      * @param app the main crow::SimpleApp
+     * @param q the queue to place inbound orders onto
      */
     void start_input_server(crow::SimpleApp& app, moodycamel::ConcurrentQueue<exchange::Order>& q);
 
