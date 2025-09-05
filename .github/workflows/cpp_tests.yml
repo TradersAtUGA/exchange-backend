@@ -16,4 +16,4 @@ jobs:
           cmake: true
 
       - name: Run C++ tests
-        run: bash exchange-backend/scripts/run-tests.sh
+        run: bash scripts/run-tests.sh
