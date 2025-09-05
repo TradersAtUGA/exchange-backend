@@ -25,7 +25,7 @@ namespace exchange {
         Side side;
         OrderType type;
         uint64_t price;      // Price is never negative
-        uint64_t quantity;
+        uint64_t quantity;   // Quantity is never negative 
         uint64_t remaining;  // Partial fill
 
         // Timing

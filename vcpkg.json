@@ -4,6 +4,7 @@
   "dependencies": [
     "concurrentqueue",
     "crow",
-    "nlohmann-json"
+    "nlohmann-json",
+    "gtest"
   ]
 }
