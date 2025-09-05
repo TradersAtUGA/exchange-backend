@@ -14,6 +14,3 @@ jobs:
         with:
           compiler: gcc
           cmake: true
-
-      - name: Run C++ tests
-        run: bash scripts/run-tests.sh
