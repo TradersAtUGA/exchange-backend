@@ -1,24 +1,21 @@
 #include <yaml-cpp/yaml.h>
 #include <string>
-#include "../../include/config-parsing/yaml_parser.hpp"
+#include "../../include/config-parser/yaml_parser.hpp"
 
 
-class YAMLConfig {
-private:
+namespace config {
 
-    YAML::Node config;
 
-public:
+YAMLConfig::YAMLConfig(const std::string& file) {
+    config = YAML::LoadFile(file);
+}
 
-    explicit YAMLConfig(const std::string& file) {
-        config = YAML::LoadFile(file);
+uint64_t YAMLConfig::get(const std::vector<std::string>& keys) {
+    YAML::Node node = this->config;
+    for (auto& key : keys) {
+        node = node[key];
     }
+    return node.as<uint64_t>();
+}
 
-    uint64_t get(const std::vector<std::string>& keys) {
-        YAML::Node node = config;
-        for (auto& key : keys) {
-            node = node[key];
-        }
-        return node.as<uint64_t>();
-    }
-}; // YAMLConfig
+}

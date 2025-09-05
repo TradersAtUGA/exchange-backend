@@ -1,20 +1,19 @@
 #include <iostream>
-#include "../include/network-inbound/api_routing.hpp"
-#include "../include/order.hpp"
-#include "crow.h"
-#include "moodycamel/concurrentqueue.h"
+#include "../include/config-parser/yaml_parser.hpp"
 #include <thread>
+#include <vector>
 
-
-moodycamel::ConcurrentQueue<exchange::Order> q;
 
 int main() {
-    crow::SimpleApp app;
 
-    // TODO: put this on its own thread 
-    // this will block 
+    // config::YAMLConfig cfg("../main_config.yml");
+    
+    // std::vector<std::string> vec;
+    // vec.push_back("network_inbound");
+    // vec.push_back("network_inbound_port_number");
 
-    network_inbound::start_input_server(app, q);
-  
+    // std::cout << cfg.get(vec) << "\n";
+
+    std::cout << "test"<< std::endl;
 
 }
