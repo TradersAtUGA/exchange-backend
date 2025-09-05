@@ -9,7 +9,7 @@ option(BUILD_TESTING "Build unit tests" ON)
 
 if(BUILD_TESTING)
     enable_testing()
-    add_subdirectory(tests)
+    add_subdirectory(tests/network-inbound)
 endif()
 
 
@@ -21,8 +21,7 @@ add_subdirectory(src/network-inbound)
 # All executables
 add_subdirectory(apps/exchange-server)
 
-# All test subdirectories
-add_subdirectory(tests/network-inbound)
+
 
 
 # # add all files needed to compile the executable

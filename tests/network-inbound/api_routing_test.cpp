@@ -2,8 +2,7 @@
 #include "crow.h"
 #include "../../include/network-inbound/api_routing.hpp"
 
-
-
-int add(int a, int b) {
-    
+TEST(SmokeTest, BasicAssertion) {
+    EXPECT_EQ(1, 1);  // always passes
 }
+
