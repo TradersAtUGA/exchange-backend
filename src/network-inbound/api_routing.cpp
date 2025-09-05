@@ -3,11 +3,11 @@
 #include "crow.h"
 #include "moodycamel/concurrentqueue.h"
 #include "../../include/order.hpp"
-#include "../../include/network-input/api_routing.hpp"
-#include "../../include/network-input/data_validation.hpp"
-#include "../../include/network-input/data_conversion.hpp"
+#include "../../include/network-inbound/api_routing.hpp"
+#include "../../include/network-inbound/data_validation.hpp"
+#include "../../include/network-inbound/data_conversion.hpp"
 
-namespace network_input {
+namespace network_inbound {
 
     void register_order_send_route(crow::SimpleApp& app, moodycamel::ConcurrentQueue<exchange::Order>& q) {
         CROW_ROUTE(app, "/order-send").methods("POST"_method)([&q](const crow::request& req) {
@@ -15,12 +15,12 @@ namespace network_input {
 
             if (!x) return crow::response(400, "malformed input");
 
-            if (!network_input::validate_order_send_json(x)) return crow::response(400, "invalid argument(s)");
+            if (!network_inbound::validate_order_send_json(x)) return crow::response(400, "invalid argument(s)");
 
-            exchange::Order user_order = network_input::json_to_exchange_order(x);
+            exchange::Order user_order = network_inbound::json_to_exchange_order(x);
 
             q.enqueue(user_order);
-            std::cout << q.size_approx() << "\n";
+            std::cout << "Queue contains " << q.size_approx() << " items" << "\n";
 
             return crow::response(200, "ok");
         });
@@ -47,7 +47,7 @@ namespace network_input {
     void start_input_server(crow::SimpleApp& app, moodycamel::ConcurrentQueue<exchange::Order>& q) {
         register_order_send_route(app, q);
         // add other routes here before startring the server 
-        app.port(network_input::PORT_NUMBER).concurrency(network_input::THREAD_POOL_THREAD_COUNT).run();
+        app.port(network_inbound::PORT_NUMBER).concurrency(network_inbound::THREAD_POOL_THREAD_COUNT).run();
     }
 
-} // network_input
+} // network_inbound

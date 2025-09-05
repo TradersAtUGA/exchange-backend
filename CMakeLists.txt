@@ -9,9 +9,9 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 # add all files needed to compile the executable
 add_executable(exchange_backend 
     apps/exchange_server.cpp
-    src/network-input/api_routing.cpp
-    src/network-input/data_validation.cpp
-    src/network-input/data_conversion.cpp
+    src/network-inbound/api_routing.cpp
+    src/network-inbound/data_validation.cpp
+    src/network-inbound/data_conversion.cpp
 )
 
 # Include project headers

@@ -4,7 +4,7 @@
 #include "../order.hpp"
 #include <cstdint>
 
-namespace network_input {
+namespace network_inbound {
 
     // port number to run the inbound server on
     constexpr uint32_t PORT_NUMBER = 10000;

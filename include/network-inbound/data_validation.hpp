@@ -3,8 +3,7 @@
 #include "crow.h"
 
 
-namespace network_input {
-
+namespace network_inbound {
     
     /**
      * @brief validates a JSON coming from the /order-send endpoint

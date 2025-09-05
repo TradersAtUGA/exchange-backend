@@ -1,4 +1,4 @@
-#include "../../include/network-input/data_conversion.hpp"
+#include "../../include/network-inbound/data_conversion.hpp"
 #include "../../include/order.hpp"
 #include "crow.h"
 #include <cstdint>
@@ -11,26 +11,15 @@ uint64_t cast_json_value(const crow::json::rvalue& json, const std::string& json
 
 Side get_side(const crow::json::rvalue& json) {
     std::string side = json["side"].s();
-
-    if (side == "buy") {
-        return Side::Buy;
-    } else {
-        return Side::Sell;
-    }
+    return (side == "buy") ? Side::Buy : Side::Sell;
 }
 
 OrderType get_order_type(const crow::json::rvalue& json) {
     std::string order_type = json["type"].s();
-
-    if (order_type == "market") {
-        return OrderType::Market;
-    } else {
-        return OrderType::Limit;
-    }
-
+    return (order_type == "market") ? OrderType::Market : OrderType::Limit;
 }
 
-namespace network_input {
+namespace network_inbound {
 
     exchange::Order json_to_exchange_order(const crow::json::rvalue& json) {
         return exchange::Order(
@@ -45,4 +34,4 @@ namespace network_input {
         );
     } 
 
-} // network_input
+} // network_inbound

@@ -3,8 +3,7 @@
     "order_id": 0,
     "side": "buy",
     "type": "market",
+    "ticker": "XYZ",
     "price": 10,
-    "quantity": 10,
-    "remaining": 10,
-    "timestamp": 1219288192
+    "quantity": 10
 }
