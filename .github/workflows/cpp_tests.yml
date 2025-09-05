@@ -1,18 +1,19 @@
- name: cpp tests
+name: cpp tests
 
- on: [push, pull_request]
+on: [push, pull_request]
 
- jobs:
-   test-cpp:
-     runs-on: ubuntu-latest
+jobs:
+  test-cpp:
+    runs-on: ubuntu-latest
 
-     steps:
-       - uses: actions/checkout@v3
+    steps:
+      - uses: actions/checkout@v3
 
-       - name: Set Up Cpp environment
-         uses: aminya/setup-cpp@v1
-         with:
-           compiler: gcc
-           cmake: true
+      - name: Set Up Cpp environment
+        uses: aminya/setup-cpp@v1
+        with:
+          compiler: gcc
+          cmake: true
 
-       
+      - name: Run C++ tests
+        run: bash exchange-backend/scripts/run-tests.sh
