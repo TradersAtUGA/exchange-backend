@@ -21,7 +21,6 @@ namespace network_inbound {
 
             q.enqueue(user_order);
             std::cout << "Queue contains " << q.size_approx() << " items" << "\n";
-
             return crow::response(200, "ok");
         });
     }

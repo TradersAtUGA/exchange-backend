@@ -15,6 +15,7 @@ endif()
 
 # All src/ subdirectories
 add_subdirectory(src/network-inbound)
+add_subdirectory(src/config-parser)
 # add_subdirectory(src/network-outbound)
 # add_subdirectory(src/shared)
 

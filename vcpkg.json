@@ -5,6 +5,7 @@
     "concurrentqueue",
     "crow",
     "nlohmann-json",
-    "gtest"
+    "gtest",
+    "yaml-cpp"
   ]
 }
