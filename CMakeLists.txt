@@ -5,19 +5,28 @@ project(ExchangeBackend VERSION 1.0 LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+# Get current time in MM-DD-YYYY HH:MM:SS format
+string(TIMESTAMP CURRENT_TIME "%m-%d-%Y %H:%M:%S")
 
 # -------------------------------
 # Global compile-time constants
 # -------------------------------
-# Defaults (can be overridden via -D)
-set(NETWORK_INBOUND_PORT_NUMBER 10000 CACHE INTEGER "Port number for inbound network traffic")
-set(NETWORK_INBOUND_THREAD_COUNT 4 CACHE INTEGER "Number of worker threads accepting inbound network traffic")
-set(NETWORK_OUTBOUND_PORT_NUMBER 12000 CACHE INTEGER "Port number for outbound network traffic")
-set(NETWORK_OUTBOUND_THREAD_COUNT 4 CACHE INTEGER "Number of worker threads sending outbound network traffic")
+# To change the const value, change here
+set(NETWORK_INBOUND_PORT_NUMBER 11000)
+set(NETWORK_INBOUND_THREAD_COUNT 4)
+set(NETWORK_OUTBOUND_PORT_NUMBER 12000)
+set(NETWORK_OUTBOUND_THREAD_COUNT 4)
 
 configure_file(
-    ${CMAKE_SOURCE_DIR}/config.hpp.in
-    ${CMAKE_BINARY_DIR}/config.hpp
+    ${CMAKE_SOURCE_DIR}/templates/config.hpp.in
+    ${CMAKE_BINARY_DIR}/generated/include/config.hpp
+    @ONLY
+)
+
+configure_file(
+    ${CMAKE_SOURCE_DIR}/templates/run.sh.in
+    ${CMAKE_BINARY_DIR}/generated/scripts/run.sh
+    @ONLY
 )
 
 
