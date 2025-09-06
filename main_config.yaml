@@ -1,7 +1,0 @@
-network_inbound:
-  network_inbound_port_number: 10000
-  network_inbound_thread_count: 4
-network_outbound:
-  network_outbound_port_number: 12000
-  network_outbound_thread_count: 4
-  
