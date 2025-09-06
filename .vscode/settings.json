@@ -1,0 +1,8 @@
+{
+  "C_Cpp.default.compileCommands": "${workspaceFolder}/exchange-backend/build/compile_commands.json",
+  "files.associations": {
+    "compare": "cpp",
+    "cstdint": "cpp",
+    "format": "cpp"
+  }
+}

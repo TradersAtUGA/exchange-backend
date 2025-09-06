@@ -4,16 +4,45 @@ project(ExchangeBackend VERSION 1.0 LANGUAGES CXX)
 # Require at least C++20
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
-add_executable(exchange_backend apps/exchange_server.cpp)
 
-# Include project headers
-target_include_directories(exchange_backend PRIVATE ${CMAKE_SOURCE_DIR}/include)
+# -------------------------------
+# Global compile-time constants
+# -------------------------------
+# Defaults (can be overridden via -D)
+set(NETWORK_INBOUND_PORT_NUMBER 10000 CACHE INTEGER "Port number for inbound network traffic")
+set(NETWORK_INBOUND_THREAD_COUNT 4 CACHE INTEGER "Number of worker threads accepting inbound network traffic")
+set(NETWORK_OUTBOUND_PORT_NUMBER 12000 CACHE INTEGER "Port number for outbound network traffic")
+set(NETWORK_OUTBOUND_THREAD_COUNT 4 CACHE INTEGER "Number of worker threads sending outbound network traffic")
 
-# ASIO standalone
-target_compile_definitions(exchange_backend PRIVATE ASIO_STANDALONE)
+configure_file(
+    ${CMAKE_SOURCE_DIR}/config.hpp.in
+    ${CMAKE_BINARY_DIR}/config.hpp
+)
 
-# Threads for ASIO io_context
-find_package(Threads REQUIRED)
-target_link_libraries(exchange_backend PRIVATE Threads::Threads)
+
+# -------------------------------
+# Cmake Tests add later
+# -------------------------------
+# option(BUILD_TESTING "Build unit tests" ON)
+
+# if(BUILD_TESTING)
+#     enable_testing()
+#     add_subdirectory(tests/network-inbound)
+# endif()
+
+
+# -------------------------------
+# All src/ subdirectories
+# -------------------------------
+add_subdirectory(src/network-inbound)
+# uncomment these later
+# add_subdirectory(src/network-outbound)
+# add_subdirectory(src/shared)
+# add_subdirectory(src/matching-engine)
+
+
+# -------------------------------
+# All executables
+# -------------------------------
+add_subdirectory(apps/exchange-server)

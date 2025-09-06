@@ -1,0 +1,18 @@
+#pragma once
+
+#include <cstdint>
+
+namespace config {
+    /*
+    This header file defines const that are execute at compile time
+    To modify the values of these constants look in the main Cmake file
+    */
+
+    // Network inbound
+    inline constexpr uint32_t NETWORK_INBOUND_PORT_NUMBER = @NETWORK_INBOUND_PORT_NUMBER@;
+    inline constexpr uint8_t NETWORK_INBOUND_THREAD_COUNT = @NETWORK_INBOUND_THREAD_COUNT@;
+
+    // Network outbound
+    inline constexpr uint32_t NETWORK_OUTBOUND_PORT_NUMBER = @NETWORK_OUTBOUND_PORT_NUMBER@;
+    inline constexpr uint8_t NETWORK_OUTBOUND_THREAD_COUNT = @NETWORK_OUTBOUND_THREAD_COUNT@;
+}

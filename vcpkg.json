@@ -2,6 +2,10 @@
   "name": "exchange-backend",
   "version": "1.0.0",
   "dependencies": [
-    "asio"
+    "concurrentqueue",
+    "crow",
+    "nlohmann-json",
+    "gtest",
+    "yaml-cpp"
   ]
 }
