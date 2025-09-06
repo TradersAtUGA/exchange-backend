@@ -2,10 +2,11 @@
 #include <cstdint>
 #include "crow.h"
 #include "moodycamel/concurrentqueue.h"
-#include "../../include/order.hpp"
-#include "../../include/network-inbound/api_routing.hpp"
-#include "../../include/network-inbound/data_validation.hpp"
-#include "../../include/network-inbound/data_conversion.hpp"
+#include <network-inbound/api_routing.hpp>
+#include <network-inbound/data_conversion.hpp>
+#include <network-inbound/data_validation.hpp>
+
+#include "../../build/config.hpp"
 
 namespace network_inbound {
 
@@ -46,7 +47,7 @@ namespace network_inbound {
     void start_input_server(crow::SimpleApp& app, moodycamel::ConcurrentQueue<exchange::Order>& q) {
         register_order_send_route(app, q);
         // add other routes here before startring the server 
-        app.port(network_inbound::PORT_NUMBER).concurrency(network_inbound::THREAD_POOL_THREAD_COUNT).run();
+        app.port(config::NETWORK_INBOUND_PORT_NUMBER).concurrency(config::NETWORK_INBOUND_THREAD_COUNT).run();
     }
 
 } // network_inbound
