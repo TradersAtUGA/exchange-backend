@@ -1,0 +1,62 @@
+\doxysection{order.\+hpp}
+\hypertarget{order_8hpp_source}{}\label{order_8hpp_source}\index{include/order.hpp@{include/order.hpp}}
+\mbox{\hyperlink{order_8hpp}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#include\ <cstdint>}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{keyword}{enum\ struct}\ \mbox{\hyperlink{order_8hpp_a850d91564117e01028bb9cbac40132e0}{Side}}\ :\ uint8\_t\ \{}
+\DoxyCodeLine{00005\ \ \ \ \ \mbox{\hyperlink{order_8hpp_a850d91564117e01028bb9cbac40132e0a831a28f1e8df07c553fcd59546465d13}{Buy}}\ =\ 0,}
+\DoxyCodeLine{00006\ \ \ \ \ \mbox{\hyperlink{order_8hpp_a850d91564117e01028bb9cbac40132e0a3068c5a98c003498f1fec0c489212e8b}{Sell}}\ =\ 1}
+\DoxyCodeLine{00007\ \};}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{keyword}{enum\ struct}\ \mbox{\hyperlink{order_8hpp_aff428c8736e5ed1123d83e2bf9271457}{OrderType}}\ :\ uint8\_t\ \{}
+\DoxyCodeLine{00010\ \ \ \ \ \mbox{\hyperlink{order_8hpp_aff428c8736e5ed1123d83e2bf9271457a80d2677cf518f4d04320042f4ea6c146}{Limit}}\ =\ 0,}
+\DoxyCodeLine{00011\ \ \ \ \ \mbox{\hyperlink{order_8hpp_aff428c8736e5ed1123d83e2bf9271457a31840a66a8d6d223e5b0540138768838}{Market}}\ =\ 1}
+\DoxyCodeLine{00012\ \};}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \textcolor{keyword}{namespace\ }\mbox{\hyperlink{namespaceexchange}{exchange}}\ \{}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structexchange_1_1Order}{Order}}\ \{}
+\DoxyCodeLine{00017\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Sequence}}
+\DoxyCodeLine{00018\ \ \ \ \ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structexchange_1_1Order_ab9e040ddee538b548d0bc3513a7e1aea}{sequence\_id}};}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Client\ details}}
+\DoxyCodeLine{00021\ \ \ \ \ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structexchange_1_1Order_a2959aad451409534eec319633c1d65a3}{client\_id}};}
+\DoxyCodeLine{00022\ \ \ \ \ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structexchange_1_1Order_a427dc7523377a38a388822545bdd6a8e}{order\_id}};}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Order\ details}}
+\DoxyCodeLine{00025\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{order_8hpp_a850d91564117e01028bb9cbac40132e0}{Side}}\ \mbox{\hyperlink{structexchange_1_1Order_a7856369e4f0e7990bad5dfb4478ab6f6}{side}};}
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{order_8hpp_aff428c8736e5ed1123d83e2bf9271457}{OrderType}}\ \mbox{\hyperlink{structexchange_1_1Order_a486b5c12583eb49499767cd5db168696}{type}};}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structexchange_1_1Order_a1a8baef205ed7cb8b8a20295ce8c935b}{price}};\ \ \ \ \ \ \textcolor{comment}{//\ Price\ is\ never\ negative}}
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structexchange_1_1Order_a13e7b76a69fb844ac5aceddc52366ed6}{quantity}};\ \ \ \textcolor{comment}{//\ Quantity\ is\ never\ negative\ }}
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structexchange_1_1Order_ac8ab8664486c4ed53399eb496a118d40}{remaining}};\ \ \textcolor{comment}{//\ Partial\ fill}}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Timing}}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structexchange_1_1Order_a77eebcf4c15cd346a194d52e75dfb6c9}{received\_time\_ns}};}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structexchange_1_1Order_ab989ceac83107377cec862dc1b201923}{Order}}(}
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ \ \ \ \ uint64\_t\ client,}
+\DoxyCodeLine{00036\ \ \ \ \ \ \ \ \ \ \ \ \ uint64\_t\ oid,}
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{order_8hpp_a850d91564117e01028bb9cbac40132e0}{Side}}\ s,}
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{order_8hpp_aff428c8736e5ed1123d83e2bf9271457}{OrderType}}\ t,}
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ \ \ \ \ uint64\_t\ p,}
+\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ \ \ \ \ uint64\_t\ q,}
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ \ \ \ \ uint64\_t\ r,}
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ \ \ \ \ uint64\_t\ ns}
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ )}
+\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ :\ \mbox{\hyperlink{structexchange_1_1Order_ab9e040ddee538b548d0bc3513a7e1aea}{sequence\_id}}(0),}
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structexchange_1_1Order_a2959aad451409534eec319633c1d65a3}{client\_id}}(client),}
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structexchange_1_1Order_a427dc7523377a38a388822545bdd6a8e}{order\_id}}(oid),}
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structexchange_1_1Order_a7856369e4f0e7990bad5dfb4478ab6f6}{side}}(s),}
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structexchange_1_1Order_a486b5c12583eb49499767cd5db168696}{type}}(t),}
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structexchange_1_1Order_a1a8baef205ed7cb8b8a20295ce8c935b}{price}}(p),}
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structexchange_1_1Order_a13e7b76a69fb844ac5aceddc52366ed6}{quantity}}(q),}
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structexchange_1_1Order_ac8ab8664486c4ed53399eb496a118d40}{remaining}}(r),}
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structexchange_1_1Order_a77eebcf4c15cd346a194d52e75dfb6c9}{received\_time\_ns}}(ns)}
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \{\}}
+\DoxyCodeLine{00054\ \ \ \ \ \};}
+\DoxyCodeLine{00055\ }
+\DoxyCodeLine{00056\ \}}
+
+\end{DoxyCode}
