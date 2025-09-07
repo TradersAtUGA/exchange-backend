@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['type_0',['type',['../structexchange_1_1Order.html#a486b5c12583eb49499767cd5db168696',1,'exchange::Order']]]
+  ['price_0',['price',['../structexchange_1_1Order.html#a1a8baef205ed7cb8b8a20295ce8c935b',1,'exchange::Order']]]
 ];

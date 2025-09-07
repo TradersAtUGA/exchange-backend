@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['received_5ftime_5fns_0',['received_time_ns',['../structexchange_1_1Order.html#a77eebcf4c15cd346a194d52e75dfb6c9',1,'exchange::Order']]],
-  ['remaining_1',['remaining',['../structexchange_1_1Order.html#ac8ab8664486c4ed53399eb496a118d40',1,'exchange::Order']]]
+  ['market_0',['Market',['../order_8hpp.html#aff428c8736e5ed1123d83e2bf9271457a31840a66a8d6d223e5b0540138768838',1,'order.hpp']]]
 ];
