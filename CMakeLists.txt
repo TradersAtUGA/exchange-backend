@@ -29,16 +29,16 @@ configure_file(
     @ONLY
 )
 
-
 # -------------------------------
-# Cmake Tests add later
+# Cmake Tests
 # -------------------------------
-# option(BUILD_TESTING "Build unit tests" ON)
+option(BUILD_TESTING "Build unit tests" ON)
 
-# if(BUILD_TESTING)
-#     enable_testing()
-#     add_subdirectory(tests/network-inbound)
-# endif()
+if(BUILD_TESTING)
+    enable_testing()
+    # Add all test subdirectories here
+    add_subdirectory(tests/unit/network-inbound)
+endif()
 
 
 # -------------------------------
@@ -50,8 +50,9 @@ add_subdirectory(src/network-inbound)
 # add_subdirectory(src/shared)
 # add_subdirectory(src/matching-engine)
 
-
 # -------------------------------
 # All executables
 # -------------------------------
 add_subdirectory(apps/exchange-server)
+
+

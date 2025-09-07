@@ -6,7 +6,7 @@
 #include <network-inbound/data_conversion.hpp>
 #include <network-inbound/data_validation.hpp>
 
-#include "../../build/config.hpp"
+#include "config.hpp"
 
 namespace exchange::network_inbound {
 
