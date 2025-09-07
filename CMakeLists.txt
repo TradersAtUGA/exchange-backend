@@ -37,7 +37,7 @@ option(BUILD_TESTING "Build unit tests" ON)
 if(BUILD_TESTING)
     enable_testing()
     # Add all test subdirectories here
-    add_subdirectory(tests/network-inbound)
+    add_subdirectory(tests/unit/network-inbound)
 endif()
 
 
