@@ -30,7 +30,7 @@ Side get_side(const crow::json::rvalue& json);
  */
 OrderType get_order_type(const crow::json::rvalue& json);
 
-namespace network_inbound {
+namespace exchange::network_inbound {
 
     /**
      * @brief Converts a user order JSON to a exchange::Order object

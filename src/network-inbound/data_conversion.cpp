@@ -19,7 +19,7 @@ OrderType get_order_type(const crow::json::rvalue& json) {
     return (order_type == "market") ? OrderType::Market : OrderType::Limit;
 }
 
-namespace network_inbound {
+namespace exchange::network_inbound {
 
     exchange::Order json_to_exchange_order(const crow::json::rvalue& json) {
         return exchange::Order(

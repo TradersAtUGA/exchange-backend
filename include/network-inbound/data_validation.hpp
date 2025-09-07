@@ -3,7 +3,7 @@
 #include "crow.h"
 
 
-namespace network_inbound {
+namespace exchange::network_inbound {
     
     /**
      * @brief validates a JSON coming from the /order-send endpoint
