@@ -21,17 +21,17 @@ OrderType get_order_type(const crow::json::rvalue& json) {
 
 namespace exchange::network_inbound {
 
-    exchange::Order json_to_exchange_order(const crow::json::rvalue& json) {
-        return exchange::Order(
-            cast_json_value(json, "client_id"),
-            cast_json_value(json, "order_id"),
-            get_side(json),
-            get_order_type(json),
-            cast_json_value(json, "price"),
-            cast_json_value(json, "quantity"),
-            cast_json_value(json, "remaining"),
-            cast_json_value(json, "timestamp")
-        );
-    } 
+exchange::Order json_to_exchange_order(const crow::json::rvalue& json) {
+    return exchange::Order(
+        cast_json_value(json, "client_id"),
+        cast_json_value(json, "order_id"),
+        get_side(json),
+        get_order_type(json),
+        cast_json_value(json, "price"),
+        cast_json_value(json, "quantity"),
+        cast_json_value(json, "remaining"),
+        cast_json_value(json, "timestamp")
+    );
+} 
 
 } // network_inbound

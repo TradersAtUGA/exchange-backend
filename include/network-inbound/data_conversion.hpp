@@ -32,12 +32,12 @@ OrderType get_order_type(const crow::json::rvalue& json);
 
 namespace exchange::network_inbound {
 
-    /**
-     * @brief Converts a user order JSON to a exchange::Order object
-     * 
-     * @param json the JSON payload received over network
-     * @return exchange::Order The users order as a object representation
-     */
-    exchange::Order json_to_exchange_order(const crow::json::rvalue& json);
+/**
+ * @brief Converts a user order JSON to a exchange::Order object
+ * 
+ * @param json the JSON payload received over network
+ * @return exchange::Order The users order as a object representation
+ */
+exchange::Order json_to_exchange_order(const crow::json::rvalue& json);
 
 }
