@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['client_5fid_0',['client_id',['../structexchange_1_1Order.html#a2959aad451409534eec319633c1d65a3',1,'exchange::Order']]]
+  ['buy_0',['Buy',['../order_8hpp.html#a850d91564117e01028bb9cbac40132e0a831a28f1e8df07c553fcd59546465d13',1,'order.hpp']]]
 ];
