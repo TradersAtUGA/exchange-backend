@@ -10,12 +10,25 @@ string(TIMESTAMP CURRENT_TIME "%m-%d-%Y %H:%M:%S")
 
 # -------------------------------
 # Global compile-time constants
-# -------------------------------
 # To change the const value, change here
+# -------------------------------
+# Network
 set(NETWORK_INBOUND_PORT_NUMBER 11000)
 set(NETWORK_INBOUND_THREAD_COUNT 4)
 set(NETWORK_OUTBOUND_PORT_NUMBER 12000)
 set(NETWORK_OUTBOUND_THREAD_COUNT 4)
+
+# Ring Buffer
+set(RING_BUFFER_SIZE 1024)
+
+# Tickers
+set(TICKERS "\"ABC\", \"XYZ\", \"QQQ\"")
+
+configure_file(
+    ${CMAKE_SOURCE_DIR}/templates/ticker.hpp.in
+    ${CMAKE_BINARY_DIR}/generated/include/ticker.hpp
+    @ONLY
+)
 
 configure_file(
     ${CMAKE_SOURCE_DIR}/templates/config.hpp.in

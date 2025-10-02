@@ -14,6 +14,8 @@ enum struct OrderType : uint8_t {
 namespace exchange {
 
     struct Order {
+        Order() = default;
+        
         // Sequence
         uint64_t sequence_id;
 
@@ -30,6 +32,7 @@ namespace exchange {
 
         // Timing
         uint64_t received_time_ns;
+        
 
         Order(
             uint64_t client,

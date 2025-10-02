@@ -11,11 +11,13 @@ uint64_t cast_json_value(const crow::json::rvalue& json, const std::string& json
 
 Side get_side(const crow::json::rvalue& json) {
     std::string side = json["side"].s();
+    // bug if side == "anythong but buy" this returns Sell
     return (side == "buy") ? Side::Buy : Side::Sell;
 }
 
 OrderType get_order_type(const crow::json::rvalue& json) {
     std::string order_type = json["type"].s();
+    // Same bug here
     return (order_type == "market") ? OrderType::Market : OrderType::Limit;
 }
 
