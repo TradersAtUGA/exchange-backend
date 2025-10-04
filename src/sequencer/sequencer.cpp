@@ -1,5 +1,6 @@
 #include "sequencer/sequencer.hpp"
 #include "sequencer/sequence_number.hpp"
+#include "build/generated/include/ticker.hpp"
 #include <iostream>
 
 namespace exchange {
@@ -26,6 +27,7 @@ void Sequencer::run() {
             
             order.sequence_id = sequence_ptr->next();
             
+            // Route ticker and 
             
         } else {
             // Maybe sleep thread for a little to save CPU usage 
