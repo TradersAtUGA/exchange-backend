@@ -4,19 +4,16 @@
 
 namespace exchange {
 
-
 class MatchingEngine {
 public:
     // Template for matching engine later
-    MatchingEngine() = default;
+    MatchingEngine(const std::string& ticker, RingBuffer<Order, config::RING_BUFFER_SIZE>& inbound);
 
-    void submit(exchange::Order&& order);
 
 private:
-    std::string ticker_;
-    // ringbuffer
+    const std::string& ticker_;
+    RingBuffer<Order, config::RING_BUFFER_SIZE>& inbound_;
     // order book
 };
-
 
 }

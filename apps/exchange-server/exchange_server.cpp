@@ -1,18 +1,21 @@
-#include <iostream>
-#include <thread>
-#include <vector>
+#include <include/exchange/exchange.hpp>
+#include <atomic>
+#include <csignal>
 
+std::atomic<bool> running{true};
+
+void handle_sigint(int) {
+    running = false;
+}
 
 int main() {
-
-    // config::YAMLConfig cfg("../main_config.yml");
+    std::signal(SIGINT, handle_sigint);
     
-    // std::vector<std::string> vec;
-    // vec.push_back("network_inbound");
-    // vec.push_back("network_inbound_port_number");
-
-    // std::cout << cfg.get(vec) << "\n";
-
-    std::cout << "test"<< std::endl;
+    exchange::Exchange exchange;
+    // Creates sequencer, matching engines, threads
+    exchange.init();
+    // Start networks loops, sequencer loop, 
+    exchange.run(running); 
+    return 0;
 
 }

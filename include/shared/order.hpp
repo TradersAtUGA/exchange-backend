@@ -1,5 +1,6 @@
 #pragma once
 #include <cstdint>
+#include <string>
 
 enum struct Side : uint8_t {
     Buy = 0,
@@ -26,6 +27,7 @@ namespace exchange {
         // Order details
         Side side;
         OrderType type;
+        std::string ticker;
         uint64_t price;      // Price is never negative
         uint64_t quantity;   // Quantity is never negative 
         uint64_t remaining;  // Partial fill
@@ -39,6 +41,7 @@ namespace exchange {
             uint64_t oid,
             Side s,
             OrderType t,
+            std::string tick,
             uint64_t p,
             uint64_t q,
             uint64_t r,
@@ -49,6 +52,7 @@ namespace exchange {
           order_id(oid),
           side(s),
           type(t),
+          ticker(tick),
           price(p),
           quantity(q),
           remaining(r),
