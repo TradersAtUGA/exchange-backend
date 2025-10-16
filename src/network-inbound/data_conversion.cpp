@@ -1,8 +1,11 @@
-#include "../../include/network-inbound/data_conversion.hpp"
-#include "../../include/order.hpp"
-#include "crow.h"
 #include <cstdint>
 #include <string>
+
+#include "crow.h"
+
+#include "network-inbound/data_conversion.hpp"
+#include "shared/order.hpp"
+
 
 uint64_t cast_json_value(const crow::json::rvalue& json, const std::string& json_parameter) {
     return static_cast<uint64_t>(json[json_parameter].i());
