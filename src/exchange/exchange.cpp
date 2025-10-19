@@ -10,8 +10,8 @@
 #include <iostream>
 #include <memory> 
 
-#include "exchange/exchange.hpp"
 #include "sequencer/sequencer.hpp"
+#include "exchange/exchange.hpp"
 
 #include "ticker.hpp"
 
@@ -30,10 +30,10 @@ Exchange::~Exchange() {
 bool Exchange::init() {
     std::cout << "Exchange is beginning initiation" << std::endl;
 
-    for (const auto& ticker : ticker::TICKERS) {
+    for (const auto& ticker : exchange::TICKERS) {
         sequencer_to_matcher_[ticker] = std::make_unique<RingBuffer<Order, config::RING_BUFFER_SIZE>>();
 
-        matching_engines_.push_back(std::make_unique<MatchingEngine>(ticker, *sequencer_to_matcher_[ticker]))
+        matching_engines_.push_back(std::make_unique<MatchingEngine>(ticker, *sequencer_to_matcher_[ticker]));
     }
 
     sequencer_ = std::make_unique<Sequencer>(network_to_sequencer_, sequencer_to_matcher_);
@@ -42,7 +42,7 @@ bool Exchange::init() {
     return true;
 }
 
-void Exchange::run(std::atomic<bool>& running) {
+void Exchange::run(const std::atomic<bool>& running) {
     // do something with running later
     while(running) {
         std::cout << "Exchange is running" << std::endl;

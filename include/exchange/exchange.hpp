@@ -19,6 +19,7 @@
 #include "engine/matching_engine.hpp"
 
 #include "config.hpp"
+#include "ticker.hpp"
 
 
 namespace exchange

@@ -1,5 +1,6 @@
 #include "sequencer/sequencer.hpp"
 #include <iostream>
+#include <unordered_map>
 
 namespace exchange {
 
@@ -13,7 +14,7 @@ void Sequencer::operator()() {
     while(true) { // maybe change later
         exchange::Order order;
         if (inbound_.try_dequeue(order)) {
-            std::cout << "Got order: " << order << std::endl;
+            std::cout << "Got order: " << order.order_id << std::endl; // cannot just print the "order" object itself 
 
             // Handle logic 
             /* 

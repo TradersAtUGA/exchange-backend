@@ -24,6 +24,11 @@ OrderType get_order_type(const crow::json::rvalue& json) {
     return (order_type == "market") ? OrderType::Market : OrderType::Limit;
 }
 
+std::string get_ticker(const crow::json::rvalue& json) {
+    std::string ticker = json["ticker"].s();
+    return ticker;
+}
+
 namespace exchange::network_inbound {
 
 exchange::Order json_to_exchange_order(const crow::json::rvalue& json) {
@@ -32,6 +37,7 @@ exchange::Order json_to_exchange_order(const crow::json::rvalue& json) {
         cast_json_value(json, "order_id"),
         get_side(json),
         get_order_type(json),
+        get_ticker(json),
         cast_json_value(json, "price"),
         cast_json_value(json, "quantity"),
         cast_json_value(json, "remaining"),

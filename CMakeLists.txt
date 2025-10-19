@@ -58,9 +58,13 @@ endif()
 # All src/ subdirectories
 # -------------------------------
 add_subdirectory(src/network-inbound)
-# uncomment these later
+add_subdirectory(src/exchange)
+add_subdirectory(src/sequencer)
+add_subdirectory(src/shared)
+add_subdirectory(src/engine)
+
+# uncomment these later when implemented AND contain CMAKE file
 # add_subdirectory(src/network-outbound)
-# add_subdirectory(src/shared)
 # add_subdirectory(src/matching-engine)
 
 # -------------------------------

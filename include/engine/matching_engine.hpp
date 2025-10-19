@@ -1,6 +1,8 @@
 #pragma once
 #include <string>
 #include "shared/order.hpp"
+#include "shared/ring_buffer.hpp"
+#include "config.hpp"
 
 namespace exchange {
 

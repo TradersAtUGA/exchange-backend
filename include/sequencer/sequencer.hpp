@@ -1,11 +1,12 @@
 #pragma once
 
 #include "moodycamel/concurrentqueue.h"
-#include "order.hpp"
+#include "shared/order.hpp"
 #include <cstdint>
 #include "shared/ring_buffer.hpp"
 #include "config.hpp"
 #include <atomic>
+#include <unordered_map>
 
 namespace exchange {
 
