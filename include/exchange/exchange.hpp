@@ -1,13 +1,25 @@
+/**
+ * @file exchange.hpp
+ * @author Brennan Davenport
+ * @date 2025-10-06
+ * @brief This exchange interface is the controller of the entire program
+ */
 #pragma once
-#include "moodycamel/concurrentqueue.h"
-#include "order.hpp"
-#include "config.hpp"
-#include "shared/ring_buffer.hpp"
-#include <unordered_map>
-#include "include/sequencer/sequencer.hpp"
-#include "include/engine/matching_engine.hpp"
+
 #include <vector>
 #include <atomic>
+#include <memory>
+#include <unordered_map>
+
+#include "moodycamel/concurrentqueue.h"
+
+#include "shared/order.hpp"
+#include "shared/ring_buffer.hpp"
+#include "sequencer/sequencer.hpp"
+#include "engine/matching_engine.hpp"
+
+#include "config.hpp"
+
 
 namespace exchange
 {

@@ -17,5 +17,4 @@ int main() {
     // Start networks loops, sequencer loop, 
     exchange.run(running); 
     return 0;
-
 }
