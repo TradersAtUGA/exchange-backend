@@ -1,5 +1,8 @@
 add_library(exchange
     exchange.cpp
+    ../sequencer/sequencer.cpp      
+    ../engine/matching_engine.cpp   
+    ../shared/ring_buffer.cpp
 )
 
 target_include_directories(exchange

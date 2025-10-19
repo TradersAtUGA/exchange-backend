@@ -12,8 +12,10 @@
 
 #include "sequencer/sequencer.hpp"
 #include "exchange/exchange.hpp"
+#include "engine/matching_engine.hpp"
 
 #include "ticker.hpp"
+#include "config.hpp"
 
 
 namespace exchange
