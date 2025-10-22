@@ -60,7 +60,6 @@ endif()
 add_subdirectory(src/network-inbound)
 add_subdirectory(src/exchange)
 add_subdirectory(src/sequencer)
-add_subdirectory(src/shared)
 add_subdirectory(src/engine)
 
 # uncomment these later when implemented AND contain CMAKE file
