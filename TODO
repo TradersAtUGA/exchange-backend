@@ -1,0 +1,9 @@
+Data validation
+
+Hard-checks (JSON format correctly, Ticker exsits, etc.)
+- This should occur in the inbound-network service
+
+Busniess checks (User risk limit, sufficient funds)
+- We havent built this yet but we will need to build a validation service, 
+it will sit after the inbound network queue and before the sequencer
+

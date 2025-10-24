@@ -1,8 +1,11 @@
-add_executable(exchange_backend exchange_server.cpp)
+add_executable(exchange_backend exchange_main.cpp)
 
 target_link_libraries(exchange_backend
     PRIVATE
     network_inbound
+    sequencer
+    exchange
+    engine
 )
 
 # external libraries    

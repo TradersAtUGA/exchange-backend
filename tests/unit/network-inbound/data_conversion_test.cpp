@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 #include <crow.h>
 #include "network-inbound/data_conversion.hpp"
-#include "../../../include/order.hpp"
+#include "shared/order.hpp"
 
 TEST(network_inbound_test, good_json_conversion_test) {
 

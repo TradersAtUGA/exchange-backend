@@ -1,7 +1,7 @@
 #pragma once
 #include "crow.h"
 #include "moodycamel/concurrentqueue.h"
-#include "../order.hpp"
+#include "shared/order.hpp"
 #include <cstdint>
 
 namespace exchange::network_inbound {

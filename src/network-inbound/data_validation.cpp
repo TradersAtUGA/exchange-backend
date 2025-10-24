@@ -6,8 +6,10 @@
  */
 
 #include <cstdint>
+
 #include "crow.h"
-#include "../../include/network-inbound/data_validation.hpp"
+
+#include "network-inbound/data_validation.hpp"
 
 namespace exchange::network_inbound {
     

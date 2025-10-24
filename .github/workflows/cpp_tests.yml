@@ -11,21 +11,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      
-      - name: Setup Docker image
+      - name: Setup Docker Image
         run: |
           ./scripts/setup.sh
 
-      - name: Build Docker image
-        run: |
-          ./scripts/build.sh
-
-      - name: Run Tests on Docker image
+      - name: Built Test Executable
         run: |
           ./scripts/test.sh
-
-      # - name: Set Up Cpp environment
-      #   uses: aminya/setup-cpp@v1
-      #   with:
-      #     compiler: gcc
-      #     cmake: true
