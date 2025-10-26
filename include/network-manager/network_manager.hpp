@@ -2,12 +2,11 @@
  * @brief Network Manager to handle all inbound and outbound network connections
 */
 #include <crow.h>
-
+#include <moodycamel/concurrentqueue.h>
+#include <thread>
 
 #include "network-inbound/api_routing.hpp"
-#include "network-inbound/data_conversion.hpp"
-#include "network-inbound/data_validation.hpp"
-
+#include "shared/order.hpp"
 // Also include network outbound headers when they are complete
 
 namespace exchange 
@@ -24,8 +23,9 @@ public:
     
     /**
      * @brief starts the NetworkManager inbound server instance
+     * @param q the inbound network queue that will receive exchange::Order objects from users
      */
-    void start_inbound_server();
+    void start_inbound_server(moodycamel::ConcurrentQueue<exchange::Order>& q);
 
     /**
      * @brief starts the NetworkManager outbound server instance
@@ -44,7 +44,9 @@ public:
 
 private:
     // Server objects
-    crow::SimpleApp inbound_server;
-    crow::SimpleApp outbound_server;
+    crow::SimpleApp inbound_server_;
+    crow::SimpleApp outbound_server_;   
+    std::thread inbound_server_thread_;
+    std::thread outbound_server_thread_;
 };
 }
