@@ -4,6 +4,8 @@
 
 #include "network-manager/network_manager.hpp"
 #include "network-inbound/api_routing.hpp"
+#include "network-inbound/data_conversion.hpp"
+#include "network-inbound/data_validation.hpp"
 #include "shared/order.hpp"
 
 

@@ -1,11 +1,15 @@
 /**
  * @brief Network Manager to handle all inbound and outbound network connections
 */
+#pragma once
+
 #include <crow.h>
 #include <moodycamel/concurrentqueue.h>
 #include <thread>
 
 #include "network-inbound/api_routing.hpp"
+#include "network-inbound/data_conversion.hpp"
+#include "network-inbound/data_validation.hpp"
 #include "shared/order.hpp"
 // Also include network outbound headers when they are complete
 

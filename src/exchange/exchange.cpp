@@ -13,6 +13,7 @@
 #include "sequencer/sequencer.hpp"
 #include "exchange/exchange.hpp"
 #include "engine/matching_engine.hpp"
+#include "network-manager/network_manager.hpp"
 
 #include "ticker.hpp"
 #include "config.hpp"
@@ -45,14 +46,18 @@ bool Exchange::init() {
 }
 
 void Exchange::run(const std::atomic<bool>& running) {
+    network_manager_.start_inbound_server(network_to_sequencer_);
     // do something with running later
     while(running) {
         std::cout << "Exchange is running" << std::endl;
+        std::cout << network_to_sequencer_.size_approx() << std::endl;
         std::this_thread::sleep_for(std::chrono::seconds(1));
     }
     // std::thread sequence_worker(*sequencer_);
 
     // sequence_worker.join();
+
+    
 
     std::cout << "Exchange is no longer running" << std::endl;
     return;
