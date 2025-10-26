@@ -84,7 +84,7 @@ $(document).ready(function() { init_codefold(0); });
 <a href="api__routing_8hpp.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#pragma once</span></div>
 <div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="preprocessor">#include &quot;crow.h&quot;</span></div>
 <div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="preprocessor">#include &quot;moodycamel/concurrentqueue.h&quot;</span></div>
-<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="preprocessor">#include &quot;../order.hpp&quot;</span></div>
+<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="preprocessor">#include &quot;<a class="code" href="order_8hpp.html">shared/order.hpp</a>&quot;</span></div>
 <div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="preprocessor">#include &lt;cstdint&gt;</span></div>
 <div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span> </div>
 <div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespaceexchange_1_1network__inbound.html">exchange::network_inbound</a> {</div>
@@ -107,6 +107,7 @@ $(document).ready(function() { init_codefold(0); });
 <div class="ttc" id="anamespaceexchange_1_1network__inbound_html_a9594df8675903571c052dd56d29ca622"><div class="ttname"><a href="namespaceexchange_1_1network__inbound.html#a9594df8675903571c052dd56d29ca622">exchange::network_inbound::start_input_server</a></div><div class="ttdeci">void start_input_server(crow::SimpleApp &amp;app, moodycamel::ConcurrentQueue&lt; exchange::Order &gt; &amp;q)</div><div class="ttdoc">starts the input network server for all input requests</div><div class="ttdef"><b>Definition</b> api_routing.cpp:47</div></div>
 <div class="ttc" id="anamespaceexchange_1_1network__inbound_html_ac3c2bae6876a1df2f75178d09ac33a39"><div class="ttname"><a href="namespaceexchange_1_1network__inbound.html#ac3c2bae6876a1df2f75178d09ac33a39">exchange::network_inbound::register_order_cancel_route</a></div><div class="ttdeci">void register_order_cancel_route(crow::SimpleApp &amp;app)</div><div class="ttdoc">sets up the endpoint to cancel orders that have been placed given an order id</div><div class="ttdef"><b>Definition</b> api_routing.cpp:35</div></div>
 <div class="ttc" id="anamespaceexchange_1_1network__inbound_html_acda2b0ca136c2c14a0d7a9645582f716"><div class="ttname"><a href="namespaceexchange_1_1network__inbound.html#acda2b0ca136c2c14a0d7a9645582f716">exchange::network_inbound::register_order_modify_route</a></div><div class="ttdeci">void register_order_modify_route(crow::SimpleApp &amp;app)</div><div class="ttdoc">sets up the endpoint to modify orders that have been placed given an order id</div><div class="ttdef"><b>Definition</b> api_routing.cpp:29</div></div>
+<div class="ttc" id="aorder_8hpp_html"><div class="ttname"><a href="order_8hpp.html">order.hpp</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
