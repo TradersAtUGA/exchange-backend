@@ -1,0 +1,20 @@
+<map id="include/shared/ring_buffer.hpp" name="include/shared/ring_buffer.hpp">
+<area shape="rect" id="Node000001" title=" " alt="" coords="207,5,353,45"/>
+<area shape="rect" id="Node000002" href="$matching__engine_8hpp.html" title=" " alt="" coords="125,93,307,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="260,58,232,95,228,92,255,55"/>
+<area shape="rect" id="Node000003" href="$exchange_8hpp.html" title="This exchange interface is the controller of the entire program." alt="" coords="235,189,466,214"/>
+<area shape="poly" id="edge6_Node000001_Node000003" title=" " alt="" coords="302,56,321,92,340,145,351,188,346,189,335,147,316,94,298,59"/>
+<area shape="rect" id="Node000005" href="$matching__engine_8cpp.html" title=" " alt="" coords="5,181,160,221"/>
+<area shape="poly" id="edge11_Node000001_Node000005" title=" " alt="" coords="195,47,151,66,131,79,114,95,101,115,92,138,86,181,80,181,87,137,96,113,110,92,128,75,148,61,192,42"/>
+<area shape="rect" id="Node000006" href="$sequencer_8hpp.html" title=" " alt="" coords="383,101,622,126"/>
+<area shape="poly" id="edge7_Node000001_Node000006" title=" " alt="" coords="343,48,474,98,472,103,341,53"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="259,139,334,186,331,191,256,143"/>
+<area shape="rect" id="Node000004" href="$exchange_8cpp.html" title="This exchange object is the controller of the entire program." alt="" coords="249,269,452,295"/>
+<area shape="poly" id="edge5_Node000002_Node000004" title=" " alt="" coords="213,147,212,184,217,203,225,220,239,236,257,249,297,267,295,272,254,254,236,240,220,223,212,205,207,185,207,147"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="176,143,114,183,111,179,174,139"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="353,228,353,269,348,269,348,228"/>
+<area shape="poly" id="edge8_Node000006_Node000003" title=" " alt="" coords="472,135,373,191,370,186,469,131"/>
+<area shape="poly" id="edge9_Node000006_Node000004" title=" " alt="" coords="506,140,500,181,493,203,481,223,464,240,443,254,401,272,399,267,441,249,460,236,477,220,488,201,495,180,500,139"/>
+<area shape="rect" id="Node000007" href="$sequencer_8cpp.html" title=" " alt="" coords="542,189,751,214"/>
+<area shape="poly" id="edge10_Node000006_Node000007" title=" " alt="" coords="535,131,628,186,626,191,532,135"/>
+</map>

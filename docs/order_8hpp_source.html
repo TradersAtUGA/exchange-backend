@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Exchange Backend: include/order.hpp Source File</title>
+<title>Exchange Backend: include/shared/order.hpp Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -74,7 +74,7 @@ $(document).ready(function() { init_codefold(0); });
 
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li>  </ul>
+<li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_6845d4c7af1a0a99add50de30b674562.html">shared</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
@@ -83,86 +83,95 @@ $(document).ready(function() { init_codefold(0); });
 <div class="contents">
 <a href="order_8hpp.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#pragma once</span></div>
 <div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="preprocessor">#include &lt;cstdint&gt;</span></div>
-<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span> </div>
-<div class="foldopen" id="foldopen00004" data-start="{" data-end="};">
-<div class="line"><a id="l00004" name="l00004"></a><span class="lineno"><a class="line" href="order_8hpp.html#a850d91564117e01028bb9cbac40132e0">    4</a></span><span class="keyword">enum struct</span> <a class="code hl_enumeration" href="order_8hpp.html#a850d91564117e01028bb9cbac40132e0">Side</a> : uint8_t {</div>
-<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span>    <a class="code hl_enumvalue" href="order_8hpp.html#a850d91564117e01028bb9cbac40132e0a831a28f1e8df07c553fcd59546465d13">Buy</a> = 0,</div>
-<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span>    <a class="code hl_enumvalue" href="order_8hpp.html#a850d91564117e01028bb9cbac40132e0a3068c5a98c003498f1fec0c489212e8b">Sell</a> = 1</div>
-<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span>};</div>
+<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="preprocessor">#include &lt;string&gt;</span></div>
+<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span> </div>
+<div class="foldopen" id="foldopen00005" data-start="{" data-end="};">
+<div class="line"><a id="l00005" name="l00005"></a><span class="lineno"><a class="line" href="order_8hpp.html#a850d91564117e01028bb9cbac40132e0">    5</a></span><span class="keyword">enum struct</span> <a class="code hl_enumeration" href="order_8hpp.html#a850d91564117e01028bb9cbac40132e0">Side</a> : uint8_t {</div>
+<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span>    <a class="code hl_enumvalue" href="order_8hpp.html#a850d91564117e01028bb9cbac40132e0a831a28f1e8df07c553fcd59546465d13">Buy</a> = 0,</div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span>    <a class="code hl_enumvalue" href="order_8hpp.html#a850d91564117e01028bb9cbac40132e0a3068c5a98c003498f1fec0c489212e8b">Sell</a> = 1</div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span>};</div>
 </div>
-<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span> </div>
-<div class="foldopen" id="foldopen00009" data-start="{" data-end="};">
-<div class="line"><a id="l00009" name="l00009"></a><span class="lineno"><a class="line" href="order_8hpp.html#aff428c8736e5ed1123d83e2bf9271457">    9</a></span><span class="keyword">enum struct</span> <a class="code hl_enumeration" href="order_8hpp.html#aff428c8736e5ed1123d83e2bf9271457">OrderType</a> : uint8_t {</div>
-<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span>    <a class="code hl_enumvalue" href="order_8hpp.html#aff428c8736e5ed1123d83e2bf9271457a80d2677cf518f4d04320042f4ea6c146">Limit</a> = 0,</div>
-<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span>    <a class="code hl_enumvalue" href="order_8hpp.html#aff428c8736e5ed1123d83e2bf9271457a31840a66a8d6d223e5b0540138768838">Market</a> = 1</div>
-<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span>};</div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span> </div>
+<div class="foldopen" id="foldopen00010" data-start="{" data-end="};">
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno"><a class="line" href="order_8hpp.html#aff428c8736e5ed1123d83e2bf9271457">   10</a></span><span class="keyword">enum struct</span> <a class="code hl_enumeration" href="order_8hpp.html#aff428c8736e5ed1123d83e2bf9271457">OrderType</a> : uint8_t {</div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span>    <a class="code hl_enumvalue" href="order_8hpp.html#aff428c8736e5ed1123d83e2bf9271457a80d2677cf518f4d04320042f4ea6c146">Limit</a> = 0,</div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span>    <a class="code hl_enumvalue" href="order_8hpp.html#aff428c8736e5ed1123d83e2bf9271457a31840a66a8d6d223e5b0540138768838">Market</a> = 1</div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span>};</div>
 </div>
-<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span> </div>
-<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespaceexchange.html">exchange</a> {</div>
-<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span> </div>
-<div class="foldopen" id="foldopen00016" data-start="{" data-end="};">
-<div class="line"><a id="l00016" name="l00016"></a><span class="lineno"><a class="line" href="structexchange_1_1Order.html">   16</a></span>    <span class="keyword">struct </span><a class="code hl_struct" href="structexchange_1_1Order.html">Order</a> {</div>
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>        <span class="comment">// Sequence</span></div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno"><a class="line" href="structexchange_1_1Order.html#ab9e040ddee538b548d0bc3513a7e1aea">   18</a></span>        uint64_t <a class="code hl_variable" href="structexchange_1_1Order.html#ab9e040ddee538b548d0bc3513a7e1aea">sequence_id</a>;</div>
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span> </div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>        <span class="comment">// Client details</span></div>
-<div class="line"><a id="l00021" name="l00021"></a><span class="lineno"><a class="line" href="structexchange_1_1Order.html#a2959aad451409534eec319633c1d65a3">   21</a></span>        uint64_t <a class="code hl_variable" href="structexchange_1_1Order.html#a2959aad451409534eec319633c1d65a3">client_id</a>;</div>
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno"><a class="line" href="structexchange_1_1Order.html#a427dc7523377a38a388822545bdd6a8e">   22</a></span>        uint64_t <a class="code hl_variable" href="structexchange_1_1Order.html#a427dc7523377a38a388822545bdd6a8e">order_id</a>;</div>
-<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span> </div>
-<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>        <span class="comment">// Order details</span></div>
-<div class="line"><a id="l00025" name="l00025"></a><span class="lineno"><a class="line" href="structexchange_1_1Order.html#a7856369e4f0e7990bad5dfb4478ab6f6">   25</a></span>        <a class="code hl_enumeration" href="order_8hpp.html#a850d91564117e01028bb9cbac40132e0">Side</a> <a class="code hl_variable" href="structexchange_1_1Order.html#a7856369e4f0e7990bad5dfb4478ab6f6">side</a>;</div>
-<div class="line"><a id="l00026" name="l00026"></a><span class="lineno"><a class="line" href="structexchange_1_1Order.html#a486b5c12583eb49499767cd5db168696">   26</a></span>        <a class="code hl_enumeration" href="order_8hpp.html#aff428c8736e5ed1123d83e2bf9271457">OrderType</a> <a class="code hl_variable" href="structexchange_1_1Order.html#a486b5c12583eb49499767cd5db168696">type</a>;</div>
-<div class="line"><a id="l00027" name="l00027"></a><span class="lineno"><a class="line" href="structexchange_1_1Order.html#a1a8baef205ed7cb8b8a20295ce8c935b">   27</a></span>        uint64_t <a class="code hl_variable" href="structexchange_1_1Order.html#a1a8baef205ed7cb8b8a20295ce8c935b">price</a>;      <span class="comment">// Price is never negative</span></div>
-<div class="line"><a id="l00028" name="l00028"></a><span class="lineno"><a class="line" href="structexchange_1_1Order.html#a13e7b76a69fb844ac5aceddc52366ed6">   28</a></span>        uint64_t <a class="code hl_variable" href="structexchange_1_1Order.html#a13e7b76a69fb844ac5aceddc52366ed6">quantity</a>;   <span class="comment">// Quantity is never negative </span></div>
-<div class="line"><a id="l00029" name="l00029"></a><span class="lineno"><a class="line" href="structexchange_1_1Order.html#ac8ab8664486c4ed53399eb496a118d40">   29</a></span>        uint64_t <a class="code hl_variable" href="structexchange_1_1Order.html#ac8ab8664486c4ed53399eb496a118d40">remaining</a>;  <span class="comment">// Partial fill</span></div>
-<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span> </div>
-<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>        <span class="comment">// Timing</span></div>
-<div class="line"><a id="l00032" name="l00032"></a><span class="lineno"><a class="line" href="structexchange_1_1Order.html#a77eebcf4c15cd346a194d52e75dfb6c9">   32</a></span>        uint64_t <a class="code hl_variable" href="structexchange_1_1Order.html#a77eebcf4c15cd346a194d52e75dfb6c9">received_time_ns</a>;</div>
-<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span> </div>
-<div class="foldopen" id="foldopen00034" data-start="{" data-end="}">
-<div class="line"><a id="l00034" name="l00034"></a><span class="lineno"><a class="line" href="structexchange_1_1Order.html#ab989ceac83107377cec862dc1b201923">   34</a></span>        <a class="code hl_function" href="structexchange_1_1Order.html#ab989ceac83107377cec862dc1b201923">Order</a>(</div>
-<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>            uint64_t client,</div>
-<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>            uint64_t oid,</div>
-<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>            <a class="code hl_enumeration" href="order_8hpp.html#a850d91564117e01028bb9cbac40132e0">Side</a> s,</div>
-<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>            <a class="code hl_enumeration" href="order_8hpp.html#aff428c8736e5ed1123d83e2bf9271457">OrderType</a> t,</div>
-<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>            uint64_t p,</div>
-<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>            uint64_t q,</div>
-<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>            uint64_t r,</div>
-<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>            uint64_t ns</div>
-<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>        )</div>
-<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>        : <a class="code hl_variable" href="structexchange_1_1Order.html#ab9e040ddee538b548d0bc3513a7e1aea">sequence_id</a>(0),</div>
-<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>          <a class="code hl_variable" href="structexchange_1_1Order.html#a2959aad451409534eec319633c1d65a3">client_id</a>(client),</div>
-<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>          <a class="code hl_variable" href="structexchange_1_1Order.html#a427dc7523377a38a388822545bdd6a8e">order_id</a>(oid),</div>
-<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>          <a class="code hl_variable" href="structexchange_1_1Order.html#a7856369e4f0e7990bad5dfb4478ab6f6">side</a>(s),</div>
-<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>          <a class="code hl_variable" href="structexchange_1_1Order.html#a486b5c12583eb49499767cd5db168696">type</a>(t),</div>
-<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>          <a class="code hl_variable" href="structexchange_1_1Order.html#a1a8baef205ed7cb8b8a20295ce8c935b">price</a>(p),</div>
-<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>          <a class="code hl_variable" href="structexchange_1_1Order.html#a13e7b76a69fb844ac5aceddc52366ed6">quantity</a>(q),</div>
-<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>          <a class="code hl_variable" href="structexchange_1_1Order.html#ac8ab8664486c4ed53399eb496a118d40">remaining</a>(r),</div>
-<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>          <a class="code hl_variable" href="structexchange_1_1Order.html#a77eebcf4c15cd346a194d52e75dfb6c9">received_time_ns</a>(ns)</div>
-<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>        {}</div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span> </div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespaceexchange.html">exchange</a> {</div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span> </div>
+<div class="foldopen" id="foldopen00017" data-start="{" data-end="};">
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno"><a class="line" href="structexchange_1_1Order.html">   17</a></span>    <span class="keyword">struct </span><a class="code hl_struct" href="structexchange_1_1Order.html">Order</a> {</div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno"><a class="line" href="structexchange_1_1Order.html#ad10f767cc074d7d379a76506653800c8">   18</a></span>        <a class="code hl_function" href="structexchange_1_1Order.html#ad10f767cc074d7d379a76506653800c8">Order</a>() = <span class="keywordflow">default</span>;</div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>        </div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>        <span class="comment">// Sequence</span></div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno"><a class="line" href="structexchange_1_1Order.html#ab9e040ddee538b548d0bc3513a7e1aea">   21</a></span>        uint64_t <a class="code hl_variable" href="structexchange_1_1Order.html#ab9e040ddee538b548d0bc3513a7e1aea">sequence_id</a>;</div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span> </div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>        <span class="comment">// Client details</span></div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno"><a class="line" href="structexchange_1_1Order.html#a2959aad451409534eec319633c1d65a3">   24</a></span>        uint64_t <a class="code hl_variable" href="structexchange_1_1Order.html#a2959aad451409534eec319633c1d65a3">client_id</a>;</div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno"><a class="line" href="structexchange_1_1Order.html#a427dc7523377a38a388822545bdd6a8e">   25</a></span>        uint64_t <a class="code hl_variable" href="structexchange_1_1Order.html#a427dc7523377a38a388822545bdd6a8e">order_id</a>;</div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span> </div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>        <span class="comment">// Order details</span></div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno"><a class="line" href="structexchange_1_1Order.html#a7856369e4f0e7990bad5dfb4478ab6f6">   28</a></span>        <a class="code hl_enumeration" href="order_8hpp.html#a850d91564117e01028bb9cbac40132e0">Side</a> <a class="code hl_variable" href="structexchange_1_1Order.html#a7856369e4f0e7990bad5dfb4478ab6f6">side</a>;</div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno"><a class="line" href="structexchange_1_1Order.html#a486b5c12583eb49499767cd5db168696">   29</a></span>        <a class="code hl_enumeration" href="order_8hpp.html#aff428c8736e5ed1123d83e2bf9271457">OrderType</a> <a class="code hl_variable" href="structexchange_1_1Order.html#a486b5c12583eb49499767cd5db168696">type</a>;</div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno"><a class="line" href="structexchange_1_1Order.html#a0d5dfbc42558d98f88e0656b9cb9806e">   30</a></span>        std::string <a class="code hl_variable" href="structexchange_1_1Order.html#a0d5dfbc42558d98f88e0656b9cb9806e">ticker</a>;</div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno"><a class="line" href="structexchange_1_1Order.html#a1a8baef205ed7cb8b8a20295ce8c935b">   31</a></span>        uint64_t <a class="code hl_variable" href="structexchange_1_1Order.html#a1a8baef205ed7cb8b8a20295ce8c935b">price</a>;      <span class="comment">// Price is never negative</span></div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno"><a class="line" href="structexchange_1_1Order.html#a13e7b76a69fb844ac5aceddc52366ed6">   32</a></span>        uint64_t <a class="code hl_variable" href="structexchange_1_1Order.html#a13e7b76a69fb844ac5aceddc52366ed6">quantity</a>;   <span class="comment">// Quantity is never negative </span></div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno"><a class="line" href="structexchange_1_1Order.html#ac8ab8664486c4ed53399eb496a118d40">   33</a></span>        uint64_t <a class="code hl_variable" href="structexchange_1_1Order.html#ac8ab8664486c4ed53399eb496a118d40">remaining</a>;  <span class="comment">// Partial fill</span></div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span> </div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>        <span class="comment">// Timing</span></div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno"><a class="line" href="structexchange_1_1Order.html#a77eebcf4c15cd346a194d52e75dfb6c9">   36</a></span>        uint64_t <a class="code hl_variable" href="structexchange_1_1Order.html#a77eebcf4c15cd346a194d52e75dfb6c9">received_time_ns</a>;</div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>        </div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span> </div>
+<div class="foldopen" id="foldopen00039" data-start="{" data-end="}">
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno"><a class="line" href="structexchange_1_1Order.html#ab3a85f33eea92566b8cb25f9cf3e76b5">   39</a></span>        <a class="code hl_function" href="structexchange_1_1Order.html#ab3a85f33eea92566b8cb25f9cf3e76b5">Order</a>(</div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>            uint64_t client,</div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>            uint64_t oid,</div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>            <a class="code hl_enumeration" href="order_8hpp.html#a850d91564117e01028bb9cbac40132e0">Side</a> s,</div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>            <a class="code hl_enumeration" href="order_8hpp.html#aff428c8736e5ed1123d83e2bf9271457">OrderType</a> t,</div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>            std::string tick,</div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>            uint64_t p,</div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>            uint64_t q,</div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>            uint64_t r,</div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>            uint64_t ns</div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>        )</div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>        : <a class="code hl_variable" href="structexchange_1_1Order.html#ab9e040ddee538b548d0bc3513a7e1aea">sequence_id</a>(0),</div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>          <a class="code hl_variable" href="structexchange_1_1Order.html#a2959aad451409534eec319633c1d65a3">client_id</a>(client),</div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>          <a class="code hl_variable" href="structexchange_1_1Order.html#a427dc7523377a38a388822545bdd6a8e">order_id</a>(oid),</div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>          <a class="code hl_variable" href="structexchange_1_1Order.html#a7856369e4f0e7990bad5dfb4478ab6f6">side</a>(s),</div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>          <a class="code hl_variable" href="structexchange_1_1Order.html#a486b5c12583eb49499767cd5db168696">type</a>(t),</div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>          <a class="code hl_variable" href="structexchange_1_1Order.html#a0d5dfbc42558d98f88e0656b9cb9806e">ticker</a>(tick),</div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>          <a class="code hl_variable" href="structexchange_1_1Order.html#a1a8baef205ed7cb8b8a20295ce8c935b">price</a>(p),</div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>          <a class="code hl_variable" href="structexchange_1_1Order.html#a13e7b76a69fb844ac5aceddc52366ed6">quantity</a>(q),</div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>          <a class="code hl_variable" href="structexchange_1_1Order.html#ac8ab8664486c4ed53399eb496a118d40">remaining</a>(r),</div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>          <a class="code hl_variable" href="structexchange_1_1Order.html#a77eebcf4c15cd346a194d52e75dfb6c9">received_time_ns</a>(ns)</div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>        {}</div>
 </div>
-<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>    };</div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>    };</div>
 </div>
-<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span> </div>
-<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>}</div>
-<div class="ttc" id="anamespaceexchange_html"><div class="ttname"><a href="namespaceexchange.html">exchange</a></div><div class="ttdef"><b>Definition</b> api_routing.cpp:11</div></div>
-<div class="ttc" id="aorder_8hpp_html_a850d91564117e01028bb9cbac40132e0"><div class="ttname"><a href="order_8hpp.html#a850d91564117e01028bb9cbac40132e0">Side</a></div><div class="ttdeci">Side</div><div class="ttdef"><b>Definition</b> order.hpp:4</div></div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span> </div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>}</div>
+<div class="ttc" id="anamespaceexchange_html"><div class="ttname"><a href="namespaceexchange.html">exchange</a></div><div class="ttdef"><b>Definition</b> matching_engine.cpp:6</div></div>
+<div class="ttc" id="aorder_8hpp_html_a850d91564117e01028bb9cbac40132e0"><div class="ttname"><a href="order_8hpp.html#a850d91564117e01028bb9cbac40132e0">Side</a></div><div class="ttdeci">Side</div><div class="ttdef"><b>Definition</b> order.hpp:5</div></div>
 <div class="ttc" id="aorder_8hpp_html_a850d91564117e01028bb9cbac40132e0a3068c5a98c003498f1fec0c489212e8b"><div class="ttname"><a href="order_8hpp.html#a850d91564117e01028bb9cbac40132e0a3068c5a98c003498f1fec0c489212e8b">Side::Sell</a></div><div class="ttdeci">@ Sell</div></div>
 <div class="ttc" id="aorder_8hpp_html_a850d91564117e01028bb9cbac40132e0a831a28f1e8df07c553fcd59546465d13"><div class="ttname"><a href="order_8hpp.html#a850d91564117e01028bb9cbac40132e0a831a28f1e8df07c553fcd59546465d13">Side::Buy</a></div><div class="ttdeci">@ Buy</div></div>
-<div class="ttc" id="aorder_8hpp_html_aff428c8736e5ed1123d83e2bf9271457"><div class="ttname"><a href="order_8hpp.html#aff428c8736e5ed1123d83e2bf9271457">OrderType</a></div><div class="ttdeci">OrderType</div><div class="ttdef"><b>Definition</b> order.hpp:9</div></div>
+<div class="ttc" id="aorder_8hpp_html_aff428c8736e5ed1123d83e2bf9271457"><div class="ttname"><a href="order_8hpp.html#aff428c8736e5ed1123d83e2bf9271457">OrderType</a></div><div class="ttdeci">OrderType</div><div class="ttdef"><b>Definition</b> order.hpp:10</div></div>
 <div class="ttc" id="aorder_8hpp_html_aff428c8736e5ed1123d83e2bf9271457a31840a66a8d6d223e5b0540138768838"><div class="ttname"><a href="order_8hpp.html#aff428c8736e5ed1123d83e2bf9271457a31840a66a8d6d223e5b0540138768838">OrderType::Market</a></div><div class="ttdeci">@ Market</div></div>
 <div class="ttc" id="aorder_8hpp_html_aff428c8736e5ed1123d83e2bf9271457a80d2677cf518f4d04320042f4ea6c146"><div class="ttname"><a href="order_8hpp.html#aff428c8736e5ed1123d83e2bf9271457a80d2677cf518f4d04320042f4ea6c146">OrderType::Limit</a></div><div class="ttdeci">@ Limit</div></div>
-<div class="ttc" id="astructexchange_1_1Order_html"><div class="ttname"><a href="structexchange_1_1Order.html">exchange::Order</a></div><div class="ttdef"><b>Definition</b> order.hpp:16</div></div>
-<div class="ttc" id="astructexchange_1_1Order_html_a13e7b76a69fb844ac5aceddc52366ed6"><div class="ttname"><a href="structexchange_1_1Order.html#a13e7b76a69fb844ac5aceddc52366ed6">exchange::Order::quantity</a></div><div class="ttdeci">uint64_t quantity</div><div class="ttdef"><b>Definition</b> order.hpp:28</div></div>
-<div class="ttc" id="astructexchange_1_1Order_html_a1a8baef205ed7cb8b8a20295ce8c935b"><div class="ttname"><a href="structexchange_1_1Order.html#a1a8baef205ed7cb8b8a20295ce8c935b">exchange::Order::price</a></div><div class="ttdeci">uint64_t price</div><div class="ttdef"><b>Definition</b> order.hpp:27</div></div>
-<div class="ttc" id="astructexchange_1_1Order_html_a2959aad451409534eec319633c1d65a3"><div class="ttname"><a href="structexchange_1_1Order.html#a2959aad451409534eec319633c1d65a3">exchange::Order::client_id</a></div><div class="ttdeci">uint64_t client_id</div><div class="ttdef"><b>Definition</b> order.hpp:21</div></div>
-<div class="ttc" id="astructexchange_1_1Order_html_a427dc7523377a38a388822545bdd6a8e"><div class="ttname"><a href="structexchange_1_1Order.html#a427dc7523377a38a388822545bdd6a8e">exchange::Order::order_id</a></div><div class="ttdeci">uint64_t order_id</div><div class="ttdef"><b>Definition</b> order.hpp:22</div></div>
-<div class="ttc" id="astructexchange_1_1Order_html_a486b5c12583eb49499767cd5db168696"><div class="ttname"><a href="structexchange_1_1Order.html#a486b5c12583eb49499767cd5db168696">exchange::Order::type</a></div><div class="ttdeci">OrderType type</div><div class="ttdef"><b>Definition</b> order.hpp:26</div></div>
-<div class="ttc" id="astructexchange_1_1Order_html_a77eebcf4c15cd346a194d52e75dfb6c9"><div class="ttname"><a href="structexchange_1_1Order.html#a77eebcf4c15cd346a194d52e75dfb6c9">exchange::Order::received_time_ns</a></div><div class="ttdeci">uint64_t received_time_ns</div><div class="ttdef"><b>Definition</b> order.hpp:32</div></div>
-<div class="ttc" id="astructexchange_1_1Order_html_a7856369e4f0e7990bad5dfb4478ab6f6"><div class="ttname"><a href="structexchange_1_1Order.html#a7856369e4f0e7990bad5dfb4478ab6f6">exchange::Order::side</a></div><div class="ttdeci">Side side</div><div class="ttdef"><b>Definition</b> order.hpp:25</div></div>
-<div class="ttc" id="astructexchange_1_1Order_html_ab989ceac83107377cec862dc1b201923"><div class="ttname"><a href="structexchange_1_1Order.html#ab989ceac83107377cec862dc1b201923">exchange::Order::Order</a></div><div class="ttdeci">Order(uint64_t client, uint64_t oid, Side s, OrderType t, uint64_t p, uint64_t q, uint64_t r, uint64_t ns)</div><div class="ttdef"><b>Definition</b> order.hpp:34</div></div>
-<div class="ttc" id="astructexchange_1_1Order_html_ab9e040ddee538b548d0bc3513a7e1aea"><div class="ttname"><a href="structexchange_1_1Order.html#ab9e040ddee538b548d0bc3513a7e1aea">exchange::Order::sequence_id</a></div><div class="ttdeci">uint64_t sequence_id</div><div class="ttdef"><b>Definition</b> order.hpp:18</div></div>
-<div class="ttc" id="astructexchange_1_1Order_html_ac8ab8664486c4ed53399eb496a118d40"><div class="ttname"><a href="structexchange_1_1Order.html#ac8ab8664486c4ed53399eb496a118d40">exchange::Order::remaining</a></div><div class="ttdeci">uint64_t remaining</div><div class="ttdef"><b>Definition</b> order.hpp:29</div></div>
+<div class="ttc" id="astructexchange_1_1Order_html"><div class="ttname"><a href="structexchange_1_1Order.html">exchange::Order</a></div><div class="ttdef"><b>Definition</b> order.hpp:17</div></div>
+<div class="ttc" id="astructexchange_1_1Order_html_a0d5dfbc42558d98f88e0656b9cb9806e"><div class="ttname"><a href="structexchange_1_1Order.html#a0d5dfbc42558d98f88e0656b9cb9806e">exchange::Order::ticker</a></div><div class="ttdeci">std::string ticker</div><div class="ttdef"><b>Definition</b> order.hpp:30</div></div>
+<div class="ttc" id="astructexchange_1_1Order_html_a13e7b76a69fb844ac5aceddc52366ed6"><div class="ttname"><a href="structexchange_1_1Order.html#a13e7b76a69fb844ac5aceddc52366ed6">exchange::Order::quantity</a></div><div class="ttdeci">uint64_t quantity</div><div class="ttdef"><b>Definition</b> order.hpp:32</div></div>
+<div class="ttc" id="astructexchange_1_1Order_html_a1a8baef205ed7cb8b8a20295ce8c935b"><div class="ttname"><a href="structexchange_1_1Order.html#a1a8baef205ed7cb8b8a20295ce8c935b">exchange::Order::price</a></div><div class="ttdeci">uint64_t price</div><div class="ttdef"><b>Definition</b> order.hpp:31</div></div>
+<div class="ttc" id="astructexchange_1_1Order_html_a2959aad451409534eec319633c1d65a3"><div class="ttname"><a href="structexchange_1_1Order.html#a2959aad451409534eec319633c1d65a3">exchange::Order::client_id</a></div><div class="ttdeci">uint64_t client_id</div><div class="ttdef"><b>Definition</b> order.hpp:24</div></div>
+<div class="ttc" id="astructexchange_1_1Order_html_a427dc7523377a38a388822545bdd6a8e"><div class="ttname"><a href="structexchange_1_1Order.html#a427dc7523377a38a388822545bdd6a8e">exchange::Order::order_id</a></div><div class="ttdeci">uint64_t order_id</div><div class="ttdef"><b>Definition</b> order.hpp:25</div></div>
+<div class="ttc" id="astructexchange_1_1Order_html_a486b5c12583eb49499767cd5db168696"><div class="ttname"><a href="structexchange_1_1Order.html#a486b5c12583eb49499767cd5db168696">exchange::Order::type</a></div><div class="ttdeci">OrderType type</div><div class="ttdef"><b>Definition</b> order.hpp:29</div></div>
+<div class="ttc" id="astructexchange_1_1Order_html_a77eebcf4c15cd346a194d52e75dfb6c9"><div class="ttname"><a href="structexchange_1_1Order.html#a77eebcf4c15cd346a194d52e75dfb6c9">exchange::Order::received_time_ns</a></div><div class="ttdeci">uint64_t received_time_ns</div><div class="ttdef"><b>Definition</b> order.hpp:36</div></div>
+<div class="ttc" id="astructexchange_1_1Order_html_a7856369e4f0e7990bad5dfb4478ab6f6"><div class="ttname"><a href="structexchange_1_1Order.html#a7856369e4f0e7990bad5dfb4478ab6f6">exchange::Order::side</a></div><div class="ttdeci">Side side</div><div class="ttdef"><b>Definition</b> order.hpp:28</div></div>
+<div class="ttc" id="astructexchange_1_1Order_html_ab3a85f33eea92566b8cb25f9cf3e76b5"><div class="ttname"><a href="structexchange_1_1Order.html#ab3a85f33eea92566b8cb25f9cf3e76b5">exchange::Order::Order</a></div><div class="ttdeci">Order(uint64_t client, uint64_t oid, Side s, OrderType t, std::string tick, uint64_t p, uint64_t q, uint64_t r, uint64_t ns)</div><div class="ttdef"><b>Definition</b> order.hpp:39</div></div>
+<div class="ttc" id="astructexchange_1_1Order_html_ab9e040ddee538b548d0bc3513a7e1aea"><div class="ttname"><a href="structexchange_1_1Order.html#ab9e040ddee538b548d0bc3513a7e1aea">exchange::Order::sequence_id</a></div><div class="ttdeci">uint64_t sequence_id</div><div class="ttdef"><b>Definition</b> order.hpp:21</div></div>
+<div class="ttc" id="astructexchange_1_1Order_html_ac8ab8664486c4ed53399eb496a118d40"><div class="ttname"><a href="structexchange_1_1Order.html#ac8ab8664486c4ed53399eb496a118d40">exchange::Order::remaining</a></div><div class="ttdeci">uint64_t remaining</div><div class="ttdef"><b>Definition</b> order.hpp:33</div></div>
+<div class="ttc" id="astructexchange_1_1Order_html_ad10f767cc074d7d379a76506653800c8"><div class="ttname"><a href="structexchange_1_1Order.html#ad10f767cc074d7d379a76506653800c8">exchange::Order::Order</a></div><div class="ttdeci">Order()=default</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

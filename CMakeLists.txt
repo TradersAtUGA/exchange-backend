@@ -1,6 +1,9 @@
 cmake_minimum_required(VERSION 3.14)
 project(ExchangeBackend VERSION 1.0 LANGUAGES CXX)
 
+# define DEBUG macro for all targets in project when in debug mode
+add_compile_definitions($<$<CONFIG:Debug>:DEBUG>)
+
 # Require at least C++20
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)

@@ -79,32 +79,33 @@ $(function() {
   <div class="headertitle"><div class="title">data_conversion.cpp File Reference</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &quot;<a class="el" href="data__conversion_8hpp_source.html">../../include/network-inbound/data_conversion.hpp</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="order_8hpp_source.html">../../include/order.hpp</a>&quot;</code><br />
-<code>#include &quot;crow.h&quot;</code><br />
-<code>#include &lt;cstdint&gt;</code><br />
+<div class="textblock"><code>#include &lt;cstdint&gt;</code><br />
 <code>#include &lt;string&gt;</code><br />
+<code>#include &quot;crow.h&quot;</code><br />
+<code>#include &quot;<a class="el" href="data__conversion_8hpp_source.html">network-inbound/data_conversion.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="order_8hpp_source.html">shared/order.hpp</a>&quot;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for data_conversion.cpp:</div>
 <div class="dyncontent">
 <div class="center"><img src="data__conversion_8cpp__incl.png" border="0" usemap="#asrc_2network-inbound_2data__conversion_8cpp" alt=""/></div>
 <map name="asrc_2network-inbound_2data__conversion_8cpp" id="asrc_2network-inbound_2data__conversion_8cpp">
-<area shape="rect" title=" " alt="" coords="94,5,254,45"/>
-<area shape="rect" href="data__conversion_8hpp.html" title=" " alt="" coords="65,93,283,133"/>
-<area shape="poly" title=" " alt="" coords="177,46,177,79,171,79,171,46"/>
-<area shape="rect" title=" " alt="" coords="42,255,109,280"/>
-<area shape="poly" title=" " alt="" coords="114,48,76,67,44,95,23,122,11,148,9,174,18,206,31,227,48,244,45,248,27,230,13,208,4,175,6,146,19,120,40,92,73,63,112,43"/>
-<area shape="rect" href="order_8hpp.html" title=" " alt="" coords="28,181,123,207"/>
-<area shape="poly" title=" " alt="" coords="114,48,80,67,66,80,55,95,49,112,50,132,63,168,58,170,45,133,44,112,50,92,62,76,77,63,111,43"/>
-<area shape="rect" title=" " alt="" coords="229,181,293,207"/>
-<area shape="poly" title=" " alt="" coords="237,43,271,63,286,76,298,92,304,112,301,134,282,171,277,169,296,132,298,113,293,95,282,80,267,67,234,48"/>
-<area shape="rect" title=" " alt="" coords="329,181,387,207"/>
-<area shape="poly" title=" " alt="" coords="240,43,281,63,319,91,332,109,342,129,355,166,350,168,338,131,328,112,315,95,279,67,238,48"/>
-<area shape="poly" title=" " alt="" coords="171,135,157,170,136,208,102,247,98,243,132,205,152,168,166,133"/>
-<area shape="poly" title=" " alt="" coords="152,136,102,175,99,170,148,131"/>
-<area shape="poly" title=" " alt="" coords="197,132,239,170,236,174,193,136"/>
-<area shape="poly" title=" " alt="" coords="219,131,320,173,317,178,217,136"/>
-<area shape="poly" title=" " alt="" coords="78,207,78,241,73,241,73,207"/>
+<area shape="rect" title=" " alt="" coords="117,5,277,45"/>
+<area shape="rect" title=" " alt="" coords="53,255,119,280"/>
+<area shape="poly" title=" " alt="" coords="155,48,116,70,74,99,37,137,22,159,11,182,8,194,11,205,28,228,51,246,48,250,25,232,6,208,3,194,6,180,18,156,33,134,71,95,113,65,152,43"/>
+<area shape="rect" title=" " alt="" coords="210,255,269,280"/>
+<area shape="poly" title=" " alt="" coords="249,43,286,63,319,91,335,113,345,133,355,181,358,195,355,208,341,226,323,240,283,258,281,253,320,235,337,222,350,205,353,195,350,182,340,135,331,116,315,95,283,68,246,48"/>
+<area shape="rect" title=" " alt="" coords="277,181,341,207"/>
+<area shape="poly" title=" " alt="" coords="239,43,268,64,294,92,303,110,308,130,312,167,307,168,303,131,298,112,289,95,265,68,236,48"/>
+<area shape="rect" href="data__conversion_8hpp.html" title=" " alt="" coords="114,93,279,133"/>
+<area shape="poly" title=" " alt="" coords="199,46,199,79,194,79,194,46"/>
+<area shape="rect" href="order_8hpp.html" title=" " alt="" coords="21,181,151,207"/>
+<area shape="poly" title=" " alt="" coords="158,48,129,68,104,95,96,112,91,131,88,168,82,167,86,130,91,110,100,92,125,64,155,43"/>
+<area shape="poly" title=" " alt="" coords="196,134,185,170,166,208,144,231,120,250,117,245,140,227,161,205,180,168,191,133"/>
+<area shape="poly" title=" " alt="" coords="205,133,235,241,230,242,200,135"/>
+<area shape="poly" title=" " alt="" coords="225,131,282,171,279,175,222,136"/>
+<area shape="poly" title=" " alt="" coords="172,136,115,175,112,171,168,131"/>
+<area shape="poly" title=" " alt="" coords="89,207,89,241,83,241,83,207"/>
+<area shape="poly" title=" " alt="" coords="112,204,203,246,201,251,110,209"/>
 </map>
 </div>
 </div><table class="memberdecls">
@@ -126,6 +127,8 @@ Functions</h2></td></tr>
 <tr class="memitem:a9c2dc07cb5cbab515a584290f5b56092" id="r_a9c2dc07cb5cbab515a584290f5b56092"><td class="memItemLeft" align="right" valign="top"><a class="el" href="order_8hpp.html#aff428c8736e5ed1123d83e2bf9271457">OrderType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="data__conversion_8cpp.html#a9c2dc07cb5cbab515a584290f5b56092">get_order_type</a> (const crow::json::rvalue &amp;json)</td></tr>
 <tr class="memdesc:a9c2dc07cb5cbab515a584290f5b56092"><td class="mdescLeft">&#160;</td><td class="mdescRight">gets the order type of a order JSON  <br /></td></tr>
 <tr class="separator:a9c2dc07cb5cbab515a584290f5b56092"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a56a152b443f98a4c783b70a9dfb0943f" id="r_a56a152b443f98a4c783b70a9dfb0943f"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="data__conversion_8cpp.html#a56a152b443f98a4c783b70a9dfb0943f">get_ticker</a> (const crow::json::rvalue &amp;json)</td></tr>
+<tr class="separator:a56a152b443f98a4c783b70a9dfb0943f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7ffaf6258c1a6ae5218bd5540c173855" id="r_a7ffaf6258c1a6ae5218bd5540c173855"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structexchange_1_1Order.html">exchange::Order</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceexchange_1_1network__inbound.html#a7ffaf6258c1a6ae5218bd5540c173855">exchange::network_inbound::json_to_exchange_order</a> (const crow::json::rvalue &amp;json)</td></tr>
 <tr class="memdesc:a7ffaf6258c1a6ae5218bd5540c173855"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a user order JSON to a <a class="el" href="structexchange_1_1Order.html">exchange::Order</a> object.  <br /></td></tr>
 <tr class="separator:a7ffaf6258c1a6ae5218bd5540c173855"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -220,6 +223,24 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Side the order side, either buy or sell </dd></dl>
+
+</div>
+</div>
+<a id="a56a152b443f98a4c783b70a9dfb0943f" name="a56a152b443f98a4c783b70a9dfb0943f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a56a152b443f98a4c783b70a9dfb0943f">&#9670;&#160;</a></span>get_ticker()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string get_ticker </td>
+          <td>(</td>
+          <td class="paramtype">const crow::json::rvalue &amp;&#160;</td>
+          <td class="paramname"><em>json</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
 
 </div>
 </div>
