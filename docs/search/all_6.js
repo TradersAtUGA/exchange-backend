@@ -1,4 +1,6 @@
 var searchData=
 [
-  ['json_5fto_5fexchange_5forder_0',['json_to_exchange_order',['../namespaceexchange_1_1network__inbound.html#a7ffaf6258c1a6ae5218bd5540c173855',1,'exchange::network_inbound']]]
+  ['get_5forder_5ftype_0',['get_order_type',['../data__conversion_8cpp.html#a9c2dc07cb5cbab515a584290f5b56092',1,'get_order_type(const crow::json::rvalue &amp;json):&#160;data_conversion.cpp'],['../data__conversion_8hpp.html#a9c2dc07cb5cbab515a584290f5b56092',1,'get_order_type(const crow::json::rvalue &amp;json):&#160;data_conversion.cpp']]],
+  ['get_5fside_1',['get_side',['../data__conversion_8cpp.html#aba1f5bb908ae9d8f91d9c55ae26fe03a',1,'get_side(const crow::json::rvalue &amp;json):&#160;data_conversion.cpp'],['../data__conversion_8hpp.html#aba1f5bb908ae9d8f91d9c55ae26fe03a',1,'get_side(const crow::json::rvalue &amp;json):&#160;data_conversion.cpp']]],
+  ['get_5fticker_2',['get_ticker',['../data__conversion_8cpp.html#a56a152b443f98a4c783b70a9dfb0943f',1,'data_conversion.cpp']]]
 ];
