@@ -17,6 +17,7 @@
 #include "shared/ring_buffer.hpp"
 #include "sequencer/sequencer.hpp"
 #include "engine/matching_engine.hpp"
+#include "network-manager/network_manager.hpp"
 
 #include "config.hpp"
 #include "ticker.hpp"
@@ -42,7 +43,7 @@ private:
     // Components
     std::unique_ptr<Sequencer> sequencer_;
     std::vector<std::unique_ptr<MatchingEngine>> matching_engines_;
-    // vikas add ur network-in manager here
+    NetworkManager network_manager_;
 };
 
 
