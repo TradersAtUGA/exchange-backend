@@ -5,5 +5,7 @@
     "type": "market",
     "ticker": "XYZ",
     "price": 10,
+    "remaining": 0,
+    "timestamp": 0,
     "quantity": 10
 }

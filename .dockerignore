@@ -1,2 +1,7 @@
 *.md
 LICENSE
+build/
+.git
+.github
+.gitignore
+.gitattributes

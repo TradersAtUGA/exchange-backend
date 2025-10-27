@@ -49,20 +49,18 @@ bool Exchange::init() {
 void Exchange::run(const std::atomic<bool>& running) {
     network_manager_.start_inbound_server(network_to_sequencer_);
     // do something with running later
-    while(running) {
+    while(running.load()) {
         DEBUG_PRINT("Exchange is running");
-        std::cout << "Exchange is running" << std::endl;
-        std::cout << network_to_sequencer_.size_approx() << std::endl;
+        DEBUG_PRINT(network_to_sequencer_.size_approx());
+  
         std::this_thread::sleep_for(std::chrono::seconds(1));
     }
+    network_manager_.stop_inbound_server();
     // std::thread sequence_worker(*sequencer_);
 
     // sequence_worker.join();
 
     DEBUG_PRINT("Exchange is no longer running");
-    
-
-    std::cout << "Exchange is no longer running" << std::endl;
     return;
 }
 

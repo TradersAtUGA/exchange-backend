@@ -1,0 +1,3 @@
+curl -X POST http://localhost:11000/order-send \
+-H "Content-Type: application/json" \
+--data-binary @mock_json/demo_client_order_input.json

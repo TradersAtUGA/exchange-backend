@@ -41,6 +41,10 @@
 *.dwo
 
 build/
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
 
 #vcpkg
 vcpkg/

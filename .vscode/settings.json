@@ -3,6 +3,8 @@
   "files.associations": {
     "compare": "cpp",
     "cstdint": "cpp",
-    "format": "cpp"
+    "format": "cpp",
+    "csignal": "cpp",
+    "atomic": "cpp"
   }
 }

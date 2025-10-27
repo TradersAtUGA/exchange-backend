@@ -3,9 +3,16 @@ FROM ubuntu:22.04
 
 
 # Install essentials
-RUN apt-get update && apt-get install -y \
-    build-essential cmake git curl unzip zip python3 pkg-config && \
-    rm -rf /var/lib/apt/lists/*
+# RUN apt-get update && apt-get install -y \
+#     build-essential cmake git curl unzip zip python3 pkg-config && \
+#     rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y software-properties-common \ 
+    && add-apt-repository ppa:ubuntu-toolchain-r/test -y \
+    && apt-get update \
+    && apt-get install -y build-essential cmake git curl unzip zip python3 pkg-config gcc-13 g++-13 \
+    && update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-13 100 \
+    && update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-13 100 \
+    && rm -rf /var/lib/apt/lists/*
 
 
 # Set working directory
@@ -23,7 +30,7 @@ RUN /vcpkg/vcpkg install --triplet x64-linux
 
 # Port defined for the crow input network 
 # this is tied to ./include/network-input/api_routing.hpp PORT_NUMBER variable
-EXPOSE 10000
+
 
 # Default command
 CMD ["bash"]
