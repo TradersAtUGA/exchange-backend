@@ -1,7 +1,11 @@
 add_library(exchange
     exchange.cpp
     ../sequencer/sequencer.cpp      
-    ../engine/matching_engine.cpp   
+    ../engine/matching_engine.cpp 
+    ../network-manager/network_manager.cpp  
+    ../network-inbound/api_routing.cpp
+    ../network-inbound/data_conversion.cpp
+    ../network-inbound/data_validation.cpp
 )
 
 target_include_directories(exchange
@@ -12,7 +16,9 @@ target_include_directories(exchange
 )
 
 find_package(concurrentqueue CONFIG REQUIRED)
+find_package(Crow CONFIG REQUIRED)
 
 target_link_libraries(exchange
     concurrentqueue::concurrentqueue
+    Crow::Crow
 )

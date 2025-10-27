@@ -13,6 +13,8 @@
 #include "sequencer/sequencer.hpp"
 #include "exchange/exchange.hpp"
 #include "engine/matching_engine.hpp"
+#include "shared/debug.hpp"
+#include "network-manager/network_manager.hpp"
 
 #include "ticker.hpp"
 #include "config.hpp"
@@ -30,7 +32,7 @@ Exchange::~Exchange() {
 }
 
 bool Exchange::init() {
-    std::cout << "Exchange is beginning initiation" << std::endl;
+    DEBUG_PRINT("Exchange is beginning initiation");
 
     for (const auto& ticker : exchange::TICKERS) {
         sequencer_to_matcher_[ticker] = std::make_unique<RingBuffer<Order, config::RING_BUFFER_SIZE>>();
@@ -40,21 +42,25 @@ bool Exchange::init() {
 
     sequencer_ = std::make_unique<Sequencer>(network_to_sequencer_, sequencer_to_matcher_);
 
-    std::cout << "Exchange has completed initialization" << std::endl;
+    DEBUG_PRINT("Exchange has completed initialization");
     return true;
 }
 
 void Exchange::run(const std::atomic<bool>& running) {
+    network_manager_.start_inbound_server(network_to_sequencer_);
     // do something with running later
-    while(running) {
-        std::cout << "Exchange is running" << std::endl;
+    while(running.load()) {
+        DEBUG_PRINT("Exchange is running");
+        DEBUG_PRINT(network_to_sequencer_.size_approx());
+  
         std::this_thread::sleep_for(std::chrono::seconds(1));
     }
+    network_manager_.stop_inbound_server();
     // std::thread sequence_worker(*sequencer_);
 
     // sequence_worker.join();
 
-    std::cout << "Exchange is no longer running" << std::endl;
+    DEBUG_PRINT("Exchange is no longer running");
     return;
 }
 

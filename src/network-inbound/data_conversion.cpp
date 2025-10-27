@@ -25,6 +25,7 @@ OrderType get_order_type(const crow::json::rvalue& json) {
 }
 
 std::string get_ticker(const crow::json::rvalue& json) {
+    // TODO: check if valid ticker is being used 
     std::string ticker = json["ticker"].s();
     return ticker;
 }
