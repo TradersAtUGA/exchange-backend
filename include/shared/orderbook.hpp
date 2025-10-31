@@ -20,8 +20,8 @@ public:
      * 
      * @param order the order being added
      */
-    void push_order(exchange::Order& order) { // Maybe change this to return bool to ensure it can be checked? Else this can just be void 
-        this->orderbook_[order.price].push_back(order);
+    void push_order(exchange::Order&& order) { // Maybe change this to return bool to ensure it can be checked? Else this can just be void 
+        orderbook_[order.price].push_back(std::move(order));
     }
 
     /**
@@ -32,48 +32,48 @@ public:
      * was no orders at that price level
      */
     std::optional<exchange::Order> pop_order(uint64_t price_level) { 
-        if (this->orderbook_[price_level].size() > 0) {
-            exchange::Order order = this->orderbook_[price_level].front();
-            this->orderbook_[price_level].pop_front(); 
+        if (orderbook_[price_level].size() > 0) {
+            exchange::Order order = orderbook_[price_level].front();
+            orderbook_[price_level].pop_front(); 
             return order;
         } else {
             return std::nullopt;
         }
     }
 
-    /**
-     * @brief removes a given order from the OrderBook entirely
-     * 
-     * @param order the order to remove
-     * @return 1 if the order was able to be removed, else 0
-     */
-    std::optional<exchange::Order> remove_order(exchange::Order& order) { // This method O(N) because we using std::deque
-        u_int64_t count = 0;
-        u_int64_t deque_size = (u_int64_t) this->orderbook_[order.price].size();
-        for (exchange::Order check : this->orderbook_[order.price]) {
-            if (check.order_id == order.order_id) { 
-                auto ele = this->orderbook_[order.price].begin() + count;
-                this->orderbook_[order.price].erase(ele);
+        /**
+         * @brief removes a given order from the OrderBook entirely
+         * 
+         * @param order the order to remove
+         * @return 1 if the order was able to be removed, else 0
+         */
+        std::optional<exchange::Order> remove_order(const exchange::Order& order) { // This method O(N) because we using std::deque
+            u_int64_t count = 0;
+            u_int64_t deque_size = (u_int64_t) orderbook_[order.price].size();
+            for (const exchange::Order& check : orderbook_[order.price]) {
+                if (check.order_id == order.order_id) { 
+                    auto ele = orderbook_[order.price].begin() + count;
+                    orderbook_[order.price].erase(ele);
+                }
+                ++count;
             }
-            ++count;
+
+            if (count == deque_size) {
+                return std::nullopt;
+            }
+
+            return order; 
         }
 
-        if (count == deque_size) {
-            return std::nullopt;
+        /**
+         * @brief modifies a given order in the OrderBook 
+         * 
+         * @param order the order to modify
+         */
+        void modify_order(exchange::Order&& order) {
+            remove_order(order);
+            push_order(std::move(order));
         }
-
-        return order; 
-    }
-
-    /**
-     * @brief modifies a given order in the OrderBook 
-     * 
-     * @param order the order to modify
-     */
-    void modify_order(exchange::Order& order) {
-        this->remove_order(order);
-        this->push_order(order);
-    }
     
 private:
     // main order book
