@@ -41,40 +41,40 @@ public:
         }
     }
 
-        /**
-         * @brief removes a given order from the OrderBook entirely
-         * 
-         * @param order the order to remove
-         * @return 1 if the order was able to be removed, else 0
-         */
-        std::optional<exchange::Order> remove_order(const exchange::Order& order) { // This method O(N) because we using std::deque
-            u_int64_t count = 0;
-            u_int64_t deque_size = (u_int64_t) orderbook_[order.price].size();
-            for (const exchange::Order& check : orderbook_[order.price]) {
-                if (check.order_id == order.order_id) { 
-                    auto ele = orderbook_[order.price].begin() + count;
-                    orderbook_[order.price].erase(ele);
-                }
-                ++count;
+    /**
+     * @brief removes a given order from the OrderBook entirely
+     * 
+     * @param order the order to remove
+     * @return 1 if the order was able to be removed, else 0
+     */
+    std::optional<exchange::Order> remove_order(const exchange::Order& order) { // This method O(N) because we using std::deque
+        u_int64_t count = 0;
+        u_int64_t deque_size = (u_int64_t) orderbook_[order.price].size();
+        for (const exchange::Order& check : orderbook_[order.price]) {
+            if (check.order_id == order.order_id) { 
+                auto ele = orderbook_[order.price].begin() + count;
+                orderbook_[order.price].erase(ele);
             }
-
-            if (count == deque_size) {
-                return std::nullopt;
-            }
-
-            return order; 
+            ++count;
         }
 
-        /**
-         * @brief modifies a given order in the OrderBook 
-         * 
-         * @param order the order to modify
-         */
-        void modify_order(exchange::Order&& order) {
-            remove_order(order);
-            push_order(std::move(order));
+        if (count == deque_size) {
+            return std::nullopt;
         }
-    
+
+        return order; 
+    }
+
+    /**
+     * @brief modifies a given order in the OrderBook 
+     * 
+     * @param order the order to modify
+     */
+    void modify_order(exchange::Order&& order) {
+        remove_order(order);
+        push_order(std::move(order));
+    }
+
 private:
     // main order book
     std::map<u_int64_t, std::deque<exchange::Order>> orderbook_;
