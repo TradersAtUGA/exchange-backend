@@ -4,14 +4,15 @@
 
 namespace exchange {
 
-Sequencer::Sequencer(moodycamel::ConcurrentQueue<exchange::Order>& inbound, 
+Sequencer::Sequencer(const std::atomic<bool>& running,
+        moodycamel::ConcurrentQueue<exchange::Order>& inbound, 
         std::unordered_map<std::string, std::unique_ptr<RingBuffer<Order, config::RING_BUFFER_SIZE>>>& outbound)
-         : inbound_(inbound), outbound_(outbound), counter_(0) {}
+         : running_(running), inbound_(inbound), outbound_(outbound), counter_(0) {}
 
 
 // opperator override for std::thread
 void Sequencer::operator()() {
-    while(true) { // maybe change later
+    while(running_.load()) { 
         exchange::Order order;
         if (inbound_.try_dequeue(order)) {
             std::cout << "Got order: " << order.order_id << std::endl; // cannot just print the "order" object itself 

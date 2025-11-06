@@ -23,9 +23,7 @@
 namespace exchange
 {
     
-Exchange::Exchange() {
-
-}
+Exchange::Exchange(const std::atomic<bool>& running) : running_(running) {}
 
 Exchange::~Exchange() {
 
@@ -40,25 +38,29 @@ bool Exchange::init() {
         matching_engines_.push_back(std::make_unique<MatchingEngine>(ticker, *sequencer_to_matcher_[ticker]));
     }
 
-    sequencer_ = std::make_unique<Sequencer>(network_to_sequencer_, sequencer_to_matcher_);
+    sequencer_ = std::make_unique<Sequencer>(running_, network_to_sequencer_, sequencer_to_matcher_);
 
     DEBUG_PRINT("Exchange has completed initialization");
     return true;
 }
 
-void Exchange::run(const std::atomic<bool>& running) {
+void Exchange::run() {
     network_manager_.start_inbound_server(network_to_sequencer_);
+    DEBUG_PRINT("Starting Network");
+    std::thread sequence_worker(*sequencer_);
+    DEBUG_PRINT("Starting Sequencer");
     // do something with running later
-    while(running.load()) {
+    while(running_.load()) {
         DEBUG_PRINT("Exchange is running");
         DEBUG_PRINT(network_to_sequencer_.size_approx());
   
         std::this_thread::sleep_for(std::chrono::seconds(1));
     }
+    DEBUG_PRINT("Shutting down network");
     network_manager_.stop_inbound_server();
-    // std::thread sequence_worker(*sequencer_);
 
-    // sequence_worker.join();
+    DEBUG_PRINT("Shutting down sequencer");
+    sequence_worker.join();
 
     DEBUG_PRINT("Exchange is no longer running");
     return;

@@ -12,14 +12,12 @@ void handle_sigint(int signal) {
 }
 
 int main() {
-    std::signal(SIGUSR1, handle_sigint);
-
-    std::cout << "PID: " << getpid() << std::endl;
+    std::signal(SIGINT, handle_sigint);
     
-    exchange::Exchange exchange;
+    exchange::Exchange exchange(running);
     // Creates sequencer, matching engines, threads
     exchange.init();
     // Start networks loops, sequencer loop, 
-    exchange.run(running); 
+    exchange.run(); 
     return 0;
 }

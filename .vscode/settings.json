@@ -5,6 +5,7 @@
     "cstdint": "cpp",
     "format": "cpp",
     "csignal": "cpp",
-    "atomic": "cpp"
+    "atomic": "cpp",
+    "unordered_map": "cpp"
   }
 }
