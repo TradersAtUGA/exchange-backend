@@ -28,13 +28,16 @@ namespace exchange
 
 class Exchange {
 public:
-    Exchange();
+    Exchange(const std::atomic<bool>& running);
     ~Exchange();
 
     bool init();
-    void run(const std::atomic<bool>& running);
+    void run();
 
 private:
+    // Running Flag - read only
+    const std::atomic<bool>& running_;
+
     // Queues
     moodycamel::ConcurrentQueue<exchange::Order> network_to_sequencer_;
     std::unordered_map<std::string, 
