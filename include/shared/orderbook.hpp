@@ -16,6 +16,13 @@ class OrderBook {
 public:
 
     /**
+     * @brief builds a new orderbook object
+     */
+    OrderBook() {
+        orderbook_ = std::map<u_int64_t, std::deque<exchange::Order>>();
+    }
+
+    /**
      * @brief adds an order to the OrderBook
      * 
      * @param order the order being added
