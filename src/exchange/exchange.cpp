@@ -51,9 +51,14 @@ void Exchange::run() {
     DEBUG_PRINT("Starting Sequencer");
     // do something with running later
     while(running_.load()) {
+        // debug info
         DEBUG_PRINT("Exchange is running");
-        DEBUG_PRINT(network_to_sequencer_.size_approx());
-  
+        DEBUG_PRINT("Network to sequencer queue size: " + std::to_string(network_to_sequencer_.size_approx()));
+        DEBUG_PRINT("Ring Buffer size [QQQ]: " + std::to_string(sequencer_to_matcher_["QQQ"]->size()));
+        DEBUG_PRINT("Ring Buffer size [ABC]: " + std::to_string(sequencer_to_matcher_["ABC"]->size()));
+        DEBUG_PRINT("Ring Buffer size [XYZ]: " + std::to_string(sequencer_to_matcher_["XYZ"]->size()));
+        
+        // slow done for mvp
         std::this_thread::sleep_for(std::chrono::seconds(1));
     }
     DEBUG_PRINT("Shutting down network");

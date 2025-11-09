@@ -1,6 +1,7 @@
 #include "sequencer/sequencer.hpp"
 #include <iostream>
 #include <unordered_map>
+#include "shared/debug.hpp"
 
 namespace exchange {
 
@@ -15,7 +16,7 @@ void Sequencer::operator()() {
     while(running_.load()) { 
         exchange::Order order;
         if (inbound_.try_dequeue(order)) {
-            std::cout << "Got order: " << order.order_id << std::endl; // cannot just print the "order" object itself 
+            DEBUG_PRINT("Got order: " + std::to_string(order.order_id));
 
             // Handle logic 
             /* 
@@ -25,7 +26,7 @@ void Sequencer::operator()() {
             order.sequence_id = counter_++;
             
             // Route ticker, assume ticker exsits
-            while(!outbound_[order.ticker]->enqueue(std::move(order))) {
+            while(!outbound_[order.ticker]->enqueue(std::move(order)) && (running_.load())) {
                 std::this_thread::yield();
             }
 

@@ -42,6 +42,10 @@ public:
         return (count_ == Size);
     }
 
+    int size() const {
+        return count_;
+    }
+
 private:
     T buffer_[Size];
     size_t head_, tail_, count_;

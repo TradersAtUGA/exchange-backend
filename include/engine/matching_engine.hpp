@@ -2,6 +2,8 @@
 #include <string>
 #include "shared/order.hpp"
 #include "shared/ring_buffer.hpp"
+#include "shared/multi_ring_buffer.hpp"
+#include "shared/trade.hpp"
 #include "config.hpp"
 
 namespace exchange {
@@ -15,6 +17,7 @@ public:
 private:
     const std::string& ticker_;
     RingBuffer<Order, config::RING_BUFFER_SIZE>& inbound_;
+    MultiConsumerRingBuffer<Trade, config::RING_BUFFER_SIZE, >& outbound_;
     // order book
 };
 

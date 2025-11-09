@@ -30,7 +30,7 @@ set(TICKERS "\"ABC\", \"XYZ\", \"QQQ\"")
 configure_file(
     ${CMAKE_SOURCE_DIR}/templates/ticker.hpp.in
     ${CMAKE_BINARY_DIR}/generated/include/ticker.hpp
-    @ONLY
+    @ONLY. 
 )
 
 configure_file(

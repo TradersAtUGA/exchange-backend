@@ -13,7 +13,7 @@ while true; do
   JSON=$(cat <<EOF
 {
   "client_id": 10,
-  "order_id": 10,
+  "order_id": $count,
   "side": "buy",
   "type": "market",
   "ticker": "XYZ",
@@ -27,5 +27,6 @@ EOF
   curl -s -X POST "$URL" \
     -H "Content-Type: application/json" \
     -d "$JSON"
-  ((count++))  
+  ((count++))
+  # sleep 1  
 done

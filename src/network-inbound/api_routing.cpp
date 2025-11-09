@@ -49,6 +49,7 @@ void start_input_server(crow::SimpleApp& app, moodycamel::ConcurrentQueue<exchan
     // add other routes here before startring the server 
 
     //start server
+    
     app.signal_clear(); // VERY IMPORTANT DO NOT DELETE - tells crow not to handle sigint so main.cpp can handle it
     app.port(config::NETWORK_INBOUND_PORT_NUMBER).concurrency(config::NETWORK_INBOUND_THREAD_COUNT).run();
 }

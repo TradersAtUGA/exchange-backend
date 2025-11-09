@@ -15,6 +15,9 @@ namespace exchange
 NetworkManager::NetworkManager() {}
 
 void NetworkManager::start_inbound_server(moodycamel::ConcurrentQueue<exchange::Order>& q) {
+    // this turns the spam from crow info off 
+    crow::logger::setLogLevel(crow::LogLevel::Critical);
+
     inbound_server_thread_ = std::thread([this, &q]() { // capture instance of this object and the queue by ref
         network_inbound::start_input_server(inbound_server_, q);
     }); 

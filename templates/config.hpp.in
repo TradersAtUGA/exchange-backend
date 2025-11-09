@@ -21,4 +21,7 @@ namespace config {
 
     // Ring buffer
     inline constexpr uint32_t RING_BUFFER_SIZE = @RING_BUFFER_SIZE@;
+
+    // Ring buffer number of consumers
+    inline constexpr uint8_t NUM_CONSUMERS = @NUM_CONSUMERS@;
 }
