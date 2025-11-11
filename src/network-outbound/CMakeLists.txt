@@ -1,5 +1,6 @@
 add_library(network_outbound
-    outbound_server.cpp
+    outbound_public.cpp
+    outbound_private.cpp
 )
 
 target_include_directories(network_outbound
