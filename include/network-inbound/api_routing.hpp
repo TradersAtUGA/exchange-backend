@@ -1,3 +1,6 @@
+/**
+ * @brief inbound server routing endpoints
+ */
 #pragma once
 #include "crow.h"
 #include "moodycamel/concurrentqueue.h"
@@ -47,5 +50,5 @@ void register_order_get_route(crow::SimpleApp& app);
  */
 void start_input_server(crow::SimpleApp& app, moodycamel::ConcurrentQueue<exchange::Order>& q);
 
-} // network_input
+} // network_inbound
 

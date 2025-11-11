@@ -65,6 +65,7 @@ add_subdirectory(src/exchange)
 add_subdirectory(src/sequencer)
 add_subdirectory(src/engine)
 add_subdirectory(src/network-manager)
+add_subdirectory(src/network-outbound)
 
 # uncomment these later when implemented AND contain CMAKE file
 # add_subdirectory(src/network-outbound)
