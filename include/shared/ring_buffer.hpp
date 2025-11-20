@@ -3,59 +3,53 @@
 #include <cstddef>
 #include <utility>
 #include <semaphore>
+#include <atomic>
 
 namespace exchange {
 
-template<typename T, size_t Size>
+template<typename T, size_t Capacity>
 class RingBuffer {
+    static_assert((Capacity & (Capacity - 1)) == 0, "RingBuffer Capacity must be power of 2");
 public:
-    RingBuffer() {
-        head_ = 0;
-        tail_ = 0;
-    }
+    RingBuffer() = default;
 
     bool enqueue(T&& item) {
-        spaces_.acquire(); // wait for space
-        mutex_.acquire(); // wait for exclusive access to buffer
+        size_t current_tail = tail_.load(std::memory_order_relaxed);
+        size_t next_tail = (current_tail + 1) & (Capacity - 1);
 
-        buffer_[tail_] = std::move(item);
-        tail_ = (tail_ + 1) % Size;
+        if (next_tail == head_.load(std::memory_order_acquire)) {
+            return false; // queue full
+        }
         
-        mutex_.release(); // release exclusive access
-        items_.release(); // signal that an item is available
+        buffer_[current_tail] = std::move(item);
+        tail_.store(next_tail, std::memory_order_release);
+        count_.fetch_add(1, std::memory_order_relaxed);
         return true;
     }
 
     bool dequeue(T& item) {
-        items_.acquire(); // wait for an item
-        mutex_.acquire(); // wait for exclusive access to buffer
+        size_t current_head = head_.load(std::memory_order_acquire);
+        size_t next_head = (current_head + 1) & (Capacity - 1);
 
-        item = std::move(buffer_[head_]);
-        head_ = (head_ + 1) % Size;
+        if (current_head == tail_.load(std::memory_order_relaxed)) {
+            return false; // queue empty
+        }
 
-        mutex_.release(); // release exclusive access
-        spaces_.release(); // signal that space is available
+        item = std::move(buffer_[current_head]);
+        head_.store(next_head, std::memory_order_release);
+        count_.fetch_sub(1, std::memory_order_relaxed);
         return true;
     }
 
-    bool empty() {
-        return (items_.try_acquire() == false); // if we can't acquire, it's empty
-    }
-
-    bool full() {
-        return (spaces_.try_acquire() == false); // if we can't acquire, it's full
-    }
-
     int size() const {
-        return count_;
+        return count_.load(std::memory_order_relaxed);
     }
 
 private:
-    T buffer_[Size];
-    size_t head_, tail_;
-    std::counting_semaphore<> items_{0}; //counting semaphores go from 0 - inf
-    std::counting_semaphore<> spaces_{Size};
-    std::binary_semaphore mutex_{1}; //binary semaphore goes from 0 - 1, basically a mutex
+    T buffer_[Capacity];
+    std::atomic<size_t> head_;
+    std::atomic<size_t> tail_;
+    std::atomic<size_t> count_;
 };
 
 }

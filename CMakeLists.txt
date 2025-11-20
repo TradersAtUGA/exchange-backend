@@ -22,7 +22,10 @@ set(NETWORK_OUTBOUND_PORT_NUMBER 12000)
 set(NETWORK_OUTBOUND_THREAD_COUNT 4)
 
 # Ring Buffer
-set(RING_BUFFER_SIZE 1024)
+set(RING_BUFFER_SIZE 1024) # change this to power of 2
+
+# Multiconsumer
+set(NUM_CONSUMERS 2)
 
 # Tickers
 set(TICKERS "\"ABC\", \"XYZ\", \"QQQ\"")

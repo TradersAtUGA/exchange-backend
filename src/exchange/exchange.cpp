@@ -50,7 +50,7 @@ void Exchange::run() {
     std::thread sequence_worker(*sequencer_);
     DEBUG_PRINT("Starting Sequencer");
     // do something with running later
-    while(running_.load()) {
+    while(running_.load(std::memory_order_acquire)) {
         // debug info
         DEBUG_PRINT("Exchange is running");
         DEBUG_PRINT("Network to sequencer queue size: " + std::to_string(network_to_sequencer_.size_approx()));

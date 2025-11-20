@@ -1,15 +1,44 @@
-# Base image with build tools
-FROM ubuntu:22.04
+# Stage 1 - Create image and compile
+# Base image
+FROM ubuntu:22.04 AS builder
 
 
-# Install essentials
-# RUN apt-get update && apt-get install -y \
-#     build-essential cmake git curl unzip zip python3 pkg-config && \
-#     rm -rf /var/lib/apt/lists/*
-RUN apt-get update && apt-get install -y software-properties-common \ 
+# Install Dependencies - do not delete this comment explaining all this bs
+# RUN apt-get update \                                               # refresh ubuntu package index list
+#    && apt-get install -y software-properties-common \              # provides add-apt-repo(PPA), need this for custom GCC
+#    && add-apt-repository ppa:ubuntu-toolchain-r/test -y \          # gives access to newer GCC versions
+#    && apt-get install -y \                                         # refresh ubuntu package index list again bc of PPA
+#        build-essential \                                           # lots of packages
+#        cmake \
+#        git \
+#        curl \
+#        unzip \
+#        zip \
+#        python3 \
+#        pkg-config \
+#        gcc-13 \
+#        g++-13 \
+#        ccache \
+#    && update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-13 100 \     # replaces system GCC to GCC-13 as defualt compiler
+#    && update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-13 100 \     # same thing but for g++, this allows for C++ 20
+#    && rm -rf /var/lib/apt/lists/*                                              # remove cached package lists to reduce image size 
+
+RUN apt-get update \  
+    && apt-get install -y software-properties-common \ 
     && add-apt-repository ppa:ubuntu-toolchain-r/test -y \
     && apt-get update \
-    && apt-get install -y build-essential cmake git curl unzip zip python3 pkg-config gcc-13 g++-13 ccache \
+    && apt-get install -y \
+        build-essential \
+        cmake \
+        git \
+        curl \
+        unzip \
+        zip \
+        python3 \
+        pkg-config \
+        gcc-13 \
+        g++-13 \
+        ccache \
     && update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-13 100 \
     && update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-13 100 \
     && rm -rf /var/lib/apt/lists/*
@@ -18,22 +47,64 @@ RUN apt-get update && apt-get install -y software-properties-common \
 ENV CCACHE_DIR=/ccache
 ENV PATH="/usr/lib/ccache:${PATH}"
 
-# Set working directory
+
+# Clone vcpkg to /opt
+# the version we are using is 2025.10.17
+# bootstrap makes vcpkg exacutable
+WORKDIR /opt
+RUN git clone https://github.com/microsoft/vcpkg.git && \
+    cd vcpkg && git checkout 2025.10.17 && \
+    ./bootstrap-vcpkg.sh
+
+
+# Set path to be able to use vcpkg
+ENV PATH="/opt/vcpkg:${PATH}"
+
+
+#set workspace
 WORKDIR /workspace
 
-# Clone and bootstrap vcpkg
-RUN git clone https://github.com/microsoft/vcpkg.git /vcpkg && \
-    /vcpkg/bootstrap-vcpkg.sh
 
-# Copy project files
+# install dependencies from vcpkg.json
+COPY vcpkg.json /workspace/vcpkg.json
+RUN /opt/vcpkg/vcpkg install --triplet x64-linux
+
+
+# Copy project files into docker workspace
 COPY . /workspace
 
-# Install dependencies from manifest
-RUN /vcpkg/vcpkg install --triplet x64-linux
+# create binary directory
+WORKDIR /workspace/build
 
+# compile hard code debug mode
+RUN cmake -DCMAKE_C_COMPILER_LAUNCHER=ccache \
+          -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
+          -DCMAKE_BUILD_TYPE=Debug \
+          -DCMAKE_TOOLCHAIN_FILE=/opt/vcpkg/scripts/buildsystems/vcpkg.cmake \
+          -DBUILD_TESTING=OFF \
+          -DCMAKE_EXPORT_COMPILE_COMMANDS=ON .. && \
+    cmake --build . --target exchange_backend -j$(nproc)
 # Port defined for the crow input network 
 # this is tied to ./include/network-input/api_routing.hpp PORT_NUMBER variable
 
+# tmr add Bazel for build system
+# right now compile time is 30 seconds let get down to 1-2 secs max
 
-# Default command
-CMD ["bash"]
+# Stage 2: run code
+FROM ubuntu:22.04 AS runner
+
+RUN apt-get update \
+    && apt-get install -y software-properties-common \
+    && add-apt-repository ppa:ubuntu-toolchain-r/test -y \
+    && apt-get update \
+    && apt-get install -y libstdc++-13-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+
+COPY --from=builder /workspace/build/apps/exchange-server/exchange_backend .
+
+EXPOSE 11000
+
+# # Default command
+CMD ["./exchange_backend"]

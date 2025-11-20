@@ -10,17 +10,17 @@ template<typename T, size_t Size, size_t NumConsumers>
 class MultiConsumerRingBuffer {
 public:
     // To - do implement the rest of this
-    MultiConsumerRingBuffer() {}
+    MultiConsumerRingBuffer() {};
 
-    bool enqueue(T&& item) {}
+    bool enqueue(T&& item);
 
-    bool dequeue(T& item) {}
+    bool dequeue(T& item);
 
-    bool empty() const {}
+    bool empty() const;
 
-    bool full() const {}
+    bool full() const;
 
-    int size() const {}
+    int size() const;
 
 private:
     T buffer_[Size];

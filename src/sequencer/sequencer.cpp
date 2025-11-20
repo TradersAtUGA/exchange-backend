@@ -13,7 +13,7 @@ Sequencer::Sequencer(const std::atomic<bool>& running,
 
 // opperator override for std::thread
 void Sequencer::operator()() {
-    while(running_.load()) { 
+    while(running_.load(std::memory_order_acquire)) { 
         exchange::Order order;
         if (inbound_.try_dequeue(order)) {
             DEBUG_PRINT("Got order: " + std::to_string(order.order_id));
@@ -26,7 +26,7 @@ void Sequencer::operator()() {
             order.sequence_id = counter_++;
             
             // Route ticker, assume ticker exsits
-            while(!outbound_[order.ticker]->enqueue(std::move(order)) && (running_.load())) {
+            while(!outbound_[order.ticker]->enqueue(std::move(order)) && (running_.load(std::memory_order_acquire))) {
                 std::this_thread::yield();
             }
 

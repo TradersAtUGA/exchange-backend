@@ -2,6 +2,7 @@
 #include <cstdint>
 #include <string>
 
+
 enum struct Side : uint8_t {
     Buy = 0,
     Sell = 1
@@ -13,10 +14,8 @@ enum struct OrderType : uint8_t {
 };
 
 namespace exchange {
-
+    // rule of 0 since Order has no RAII then compiler defines all 5 constructors
     struct Order {
-        Order() = default;
-        
         // Sequence
         uint64_t sequence_id;
 
@@ -34,30 +33,6 @@ namespace exchange {
 
         // Timing
         uint64_t received_time_ns;
-        
-
-        Order(
-            uint64_t client,
-            uint64_t oid,
-            Side s,
-            OrderType t,
-            std::string tick,
-            uint64_t p,
-            uint64_t q,
-            uint64_t r,
-            uint64_t ns
-        )
-        : sequence_id(0),
-          client_id(client),
-          order_id(oid),
-          side(s),
-          type(t),
-          ticker(tick),
-          price(p),
-          quantity(q),
-          remaining(r),
-          received_time_ns(ns)
-        {}
     };
 
 }

@@ -13,11 +13,11 @@ public:
     // Template for matching engine later
     MatchingEngine(const std::string& ticker, RingBuffer<Order, config::RING_BUFFER_SIZE>& inbound);
 
-
+    
 private:
     const std::string& ticker_;
     RingBuffer<Order, config::RING_BUFFER_SIZE>& inbound_;
-    MultiConsumerRingBuffer<Trade, config::RING_BUFFER_SIZE, >& outbound_;
+    // MultiConsumerRingBuffer<Trade, config::RING_BUFFER_SIZE, config::NUM_CONSUMERS>& outbound_;
     // order book
 };
 

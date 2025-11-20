@@ -1,2 +1,3 @@
 #!/bin/bash
-bash build/generated/scripts/run.sh
+
+docker run --rm -p 11000:11000 exchange_backend_image

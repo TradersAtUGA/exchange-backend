@@ -8,7 +8,7 @@ std::atomic<bool> running(true);
 
 void handle_sigint(int signal) {
     DEBUG_PRINT("Handle Sig called");
-    running = false;
+    running.store(false, std::memory_order_release);
 }
 
 int main() {

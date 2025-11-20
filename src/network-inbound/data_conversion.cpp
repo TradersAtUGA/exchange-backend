@@ -34,6 +34,7 @@ namespace exchange::network_inbound {
 
 exchange::Order json_to_exchange_order(const crow::json::rvalue& json) {
     return exchange::Order(
+        static_cast<uint64_t>(0),
         cast_json_value(json, "client_id"),
         cast_json_value(json, "order_id"),
         get_side(json),
