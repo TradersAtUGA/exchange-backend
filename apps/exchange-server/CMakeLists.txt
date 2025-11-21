@@ -7,6 +7,7 @@ target_link_libraries(exchange_backend
     sequencer
     exchange
     engine
+    exchange_gateway
 )
 
 # external libraries    
