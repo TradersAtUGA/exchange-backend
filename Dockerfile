@@ -22,15 +22,19 @@ ENV PATH="/usr/lib/ccache:${PATH}"
 WORKDIR /workspace
 
 # Clone and bootstrap vcpkg
-RUN git clone https://github.com/microsoft/vcpkg.git /vcpkg && \
-    /vcpkg/bootstrap-vcpkg.sh
+RUN apt-get update && apt-get install -y unzip curl \
+    && curl -L https://github.com/microsoft/vcpkg/archive/refs/heads/master.zip -o /tmp/vcpkg.zip \
+    && unzip /tmp/vcpkg.zip -d / \
+    && mv /vcpkg-master /vcpkg \
+    && cd /vcpkg && ./bootstrap-vcpkg.sh
+
 
 # Copy project files
 COPY . /workspace
 
 # Install dependencies from manifest
 RUN /vcpkg/vcpkg install --triplet x64-linux
-
+    
 # Port defined for the crow input network 
 # this is tied to ./include/network-input/api_routing.hpp PORT_NUMBER variable
 
