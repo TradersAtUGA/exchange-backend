@@ -45,7 +45,8 @@ bool Exchange::init() {
 }
 
 void Exchange::run() {
-    network_manager_.start_inbound_server(network_to_sequencer_);
+    // network_manager_.start_inbound_server(network_to_sequencer_);
+    network_manager_.start_gateway();
     DEBUG_PRINT("Starting Network");
     std::thread sequence_worker(*sequencer_);
     DEBUG_PRINT("Starting Sequencer");
@@ -57,7 +58,7 @@ void Exchange::run() {
         std::this_thread::sleep_for(std::chrono::seconds(1));
     }
     DEBUG_PRINT("Shutting down network");
-    network_manager_.stop_inbound_server();
+    // network_manager_.stop_inbound_server();
 
     DEBUG_PRINT("Shutting down sequencer");
     sequence_worker.join();

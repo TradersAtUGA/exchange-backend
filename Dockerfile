@@ -34,6 +34,7 @@ RUN /vcpkg/vcpkg install --triplet x64-linux
 # Port defined for the crow input network 
 # this is tied to ./include/network-input/api_routing.hpp PORT_NUMBER variable
 
+EXPOSE 9823
 
 # Default command
 CMD ["bash"]

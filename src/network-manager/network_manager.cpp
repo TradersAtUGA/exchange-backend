@@ -8,11 +8,18 @@
 #include "network-inbound/data_validation.hpp"
 #include "shared/order.hpp"
 
+#include <iostream>
+
+
 
 namespace exchange 
 {
 
-NetworkManager::NetworkManager() {}
+NetworkManager::NetworkManager()
+    : settings("settings.cfg"),
+      storeFactory(settings),
+      logFactory(settings)
+{}
 
 void NetworkManager::start_inbound_server(moodycamel::ConcurrentQueue<exchange::Order>& q) {
     inbound_server_thread_ = std::thread([this, &q]() { // capture instance of this object and the queue by ref
@@ -31,6 +38,11 @@ void NetworkManager::stop_inbound_server() {
 
 void NetworkManager::stop_outbound_server() {
     return; // TODO: Implement
+}
+
+void NetworkManager::start_gateway() {
+    acceptor = std::make_unique<FIX::SocketAcceptor>(application, storeFactory, settings, logFactory);
+    acceptor->start();
 }
 
 }

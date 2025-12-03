@@ -4,20 +4,55 @@
  */
 #pragma once 
 #include <quickfix/Application.h> 
+#include <quickfix/MessageCracker.h>
 #include <iostream>
 
 
-class ExchangeGateway : public FIX::Application
+class ExchangeGateway 
+    : public FIX::Application, public FIX::MessageCracker
 {
 public:
-virtual ~ExchangeGateway() {};
-virtual void onCreate( const FIX::SessionID& ) = 0;
-virtual void onLogon( const FIX::SessionID& ) = 0;
-virtual void onLogout( const FIX::SessionID& ) = 0;
-virtual void toAdmin( FIX::Message&, const FIX::SessionID& ) = 0;
 
-// override the throw() statements from quickfix library since they are no longer supported
-virtual void toApp( FIX::Message&, const FIX::SessionID& ) noexcept override = 0;
-virtual void fromAdmin( const FIX::Message&, const FIX::SessionID&) noexcept override = 0;
-virtual void fromApp( const FIX::Message&, const FIX::SessionID&) noexcept override = 0;
+    ~ExchangeGateway() override {}
+
+    void onCreate(const FIX::SessionID& session) override {
+        std::cout << "onCreate\n";
+    }
+    void onLogon(const FIX::SessionID& session) override {
+        std::cout << "onLogon\n";
+    }
+    void onLogout(const FIX::SessionID& session) override {
+        std::cout << "onLogout\n";
+    }
+    void toAdmin(FIX::Message& msg, const FIX::SessionID& session) override {
+        std::cout << "toAdmin\n";
+    }
+    void toApp(FIX::Message& msg, const FIX::SessionID& session) noexcept override {
+        try {
+            std::cout << "toAPP\n";
+            crack(msg, session);
+        } catch (const std::exception& e) {
+            std::cerr << "toAPP error: " << e.what() << "\n";
+        }
+    }
+    void fromAdmin(const FIX::Message& msg, const FIX::SessionID& session) noexcept override {
+        try {
+            std::cout << "Received admin message\n";
+            crack(msg, session);
+        } catch (const std::exception& e) {
+            std::cerr << "Admin message error: " << e.what() << "\n";
+        }
+    }
+    void fromApp(const FIX::Message& msg, const FIX::SessionID& session) noexcept override {
+        try {
+            std::cout << "Received application message\n";
+            crack(msg, session);
+        } catch (const std::exception& e) {
+            std::cerr << "App message error: " << e.what() << "\n";
+        }
+    }
+    
+    void onMessage(const FIX42::NewOrderSingle& msg, const FIX::SessionID& session) override {
+        std::cout << "NewOrderSingle received\n";
+    }
 };

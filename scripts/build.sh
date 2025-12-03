@@ -10,5 +10,5 @@ docker run --rm \
 bash -c "mkdir -p /workspace/build && cd /workspace/build \
 && cmake -DCMAKE_BUILD_TYPE=${BUILD_TYPE} \
    -DCMAKE_TOOLCHAIN_FILE=/vcpkg/scripts/buildsystems/vcpkg.cmake \
-   -DBUILD_TESTING=OFF -DCMAKE_EXPORT_COMPILE_COMMANDS=ON .. \
+   -DBUILD_TESTING=OFF -DCMAKE_EXPORT_COMPILE_COMMANDS=ON  .. \
 && cmake --build . --target exchange_backend"

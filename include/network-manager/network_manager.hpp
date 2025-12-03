@@ -11,7 +11,17 @@
 #include "network-inbound/data_conversion.hpp"
 #include "network-inbound/data_validation.hpp"
 #include "shared/order.hpp"
+
+
 // Also include network outbound headers when they are complete
+
+// quickfix library 
+#include "exchange-gateway/gateway.hpp"
+
+#include <quickfix/Acceptor.h>
+#include <quickfix/FileLog.h>
+#include <quickfix/FileStore.h>
+#include <quickfix/SocketAcceptor.h>
 
 namespace exchange 
 {
@@ -46,11 +56,23 @@ public:
      */
     void stop_outbound_server();
 
+    /**
+     * @brief starts the exchange gateway implementation from the quickfix 
+     * engine library
+     */
+    void start_gateway();
+
 private:
     // Server objects
     crow::SimpleApp inbound_server_;
     crow::SimpleApp outbound_server_;   
     std::thread inbound_server_thread_;
     std::thread outbound_server_thread_;
+
+    ExchangeGateway application;
+    FIX::SessionSettings settings;
+    FIX::FileStoreFactory storeFactory;
+    FIX::FileLogFactory logFactory;
+    std::unique_ptr<FIX::SocketAcceptor> acceptor;
 };
 }
