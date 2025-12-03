@@ -34,3 +34,13 @@
 20251203-22:42:23.872235000 : Disconnecting
 20251203-22:42:24.322897000 : MsgSeqNum too low, expecting 2 but received 1
 20251203-22:42:24.322904000 : Disconnecting
+20251203-22:46:04.532188000 : Created session
+20251203-22:46:09.172379000 : MsgSeqNum too low, expecting 2 but received 1
+20251203-22:46:09.172399000 : Disconnecting
+20251203-22:46:10.571324000 : MsgSeqNum too low, expecting 2 but received 1
+20251203-22:46:10.571330000 : Disconnecting
+20251203-22:46:12.195845000 : MsgSeqNum too low, expecting 2 but received 1
+20251203-22:46:12.195851000 : Disconnecting
+20251203-22:46:55.674785000 : Created session
+20251203-22:46:56.452028000 : Received logon request
+20251203-22:46:56.452138000 : Responding to logon request

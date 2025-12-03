@@ -36,21 +36,22 @@ public:
         }
     }
     void fromAdmin(const FIX::Message& msg, const FIX::SessionID& session) noexcept override {
-        try {
-            std::cout << "Received admin message\n";
-            crack(msg, session);
-        } catch (const std::exception& e) {
-            std::cerr << "Admin message error: " << e.what() << "\n";
-        }
+    try {
+        crack(msg, session);
+    } catch (const std::exception& e) {
+        std::cerr << "FIX Admin error: " << e.what() << "\n";
     }
-    void fromApp(const FIX::Message& msg, const FIX::SessionID& session) noexcept override {
-        try {
-            std::cout << "Received application message\n";
-            crack(msg, session);
-        } catch (const std::exception& e) {
-            std::cerr << "App message error: " << e.what() << "\n";
-        }
+}
+
+void fromApp(const FIX::Message& msg, const FIX::SessionID& session) noexcept override {
+    try {
+        crack(msg, session);
+    } catch (const std::exception& e) {
+        std::cerr << "FIX App error: " << e.what() << "\n";
+        // optionally send Reject here
     }
+}
+
     
     void onMessage(const FIX42::NewOrderSingle& msg, const FIX::SessionID& session) override {
         std::cout << "NewOrderSingle received\n";
