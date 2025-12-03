@@ -48,9 +48,8 @@ configure_file(
     @ONLY
 )
 
-# -------------------------------
-# Cmake Tests
-# -------------------------------
+
+# Unit Tests
 option(BUILD_TESTING "Build unit tests" ON)
 
 if(BUILD_TESTING)

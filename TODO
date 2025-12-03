@@ -1,9 +1,13 @@
-Data validation
+Swap Make for Ninja
 
-Hard-checks (JSON format correctly, Ticker exsits, etc.)
-- This should occur in the inbound-network service
+Add way more documentation
 
-Busniess checks (User risk limit, sufficient funds)
-- We havent built this yet but we will need to build a validation service, 
-it will sit after the inbound network queue and before the sequencer
+After check that compile time for project should be < 1 sec 
 
+Write some basic unit test
+
+... After completing everything abouve ...
+
+Fix the ring buffer and multi ring buffer
+
+Build out matching engine
