@@ -1,0 +1,32 @@
+<fix type="FIX" major="4" minor="1">
+  <header>
+    <field name="BeginString" required="Y"/>
+    ...
+  </header>
+  <trailer>
+    <field name="CheckSum" required="Y"/>
+    ...
+  </trailer>
+  <messages>
+    <message name="Heartbeat" msgtype="0" msgcat="admin">
+      <field name="TestReqID" required="N"/>
+    </message>
+    ...
+    <message name="NewOrderSingle" msgtype="D" msgcat="app">
+      <field name="ClOrdID" required="Y"/>
+      ...
+    </message>
+    ...
+  </messages>
+  <fields>
+    <field number="1" name="Account" type="CHAR" />
+    ...
+    <field number="4" name="AdvSide" type="CHAR">
+      <value enum="B" description="BUY" />
+      <value enum="S" description="SELL" />
+      <value enum="X" description="CROSS" />
+      <value enum="T" description="TRADE" />
+    </field>
+    ...
+  </fields>
+</fix>
