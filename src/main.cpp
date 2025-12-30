@@ -14,6 +14,7 @@ void handle_sigint(int signal) {
 int main() {
     std::signal(SIGINT, handle_sigint);
     
+    // Load in constants
     exchange::Exchange exchange(running);
     // Creates sequencer, matching engines, threads
     exchange.init();

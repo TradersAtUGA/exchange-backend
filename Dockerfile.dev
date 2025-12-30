@@ -1,7 +1,4 @@
-# Stage 1 - Create image and compile
-# Base image
-FROM ubuntu:22.04 AS builder
-
+FROM ubuntu:22.04
 
 # Install Dependencies - do not delete this comment explaining all this bs
 # RUN apt-get update \                                               # refresh ubuntu package index list
@@ -30,6 +27,7 @@ RUN apt-get update \
     && apt-get install -y \
         build-essential \
         cmake \
+        ninja-build \
         git \
         curl \
         unzip \
@@ -43,68 +41,32 @@ RUN apt-get update \
     && update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-13 100 \
     && rm -rf /var/lib/apt/lists/*
 
-# Cmake cache setup
-ENV CCACHE_DIR=/ccache
-ENV PATH="/usr/lib/ccache:${PATH}"
-
+# # Cmake cache setup
+# ENV CCACHE_DIR=/ccache
+# ENV PATH="/usr/lib/ccache:${PATH}"
 
 # Clone vcpkg to /opt
-# the version we are using is 2025.10.17
+# the version we are using is stable 2025.10.17
 # bootstrap makes vcpkg exacutable
 WORKDIR /opt
-RUN git clone https://github.com/microsoft/vcpkg.git && \
-    cd vcpkg && git checkout 2025.10.17 && \
-    ./bootstrap-vcpkg.sh
+RUN git clone https://github.com/microsoft/vcpkg.git \
+    && cd vcpkg \
+#     && git checkout 2025.10.17 \
+    && ./bootstrap-vcpkg.sh
 
+# # Set path to be able to use vcpkg
+ENV PATH="/opt/vcpkg:$PATH"
 
-# Set path to be able to use vcpkg
-ENV PATH="/opt/vcpkg:${PATH}"
+# Install packages for x64-linux
+# NOTE: I dont know why but the vcpkg default install root will not work
+# so to run the command u must specify the install root
+# Example: vcpkg list --x-install-root=/opt/vcpkg_installed
+# this took me wayyyyy too long to debug, delete this and U DIE
+# COPY vcpkg.json vcpkg/vcpkg.json
 
-
-#set workspace
-WORKDIR /workspace
-
-
-# install dependencies from vcpkg.json
-COPY vcpkg.json /workspace/vcpkg.json
-RUN /opt/vcpkg/vcpkg install --triplet x64-linux
-
-
-# Copy project files into docker workspace
-COPY . /workspace
-
-# create binary directory
-WORKDIR /workspace/build
-
-# compile hard code debug mode
-RUN cmake -DCMAKE_C_COMPILER_LAUNCHER=ccache \
-          -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
-          -DCMAKE_BUILD_TYPE=Debug \
-          -DCMAKE_TOOLCHAIN_FILE=/opt/vcpkg/scripts/buildsystems/vcpkg.cmake \
-          -DBUILD_TESTING=OFF \
-          -DCMAKE_EXPORT_COMPILE_COMMANDS=ON .. && \
-    cmake --build . --target exchange_backend -j$(nproc)
-# Port defined for the crow input network 
-# this is tied to ./include/network-input/api_routing.hpp PORT_NUMBER variable
-
-# tmr add Bazel for build system
-# right now compile time is 30 seconds let get down to 1-2 secs max
-
-# Stage 2: run code
-FROM ubuntu:22.04 AS runner
-
-RUN apt-get update \
-    && apt-get install -y software-properties-common \
-    && add-apt-repository ppa:ubuntu-toolchain-r/test -y \
-    && apt-get update \
-    && apt-get install -y libstdc++-13-dev \
-    && rm -rf /var/lib/apt/lists/*
-
+# RUN vcpkg install --triplet x64-linux --x-install-root=/opt/vcpkg_installed
+# RUN vcpkg install
 WORKDIR /app
 
-COPY --from=builder /workspace/build/apps/exchange-server/exchange_backend .
 
-EXPOSE 11000
-
-# # Default command
-CMD ["./exchange_backend"]
+CMD ["/bin/bash"]

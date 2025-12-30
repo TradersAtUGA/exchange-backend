@@ -23,13 +23,14 @@ cmake ..
 make
 
 ## Requirements
+- Cmake 
 - C++ 20
-- G++ Compiler >= 11
+- G++ Compiler >= 13
 - Docker
 
 ## Coding style
 - Unless said otherwise use the google c++ style guide
-- Variable names: snake_case
-- Folder names: kebab-case
+- Variable, Function, and .cpp files names: snake_case
+- Directory names: kebab-case
 - Constant names: CAPITAL_SNAKE_CASE
 - For header files use .hpp

@@ -48,4 +48,4 @@ Makefile
 
 #vcpkg
 vcpkg/
-vcpkg_installed/
+vcpkg/installed/

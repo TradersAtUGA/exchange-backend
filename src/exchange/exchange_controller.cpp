@@ -1,35 +1,36 @@
 /**
- * @file exchange.cpp
+ * @file exchange_controller.cpp
  * @author Brennan Davenport
  * @date 2025-10-06
  * @brief This exchange object is the controller of the entire program
  */
 
-#include <thread>
-#include <chrono>
-#include <iostream>
-#include <memory> 
+// #include <thread>
+// #include <chrono>
+// #include <iostream>
+// #include <memory> 
 
+#include "pch.hpp"
 #include "sequencer/sequencer.hpp"
-#include "exchange/exchange.hpp"
+#include "exchange/exchange_controller.hpp"
 #include "engine/matching_engine.hpp"
-#include "shared/debug.hpp"
+// #include "shared/debug.hpp"
 #include "network-manager/network_manager.hpp"
 
-#include "ticker.hpp"
-#include "config.hpp"
+// #include "ticker.hpp"
+// #include "config.hpp"
 
 
 namespace exchange
 {
     
-Exchange::Exchange(const std::atomic<bool>& running) : running_(running) {}
+ExchangeController::ExchangeController(const std::atomic<bool>& running) : running_(running) {}
 
-Exchange::~Exchange() {
+ExchangeController::~ExchangeController() {
 
 }
 
-bool Exchange::init() {
+bool ExchangeController::init() {
     DEBUG_PRINT("Exchange is beginning initiation");
 
     for (const auto& ticker : exchange::TICKERS) {
@@ -44,7 +45,7 @@ bool Exchange::init() {
     return true;
 }
 
-void Exchange::run() {
+void ExchangeController::run() {
     network_manager_.start_inbound_server(network_to_sequencer_);
     DEBUG_PRINT("Starting Network");
     std::thread sequence_worker(*sequencer_);
@@ -66,8 +67,12 @@ void Exchange::run() {
 
     DEBUG_PRINT("Shutting down sequencer");
     sequence_worker.join();
-
+    DEBUG_PRINT("Hello World");
     DEBUG_PRINT("Exchange is no longer running");
+    return;
+}
+
+void ExchangeController::shutdown() {
     return;
 }
 

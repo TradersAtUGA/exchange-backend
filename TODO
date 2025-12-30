@@ -1,8 +1,11 @@
 Swap Make for Ninja
 
-Add way more documentation
+Add way more documentation - Doxygen for code, MkDocs for project level documentation
+put output of doxygen into mkdocs
 
 After check that compile time for project should be < 1 sec 
+
+Add stronger linter and valgrind checks to github tests (one day perf test)
 
 Write some basic unit test
 
