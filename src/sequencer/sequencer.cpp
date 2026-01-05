@@ -23,7 +23,10 @@ void Sequencer::operator()() {
             Give timestamp that is global monotonic
             Push order onto correct Ring Buffer for respective matching engine
             */
-            order.sequence_id = counter_++;
+            order.oid = counter_++;
+            
+            // TODO: this also will need to handle and sequence inbound
+            // cancel orders as well -- we can look at this later
             
             // Route ticker, assume ticker exsits
             while(!outbound_[order.ticker]->enqueue(std::move(order)) && (running_.load(std::memory_order_acquire))) {
