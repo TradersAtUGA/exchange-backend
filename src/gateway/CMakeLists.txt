@@ -1,19 +1,17 @@
-add_library(network_manager
+add_library(gateway STATIC
     network_manager.cpp
-    ../network-inbound/api_routing.cpp
-    ../network-inbound/data_conversion.cpp
-    ../network-inbound/data_validation.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/gateway-inbound/api_routing.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/gateway-inbound/data_conversion.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/gateway-inbound/data_validation.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/gateway-outbound/network_outbound.cpp
 )
 
-target_include_directories(network_manager
-    PUBLIC
-        ${CMAKE_SOURCE_DIR}/include
-        ${CMAKE_BINARY_DIR}/generated/include/
-        @ONLY
+target_include_directories(gateway
+    PRIVATE ${CMAKE_SOURCE_DIR}/include
 )
 
 # If this module needs compile definitions (like ASIO standalone)
-target_compile_definitions(network_manager
+target_compile_definitions(gateway
     PUBLIC ASIO_STANDALONE
 )
 

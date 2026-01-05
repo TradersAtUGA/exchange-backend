@@ -1,0 +1,72 @@
+FROM ubuntu:22.04
+
+# Install Dependencies - do not delete this comment explaining all this bs
+# RUN apt-get update \                                               # refresh ubuntu package index list
+#    && apt-get install -y software-properties-common \              # provides add-apt-repo(PPA), need this for custom GCC
+#    && add-apt-repository ppa:ubuntu-toolchain-r/test -y \          # gives access to newer GCC versions
+#    && apt-get install -y \                                         # refresh ubuntu package index list again bc of PPA
+#        build-essential \                                           # lots of packages
+#        cmake \
+#        git \
+#        curl \
+#        unzip \
+#        zip \
+#        python3 \
+#        pkg-config \
+#        gcc-13 \
+#        g++-13 \
+#        ccache \
+#    && update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-13 100 \     # replaces system GCC to GCC-13 as defualt compiler
+#    && update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-13 100 \     # same thing but for g++, this allows for C++ 20
+#    && rm -rf /var/lib/apt/lists/*                                              # remove cached package lists to reduce image size 
+
+RUN apt-get update \  
+    && apt-get install -y software-properties-common \ 
+    && add-apt-repository ppa:ubuntu-toolchain-r/test -y \
+    && apt-get update \
+    && apt-get install -y \
+        build-essential \
+        cmake \
+        ninja-build \
+        git \
+        curl \
+        unzip \
+        zip \
+        python3 \
+        pkg-config \
+        gcc-13 \
+        g++-13 \
+        ccache \
+    && update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-13 100 \
+    && update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-13 100 \
+    && rm -rf /var/lib/apt/lists/*
+
+# # Cmake cache setup
+# ENV CCACHE_DIR=/ccache
+# ENV PATH="/usr/lib/ccache:${PATH}"
+
+# Clone vcpkg to /opt
+# the version we are using is stable 2025.10.17
+# bootstrap makes vcpkg exacutable
+WORKDIR /opt
+RUN git clone https://github.com/microsoft/vcpkg.git \
+    && cd vcpkg \
+#     && git checkout 2025.10.17 \
+    && ./bootstrap-vcpkg.sh
+
+# # Set path to be able to use vcpkg
+ENV PATH="/opt/vcpkg:$PATH"
+
+# Install packages for x64-linux
+# NOTE: I dont know why but the vcpkg default install root will not work
+# so to run the command u must specify the install root
+# Example: vcpkg list --x-install-root=/opt/vcpkg_installed
+# this took me wayyyyy too long to debug, delete this and U DIE
+# COPY vcpkg.json vcpkg/vcpkg.json
+
+# RUN vcpkg install --triplet x64-linux --x-install-root=/opt/vcpkg_installed
+# RUN vcpkg install
+WORKDIR /app
+
+
+CMD ["/bin/bash"]

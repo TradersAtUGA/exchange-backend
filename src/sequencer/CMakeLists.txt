@@ -1,12 +1,8 @@
-add_library(sequencer
-    sequencer.cpp
-)
+add_library(sequencer STATIC sequencer.cpp)
 
 target_include_directories(sequencer
-    PUBLIC
+        PRIVATE
         ${CMAKE_SOURCE_DIR}/include
-        ${CMAKE_BINARY_DIR}/generated/include/
-        @ONLY
 )
 
 find_package(concurrentqueue CONFIG REQUIRED)

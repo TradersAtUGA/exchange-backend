@@ -1,19 +1,20 @@
-#include "exchange/exchange.hpp"
+#include "exchange/exchange_controller.hpp"
 #include <atomic>
 #include <iostream>
 #include <signal.h>
-#include "shared/debug.hpp"
+#include "shared/logger.hpp"
 
 std::atomic<bool> running(true);
 
 void handle_sigint(int signal) {
-    DEBUG_PRINT("Handle Sig called");
-    running = false;
+    exchange::Logger::info("Signal Interrupt Caught in main");
+    running.store(false, std::memory_order_release);
 }
 
 int main() {
     std::signal(SIGINT, handle_sigint);
     
+    // Load in constants
     exchange::Exchange exchange(running);
     // Creates sequencer, matching engines, threads
     exchange.init();
