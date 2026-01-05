@@ -43,7 +43,7 @@ void Gateway::fromApp(const FIX::Message& message, const FIX::SessionID& session
 
 // ---- NewOrderSingle handler ----
 void Gateway::onMessage(const FIX44::NewOrderSingle& msg, const FIX::SessionID&) {
-    Order o;
+    exchange::Order o;
     FIX::ClOrdID clOrdID;
     FIX::Symbol symbol;
     FIX::Side side;
@@ -59,7 +59,7 @@ void Gateway::onMessage(const FIX44::NewOrderSingle& msg, const FIX::SessionID&)
     msg.getField(symbol);
     msg.getField(tif);
 
-    o.recv_time = get_time_ms();
+    o.recv_time = exchange::get_time_ms();
     
     // TODO assign order id 
     o.oid =  0; // SEQUENCER MUST ASSIGN THE VALUE HERE TO THE ORDER ID 
@@ -71,7 +71,7 @@ void Gateway::onMessage(const FIX44::NewOrderSingle& msg, const FIX::SessionID&)
         o.side = Side::SELL;
     }
 
-    o.qty = double_to_uint64_t(qty.getValue());
+    o.qty = exchange::double_to_uint64_t(qty.getValue());
 
     if (ordType.getValue() == FIX::OrdType_LIMIT) {
         o.order_type = OrderType::LIMIT;

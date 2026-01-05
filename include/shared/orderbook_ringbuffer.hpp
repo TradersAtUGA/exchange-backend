@@ -18,7 +18,7 @@ template <typename T, uint64_t SIZE>
 class OrderbookRingBuffer {
 public:
 
-    RingBuffer() noexcept : head_(0), tail_(0), item_count_(0) {}
+    OrderbookRingBuffer() noexcept : head_(0), tail_(0), item_count_(0) {}
 
     /**
      * @brief enqueues an item into the ring buffer
@@ -113,7 +113,7 @@ public:
     /** @brief returns a const pointer to the first item in the ring buffer */
     const T* front_ptr() const noexcept { return &buf_[(head_ + SIZE - 1) % SIZE]; }
 
-    friend std::ostream& operator<<(std::ostream& os, const RingBuffer& rb) {
+    friend std::ostream& operator<<(std::ostream& os, const OrderbookRingBuffer& rb) {
         for(uint64_t i{}; i < rb.item_count(); ++i) {
             os << rb.buf_[(rb.head_ + i) % SIZE] << " ";
         }

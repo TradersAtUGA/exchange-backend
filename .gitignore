@@ -54,3 +54,5 @@ vcpkg_installed/
 # quickfix engine logs
 exchange-gateway-log/
 exchange-gateway-store
+
+gateway-log/*

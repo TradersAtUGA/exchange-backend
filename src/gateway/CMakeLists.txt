@@ -1,6 +1,6 @@
 add_library(gateway STATIC gateway.cpp)
 
-target_include_directories(exchange_gateway
+target_include_directories(gateway
     PUBLIC
         ${CMAKE_SOURCE_DIR}/include
         ${CMAKE_BINARY_DIR}/generated/include/

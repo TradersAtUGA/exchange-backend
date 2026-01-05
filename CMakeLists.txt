@@ -10,9 +10,10 @@ set(CMAKE_CXX_STANDARD_REQUIRED  ON)
 set(CMAKE_CXX_EXTENSIONS        OFF)
 
 if (NOT CMAKE_BUILD_TYPE)
-  message("--Setting build type to 'Debug' as none was specified")
-  set(CMAKE_BUILD_TYPE "Debug" FORCE)
+  message(STATUS "Setting build type to 'Debug' as none was specified")
+  set(CMAKE_BUILD_TYPE Debug CACHE STRING "Build type" FORCE)
 endif()
+
 
 #
 ## Unit Tests
@@ -26,12 +27,14 @@ endif()
 #
 
 add_subdirectory(src/engine)
-add_subdirectory(src/exchange)
+add_subdirectory(src/gateway)
+add_subdirectory(src/matching-engine)
+add_subdirectory(src/orchestration)
+add_subdirectory(src/orderbook)
 add_subdirectory(src/sequencer)
-add_subdirectory(src/network-inbound)
-# add_subdirectory(src/network-outbound)
-add_subdirectory(src/network-manager)
-add_subdirectory(src/exchange-gateway)
+
+# for executables
+add_subdirectory(apps/)
 
 
 add_executable(${PROJECT_NAME} src/main.cpp)
@@ -40,3 +43,4 @@ target_link_libraries(${PROJECT_NAME}
     PRIVATE
         exchange_controller
 )
+
