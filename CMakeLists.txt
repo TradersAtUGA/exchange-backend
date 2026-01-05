@@ -31,6 +31,7 @@ add_subdirectory(src/sequencer)
 add_subdirectory(src/network-inbound)
 # add_subdirectory(src/network-outbound)
 add_subdirectory(src/network-manager)
+add_subdirectory(src/exchange-gateway)
 
 
 add_executable(${PROJECT_NAME} src/main.cpp)

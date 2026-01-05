@@ -50,3 +50,7 @@ Makefile
 vcpkg/
 vcpkg/installed/
 vcpkg_installed/
+
+# quickfix engine logs
+exchange-gateway-log/
+exchange-gateway-store
