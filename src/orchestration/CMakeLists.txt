@@ -8,10 +8,8 @@ target_include_directories(exchange_controller
 )
 
 find_package(concurrentqueue CONFIG REQUIRED)
-find_package(Crow CONFIG REQUIRED)
 
 target_link_libraries(exchange_controller
     PRIVATE
     concurrentqueue::concurrentqueue
-    Crow::Crow
 )

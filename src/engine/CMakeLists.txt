@@ -3,9 +3,11 @@ add_library(engine STATIC
     order_book.cpp
 )
 
-target_precompile_headers(engine PRIVATE ${CMAKE_SOURCE_DIR}/include/pch.hpp)
-
 target_include_directories(engine
         PRIVATE
         ${CMAKE_SOURCE_DIR}/include
 )
+
+
+target_precompile_headers(engine PRIVATE ${CMAKE_SOURCE_DIR}/include/pch.hpp)
+

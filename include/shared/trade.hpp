@@ -1,54 +1,60 @@
 #pragma once
 #include <cstdint>
 #include <string>
+#include <ostream>
 
+#include "enums.hpp"
 
-namespace exchange {
+using std::uint64_t, std::int8_t;
 
-    struct Trade {
-        Trade() = default;
-        
-        // Sequence
-        uint64_t trade_id;
+struct Trade {
 
-        // Client details
-        uint64_t buy_order_id;
-        uint64_t sell_order_id;
-        uint64_t buy_client_id;
-        uint64_t sell_client_id;
-  
+    // DO NOT use this to construct TRADE objects,
+    // purely for array allocation purposes 
+    Trade() :
+        bcid(0),
+        acid(0),
+        tid(0),
+        qty(0),
+        price(0),
+        return_code(0),
+        ticker() 
+    {}
 
-        // Order details
-        std::string ticker;
-        uint64_t price;      // Price is never negative
-        uint64_t quantity;   // Quantity is never negative 
-        uint64_t remaining;  // Partial fill
+    Trade(
+        uint64_t bidder_id,
+        uint64_t asker_id,
+        uint64_t trade_id, 
+        uint64_t quantity,
+        uint64_t price,
+        int8_t return_code,
+        std::string ticker
+    ) : 
+        bcid(bidder_id),
+        acid(asker_id),
+        tid(trade_id),
+        qty(quantity),
+        price(price),
+        return_code(return_code),
+        ticker(ticker)
+    {}
 
-        // Timing
-        uint64_t timestamp;
-        
-        Trade(uint64_t trade_id_,
-          uint64_t buy_order_id_,
-          uint64_t sell_order_id_,
-          uint64_t buy_client_id_,
-          uint64_t sell_client_id_,
-          std::string ticker_,
-          uint64_t price_,
-          uint64_t quantity_,
-          uint64_t remaining_,
-          uint64_t timestamp_
-        )
-        : trade_id(trade_id_),
-          buy_order_id(buy_order_id_),
-          sell_order_id(sell_order_id_),
-          buy_client_id(buy_client_id_),
-          sell_client_id(sell_client_id_),
-          ticker(std::move(ticker_)),
-          price(price_),
-          quantity(quantity_),
-          remaining(remaining_),
-          timestamp(timestamp_)
-        {}
-    };
+    friend std::ostream& operator<<(std::ostream& os, const Trade& trade) {
+        os << "bid client id " << trade.bcid << "\n";
+        os << "ask client id " << trade.acid << "\n";
+        os << "trade id " << trade.tid << "\n";
+        os << "qty filled " << trade.qty << "\n";
+        os << "price filled " << trade.price << "\n";
+        os << "return code " << static_cast<int>(trade.return_code) << "\n";
+        os << "ticker " << trade.ticker << "\n";
+        return os;
+    }
 
-}
+    uint64_t bcid; // bidder client id
+    uint64_t acid; // asker client id
+    uint64_t tid; // trade id
+    uint64_t qty; 
+    uint64_t price;
+    int8_t return_code; // internal
+    std::string ticker;
+};  
