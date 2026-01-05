@@ -62,6 +62,11 @@ public:
      */
     void start_gateway();
 
+    /**
+     * @brief shuts down the exchange gateway implementation from the quickfix library
+     */
+    void stop_gateway();
+
 private:
     // Server objects
     crow::SimpleApp inbound_server_;

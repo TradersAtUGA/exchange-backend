@@ -45,4 +45,8 @@ void NetworkManager::start_gateway() {
     acceptor->start();
 }
 
+void NetworkManager::stop_gateway() {
+    acceptor->stop();
+}
+
 }
