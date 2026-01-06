@@ -1,6 +1,8 @@
 #include "gateway/gateway.hpp"
 #include "quickfix/Field.h"
 #include "quickfix/fix44/ExecutionReport.h"
+#include "shared/cancel.hpp"
+#include "gateway/validation.hpp"
 
 void Gateway::onCreate(const FIX::SessionID& sessionID) {
     std::cout << "Session created: " << sessionID.toString() << std::endl;
@@ -18,12 +20,42 @@ void Gateway::toAdmin(FIX::Message& message, const FIX::SessionID&) {
     std::cout << "ADMIN S >> " << message.toString() << std::endl;
 }
 
-void Gateway::fromAdmin(const FIX::Message& message, const FIX::SessionID&) noexcept {
+void Gateway::fromAdmin(const FIX::Message& message, const FIX::SessionID& sessionID) noexcept {
     std::cout << "ADMIN R << " << message.toString() << std::endl;
+    try {
+        crack(message, sessionID);  // MessageCracker dispatch
+    } catch (FIX::FieldNotFound& e) {
+        std::cerr << "Field not found: " << e.what() << std::endl;
+    } catch (FIX::IncorrectDataFormat& e) {
+        std::cerr << "Data format error: " << e.what() << std::endl;
+    } catch (FIX::IncorrectTagValue& e) {
+        std::cerr << "Tag value error: " << e.what() << std::endl;
+    } catch (FIX::UnsupportedMessageType& e) {
+        std::cerr << "Unsupported message type: " << e.what() << std::endl;
+    } catch (FIX::FieldConvertError& e) {
+        std::cerr << "Could not convert some field: " << e.what() << std::endl;
+    } catch (FIX::SocketRecvFailed& e) {
+        std::cerr << "Connection reset by peer " << e.what() << std::endl;
+    }
 }
 
-void Gateway::toApp(FIX::Message& message, const FIX::SessionID&) noexcept {
+void Gateway::toApp(FIX::Message& message, const FIX::SessionID& sessionID) noexcept {
     std::cout << "APP   S >> " << message.toString() << std::endl;
+    try {
+        crack(message, sessionID);  // MessageCracker dispatch
+    } catch (FIX::FieldNotFound& e) {
+        std::cerr << "Field not found: " << e.what() << std::endl;
+    } catch (FIX::IncorrectDataFormat& e) {
+        std::cerr << "Data format error: " << e.what() << std::endl;
+    } catch (FIX::IncorrectTagValue& e) {
+        std::cerr << "Tag value error: " << e.what() << std::endl;
+    } catch (FIX::UnsupportedMessageType& e) {
+        std::cerr << "Unsupported message type: " << e.what() << std::endl;
+    } catch (FIX::FieldConvertError& e) {
+        std::cerr << "Could not convert some field: " << e.what() << std::endl;
+    } catch (FIX::SocketRecvFailed& e) {
+        std::cerr << "Connection reset by peer " << e.what() << std::endl;
+    }
 }
 
 void Gateway::fromApp(const FIX::Message& message, const FIX::SessionID& sessionID) noexcept {
@@ -38,12 +70,15 @@ void Gateway::fromApp(const FIX::Message& message, const FIX::SessionID& session
         std::cerr << "Tag value error: " << e.what() << std::endl;
     } catch (FIX::UnsupportedMessageType& e) {
         std::cerr << "Unsupported message type: " << e.what() << std::endl;
+    } catch (FIX::FieldConvertError& e) {
+        std::cerr << "Could not convert some field: " << e.what() << std::endl;
+    } catch (FIX::SocketRecvFailed& e) {
+        std::cerr << "Connection reset by peer " << e.what() << std::endl;
     }
 }
 
 // ---- NewOrderSingle handler ----
 void Gateway::onMessage(const FIX44::NewOrderSingle& msg, const FIX::SessionID&) {
-    exchange::Order o;
     FIX::ClOrdID clOrdID;
     FIX::Symbol symbol;
     FIX::Side side;
@@ -58,43 +93,32 @@ void Gateway::onMessage(const FIX44::NewOrderSingle& msg, const FIX::SessionID&)
     msg.getField(ordType);
     msg.getField(symbol);
     msg.getField(tif);
+    msg.getField(price);
 
-    o.recv_time = exchange::get_time_ms();
-    
-    // TODO assign order id 
-    o.oid =  0; // SEQUENCER MUST ASSIGN THE VALUE HERE TO THE ORDER ID 
-    o.cid = std::stoull(clOrdID.getValue());                  // assign based on sessionID
-    
-    if (side.getValue() == FIX::Side_BUY) {
-        o.side = Side::BUY;
-    } else if (side.getValue() == FIX::Side_SELL) {
-        o.side = Side::SELL;
-    }
+    // invariants required 
 
-    o.qty = exchange::double_to_uint64_t(qty.getValue());
+    /*
+    - for market orders price must be supplied it can be whatever
+    */
 
-    if (ordType.getValue() == FIX::OrdType_LIMIT) {
-        o.order_type = OrderType::LIMIT;
-        msg.getField(price);
-        o.price = price.getValue();
-    } else if (ordType.getValue() == FIX::OrdType_MARKET) {
-        o.order_type = OrderType::MARKET;
-    }
+    uint8_t valid = exchange::validate_fix_values(
+        side.getValue(),
+        ordType.getValue(),
+        tif.getValue(), 
+        price.getValue(),
+        qty.getValue()
+    );
 
-    if (tif.getValue() == FIX::TimeInForce_DAY) {
-        o.tif = TIF::DAY;
-    } else if (tif.getValue() == FIX::TimeInForce_FILL_OR_KILL) { 
-        o.tif = TIF::FOK;
-    } else if (tif.getValue() == FIX::TimeInForce_IMMEDIATE_OR_CANCEL) {
-        o.tif = TIF::IOC;
-    }
+    if (valid == 0) return; // ill-formed order
 
-    o.ticker = symbol.getValue();
-
-    o.status = 1;
-
-    if (msg.isSetField(FIX::FIELD::TimeInForce))
-        msg.getField(tif), o.tif = TIF::DAY;
+    exchange::Order o = exchange::generate_order(
+        side.getValue(),
+        ordType.getValue(),
+        tif.getValue(),
+        price.getValue(),
+        qty.getValue(),
+        clOrdID.getValue()
+    );
 
     std::cout << "Received NewOrderSingle: order_id=" << o.oid
               << " symbol=" << symbol.getValue()
@@ -109,7 +133,6 @@ void Gateway::onMessage(const FIX44::NewOrderSingle& msg, const FIX::SessionID&)
 
 // ---- OrderCancelRequest handler ----
 void Gateway::onMessage(const FIX44::OrderCancelRequest& msg, const FIX::SessionID&) {
-    // CancelEvent c;
     FIX::OrigClOrdID origClOrdID;
     FIX::ClOrdID clOrdID;
     FIX::Side side;
@@ -119,6 +142,13 @@ void Gateway::onMessage(const FIX44::OrderCancelRequest& msg, const FIX::Session
     msg.getField(clOrdID);
     msg.getField(side);
     msg.getField(symbol);
+
+    // Cancel c;
+
+    // c.cancel_id = 0; // SEQUENCER should assign value here
+    // // TODO(vikas): order struct should contain a order id that was used internally from the brokerage
+    // c.order_id = 0; 
+    // c.client_id = 1; // this will just be the broker id same as the one above for orders
 
     // c.target_order_id = std::stoull(origClOrdID.getValue());
     // c.participant_id = 0;  // map from sessionID

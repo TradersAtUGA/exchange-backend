@@ -56,3 +56,4 @@ exchange-gateway-log/
 exchange-gateway-store
 
 gateway-log/*
+gateway-store/*
