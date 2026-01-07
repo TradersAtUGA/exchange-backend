@@ -101,15 +101,12 @@ void Gateway::onMessage(const FIX44::NewOrderSingle& msg, const FIX::SessionID&)
     - for market orders price must be supplied it can be whatever
     */
 
-    uint8_t valid = exchange::validate_fix_values(
+    if (exchange::validate_fix_values(
         side.getValue(),
         ordType.getValue(),
         tif.getValue(), 
         price.getValue(),
-        qty.getValue()
-    );
-
-    if (valid == 0) return; // ill-formed order
+        qty.getValue()) == 0) return; // ill formed order
 
     exchange::Order o = exchange::generate_order(
         side.getValue(),

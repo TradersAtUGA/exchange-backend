@@ -22,6 +22,8 @@ some arrays are accessed by ['1' - '0' - 1] if they
 start at 1 and ['1' - '0'] if they start at 0. 
 */
 
+// VALID ARRAYS
+
 // NOTE: fix values start at 1!
 inline constexpr std::array<uint8_t, 17> VALID_SIDES = [] {
     std::array<uint8_t, 17> arr; 
@@ -58,6 +60,7 @@ inline constexpr std::array<uint8_t, 30> VALID_ORDER_TYPES = [] {
     return arr;
 }();
 
+// MAPPING ARRAYS 
 
 // NOTE: fix values start at 1!
 inline constexpr std::array<Side, 2> SIDE_MAP = [] {
@@ -89,23 +92,8 @@ inline constexpr std::array<TIF, 5> TIF_MAP = [] {
     return arr;
 }();
 
-/** @brief looks up in valid side dispatch table if valid side provided */
-inline static uint8_t validate_side(char fix_value) {
-    return VALID_SIDES[static_cast<size_t>(fix_value - '0' - 1)] == 1;
-}
-
-/** @brief looks up in valid order type dispatch table if valid order type was provided */
-inline static uint8_t validate_order_type(char fix_value) {
-    return VALID_ORDER_TYPES[static_cast<size_t>(fix_value - '0' - 1)] == 1;
-}
-
-/** @brief looks up in the valid tif dispatch table if valid tif provided */
-inline static uint8_t validate_tif(char fix_value) {
-    return VALID_TIF[static_cast<size_t>(fix_value - '0')] == 1;
-}
-
 /** @brief creates a new order given that its valid */
-inline static exchange::Order generate_order(
+inline exchange::Order generate_order(
     char side,
     char order_type, 
     char tif,
@@ -116,8 +104,8 @@ inline static exchange::Order generate_order(
     exchange::Order o; 
     // FIX provided fields 
     o.side = SIDE_MAP[static_cast<size_t>(side - '0' - 1)];
-    o.order_type = ORD_TYPE_MAP[static_cast<size_t>(side - '0' - 1)];
-    o.tif = TIF_MAP[static_cast<size_t>(side - '0')];
+    o.order_type = ORD_TYPE_MAP[static_cast<size_t>(order_type- '0' - 1)];
+    o.tif = TIF_MAP[static_cast<size_t>(tif - '0')];
     o.price = exchange::double_to_uint64_t(price);
     o.qty = static_cast<uint64_t>(qty); // avoid bit casts for qty
     o.cid = std::stoull(client_id);
@@ -131,18 +119,19 @@ inline static exchange::Order generate_order(
 }
 
 /** @brief validates fix passed values */
-inline static uint8_t validate_fix_values(
+inline uint8_t validate_fix_values(
     char side, 
     char order_type, 
     char tif, 
     double price, 
     double qty
 ) {
-    return validate_side(side)
-    && validate_order_type(order_type)
-    && validate_tif(tif)
+    return 
+    (VALID_SIDES[static_cast<size_t>(side - '0' - 1)] == 1)
+    && (VALID_ORDER_TYPES[static_cast<size_t>(order_type - '0' - 1)] == 1)
+    && (VALID_TIF[static_cast<size_t>(tif - '0')] == 1)
     && static_cast<uint8_t>(price > 0)
     && static_cast<uint8_t>(qty > 0);
 }
 
-} // namespace exchange 
+} // namespace exchange         
