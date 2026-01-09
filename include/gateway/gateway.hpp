@@ -15,6 +15,7 @@
 class Gateway: public FIX::Application, public FIX::MessageCracker
 {
 public:
+    // QUICKFIX required overrides
     void onCreate(const FIX::SessionID& sessionID) override;
     void onLogon(const FIX::SessionID& sessionID) override;
     void onLogout(const FIX::SessionID& sessionID) override;
@@ -23,7 +24,17 @@ public:
     void toApp(FIX::Message&, const FIX::SessionID&) noexcept override;
     void fromApp(const FIX::Message&, const FIX::SessionID&) noexcept override;
 
-    // MessageCracker handlers
+    // Custom handlers (Message Crackers)
+
+    // Handles new inbound orders -- validates and pushes to matching engine queue
     void onMessage(const FIX44::NewOrderSingle&, const FIX::SessionID&) override;
+
+    // Handles new inbound cancel requests -- validates and pushes matching engine queue
     void onMessage(const FIX44::OrderCancelRequest&, const FIX::SessionID&) override;
+
+    // Handles new outbound trade reports 
+
+    // not implemented
+    // void onMessage(const FIX44::ExecutionReport&, const FIX::SessionID&) override;
+
 };
