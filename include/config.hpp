@@ -26,4 +26,5 @@ namespace config {
 
     // Ring buffer number of consumers
     inline constexpr uint8_t NUM_CONSUMERS = 2;
+
 }
