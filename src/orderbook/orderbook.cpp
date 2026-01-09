@@ -9,10 +9,10 @@ void exchange::OrderBook::add_order(exchange::Order order) {
     if (order.side == Side::BUY) { // convert to branchless later (hashmap with ref to bids/asks)
         // k, v: oid : last item in orderbook at that price in the ring buffer
         orders_[order.oid] = bids_[order.price].back_ptr(); 
-        bids_[order.price].push_back(std::move(order)); // putting order into orderbook
+        bids_[order.price].push_back(std::forward<exchange::Order>(order)); // putting order into orderbook
     } else {
         orders_[order.oid] = asks_[order.price].back_ptr();
-        asks_[order.price].push_back(std::move(order));
+        asks_[order.price].push_back(std::forward<exchange::Order>(order));
     }
 }  
 

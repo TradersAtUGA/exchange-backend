@@ -2,19 +2,24 @@
 
 #include <cstdint>
 #include <string>
-#include <optional>
 #include <deque>
+#include <array>
+#include <variant>
 
 #include "shared/trade.hpp"
 #include "shared/order.hpp"
 #include "shared/orderbook_ringbuffer.hpp"
 #include "orderbook/orderbook.hpp"
+#include "shared/unreachable.hpp"
+
+
 
 namespace exchange {
 
 class MatchingEngine {
 public:
 
+   
     explicit MatchingEngine(std::string ticker) : 
         last_price_(0),
         ledger_({}),
@@ -23,7 +28,7 @@ public:
 
     /** 
      * @brief entry point for all orders entering the matching engine
-     * 
+     *  
      * @param order the order to process inside the matching engine
      */
     void process(exchange::Order& order);
@@ -51,21 +56,11 @@ public:
     const exchange::OrderBook& orderbook() const { return orderbook_; }
 
     /** @brief returns the inbound ring buffer */
-    const OrderbookRingBuffer<exchange::Order, config::RING_BUFFER_SIZE> orders() const { return orders_; }
+    const OrderbookRingBuffer<exchange::Order, config::RING_BUFFER_SIZE>& orders() const { return orders_; }
 
 private:
 
-    uint64_t last_price_; // last market trade price 
-
-    // ledger might be removed and the matching engine may 
-    // just use a different data structure to feed the 
-    // confirmed trades out, could just be a dedicated 
-    // structure to handle outbound comms...
-    std::deque<Trade> ledger_; // contains transactions for matched orders
-    
-    OrderbookRingBuffer<exchange::Order, config::RING_BUFFER_SIZE> orders_; // incoming orders 
-    exchange::OrderBook orderbook_; 
-
+    //====deprecated use quickfix method for execution report 
     /**
      * @brief creates a trade object given a bid and ask order that 
      * have been matched
@@ -83,57 +78,132 @@ private:
         uint64_t trade_price
     );
 
-    // MAIN (TIF) HANDLES
-
-    /** @brief handle for day orders */
-    void handle_DAY_(exchange::Order& order);
-
-    /** @brief handle for IOC orders */
-    void handle_IOC_(exchange::Order& order);
-
-    /** @brief handle for FOK orders */
-    void handle_FOK_(exchange::Order& order);
-
-    // MATCHING HANDLES
-
-    /** @brief handle for limit orders */
-    void handle_LMT_(exchange::Order& order);
-
-    /** @brief handle for market orders */
-    void handle_MKT_(exchange::Order& order);
-
     // MATCHING ALGOS
 
-    /** @brief matching algo for limit buy side orders */
-    void match_LMT_buy_(exchange::Order& order);
+    void match_IOC_buy_(exchange::Order& order); 
 
-    /** @brief matching algo for limit sell side orders */
-    void match_LMT_sell_(exchange::Order& order);
+    void match_IOC_sell_(exchange::Order& order);
 
-    /** @brief matching algo for market buy side orders */
-    void match_MKT_buy_(exchange::Order& order);
+    void match_FOK_buy_(exchange::Order& order);
 
-    /** @brief matching algo for market sell side orders */
-    void match_MKT_sell_(exchange::Order& order);
+    void match_FOK_sell_(exchange::Order& order);
 
-    /** 
-     * @brief matching algo for limit buy side orders that do 
-     * not push partial fill orders to the orderbook, used for 
-     * immediately executing limit orders (FOK, IOC, etc.)
-     */
-    void match_LMT_buy_no_push_(exchange::Order& order);   
+    void match_DAY_buy_(exchange::Order& order);
 
-    /** 
-     * @brief matching algo for limit sell side orders that do 
-     * not push partial fill orders to the orderbook, used for 
-     * immediately executing limit orders (FOK, IOC, etc.)
-     */
-    void match_LMT_sell_no_push_(exchange::Order& order);
+    void match_DAY_sell_(exchange::Order& order);
 
     // HELPERS
 
     /** @brief adds a partially filled aggressive LMT order back to the orderbook */
     void on_partial_fill_aggressive_limit_(exchange::Order& order);
+
+    /** @brief side enum conversion for main lookup table */
+    uint8_t side_lut_converter_(Side s) noexcept {
+        switch(s) {
+            case Side::BUY: return 0;
+            case Side::SELL: return 1;
+        }
+        exchange::unreachable();
+    }
+
+    /** @brief order type enum conversion for main lookup table  */
+    uint8_t order_type_lut_converter_(OrderType ot) noexcept {
+        // switch(ot) { 
+        //     case OrderType::MARKET: return 0;
+        //     case OrderType::LIMIT: return 1;
+        // }
+        return 0; 
+        // if more ordertypes are supported in the future 
+        // then an actual conversion can be used 
+    }
+
+    /** @brief tif enum conversion for main lookup table */
+    uint8_t tif_lut_converter_(TIF tif) noexcept { 
+        switch(tif) {
+            case TIF::DAY: return 0;
+            case TIF::IOC: return 1; 
+            case TIF::FOK: return 2; 
+        }
+        exchange::unreachable();
+    }
+
+    void mkt_to_lim_(exchange::Order& order) noexcept {
+        switch(order.order_type) {
+            case OrderType::LIMIT: return; 
+            case OrderType::MARKET: (order.side == Side::BUY) 
+                ? UINT64_MAX : 0; 
+        }
+        exchange::unreachable(); 
+    }
+
+    uint64_t last_price_; // last market trade price 
+
+    // ledger might be removed and the matching engine may 
+    // just use a different data structure to feed the 
+    // confirmed trades out, could just be a dedicated 
+    // structure to handle outbound comms...
+    std::deque<Trade> ledger_; // contains transactions for matched orders
+    
+    OrderbookRingBuffer<exchange::Order, config::RING_BUFFER_SIZE> orders_; // incoming orders 
+    exchange::OrderBook orderbook_; 
+    
+// forced to put public so look up table can see private method prototypes
+public: 
+
+    using MATCH_LUT_ =  
+            std::array<
+                std::array<
+                    std::array<
+                        void(exchange::MatchingEngine::*)(exchange::Order& order), 
+                    3>, // num order tifs
+                2>, // num order types
+            2>; // num order sides 
+        
+
+    // lookup table for matching methods 
+    // avoids chopped if else(s) and handlers 
+    static constexpr MATCH_LUT_ MATCH_FUNC_LUT = [] {
+            MATCH_LUT_ arr; 
+
+            // BUY MARKET DAY 
+            arr[0][0][0] = &exchange::MatchingEngine::match_DAY_buy_;
+
+            // BUY MARKET IOC = MARKET DAY 
+            arr[0][0][1] = &exchange::MatchingEngine::match_IOC_buy_;
+
+            // BUY MARKET FOK (uses special handle)
+            arr[0][0][2] = &exchange::MatchingEngine::match_FOK_buy_;
+
+            // SELL MARKET DAY 
+            arr[1][0][0] = &exchange::MatchingEngine::match_DAY_sell_;
+
+            // SELL MARKET IOC = MARKET DAY --------->vvvvvvvvvvvvvv
+            arr[1][0][1] = &exchange::MatchingEngine::match_IOC_sell_;
+
+            // SELL MARKET FOK (uses special handle)
+            arr[1][0][2] = &exchange::MatchingEngine::match_FOK_sell_;
+
+            // BUY LIMIT DAY 
+            arr[0][1][0] = &exchange::MatchingEngine::match_DAY_buy_;
+
+            // BUY LIMIT IOC
+            arr[0][1][1] = &exchange::MatchingEngine::match_IOC_buy_;
+
+            // BUY LIMIT FOK (uses special handle)
+            arr[0][1][2] = &exchange::MatchingEngine::match_FOK_buy_;
+
+            // SELL LIMIT DAY 
+            arr[1][1][0] = &exchange::MatchingEngine::match_DAY_sell_;
+
+            // SELL LIMIT IOC
+            arr[1][1][1] = &exchange::MatchingEngine::match_IOC_sell_;
+
+            // SELL LIMIT FOK (uses special handle)
+            arr[1][1][2] = &exchange::MatchingEngine::match_FOK_sell_;
+
+            return arr; 
+        }();
+
 }; 
 
 }

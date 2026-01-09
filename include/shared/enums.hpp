@@ -8,16 +8,19 @@
     build/vcpkg_installed/x64-linux/include/quickfix/FixValues.h
 */
 
+// Order's side 
 enum struct Side : uint8_t {
     BUY = 1,
     SELL = 2
 };
 
+// Order's Type 
 enum struct OrderType : uint8_t {
     MARKET = 1, 
     LIMIT = 2,
 };
 
+// Order's Time In Force
 enum struct TIF : uint8_t { 
     DAY = 0,
     IOC = 3, 
