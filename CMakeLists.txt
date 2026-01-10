@@ -26,16 +26,12 @@ endif()
 #endif()
 #
 
-add_subdirectory(src/engine)
 add_subdirectory(src/gateway)
 add_subdirectory(src/matching-engine)
 add_subdirectory(src/orchestration)
-add_subdirectory(src/orderbook)
-add_subdirectory(src/sequencer)
 
 # for executables
 add_subdirectory(apps/)
-
 
 add_executable(${PROJECT_NAME} src/main.cpp)
 
