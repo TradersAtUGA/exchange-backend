@@ -5,6 +5,5 @@ find_package(quickfix CONFIG REQUIRED)
 target_link_libraries(test PRIVATE
     matching_engine
     gateway
-    orderbook
     quickfix
 )
