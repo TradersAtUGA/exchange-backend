@@ -48,4 +48,15 @@ Makefile
 
 #vcpkg
 vcpkg/
+vcpkg/installed/
 vcpkg_installed/
+
+# quickfix engine logs
+exchange-gateway-log/
+exchange-gateway-store
+
+gateway-log/*
+gateway-store/*
+
+# cmake user presets
+CMakeUserPresets.json

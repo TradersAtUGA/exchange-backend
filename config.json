@@ -1,0 +1,15 @@
+{
+    "network": {
+        "port": 11000,
+        "threads": 4
+    },
+    "engine": {
+        "ring_buffer_size": 1024,
+        "num_of_consumers": 2
+    },
+    "tickers": [
+        "ABC",
+        "XYZ",
+        "QQQ"
+    ]
+}

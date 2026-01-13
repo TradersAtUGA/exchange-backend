@@ -3,9 +3,8 @@
   "version": "1.0.0",
   "dependencies": [
     "concurrentqueue",
-    "crow",
-    "nlohmann-json",
     "gtest",
+    "benchmark",
     "quickfix"
   ]
 }

@@ -1,63 +1,81 @@
-#pragma once
-#include <cstdint>
+#pragma once 
+
 #include <string>
+#include <cstdint>
+#include <chrono>
+#include <iostream>
 
-enum struct Side : uint8_t {
-    Buy = 0,
-    Sell = 1
-};
+#include "enums.hpp"
 
-enum struct OrderType : uint8_t {
-    Limit = 0,
-    Market = 1
-};
+using std::uint64_t, std::uint8_t;
 
 namespace exchange {
 
-    struct Order {
-        Order() = default;
-        
-        // Sequence
-        uint64_t sequence_id;
+struct Order {
+    
+    // DO NOT use this to construct ORDER objects,
+    // purely for array allocation purposes 
+    Order() 
+    : price(0),
+      qty(0),
+      cid(0),
+      oid(0),
+      recv_time(0),
+      side(Side::BUY),
+      order_type(OrderType::MARKET),
+      tif(TIF::DAY),
+      ticker(),
+      status(0)
+    {}
 
-        // Client details
-        uint64_t client_id;
-        uint64_t order_id;
+    Order(
+        Side side,
+        OrderType order_type, 
+        TIF time_in_force,
+        std::string ticker, 
+        uint64_t price, 
+        uint64_t quantity,
+        uint64_t client_id, 
+        uint64_t order_id, 
+        uint64_t order_time_placed,
+        uint8_t status
+    ) :
+        side(side),
+        order_type(order_type),
+        tif(time_in_force),
+        ticker(ticker),
+        price(price),
+        qty(quantity),
+        cid(client_id),
+        oid(order_id),
+        recv_time(order_time_placed),
+        status(1)
+    {} 
 
-        // Order details
-        Side side;
-        OrderType type;
-        std::string ticker;
-        uint64_t price;      // Price is never negative
-        uint64_t quantity;   // Quantity is never negative 
-        uint64_t remaining;  // Partial fill
+    friend std::ostream& operator<<(std::ostream& os, const Order& order) {
+        std::cout << "Order Side: "<< static_cast<int>(order.side) << std::endl;
+        std::cout << "Order Type: " << static_cast<int>(order.order_type) << std::endl;
+        std::cout << "Price: " << order.price << std::endl;
+        std::cout << "Quantity: " << order.qty << std::endl;
+        std::cout << "Client ID: " << order.cid << std::endl;
+        std::cout << "Order ID: " << order.oid << std::endl;
+        std::cout << "Received: " << order.recv_time << std::endl;
+        std::cout << "Status code" << static_cast<int>(order.status) << std::endl;
+        return os;
+    }
 
-        // Timing
-        uint64_t received_time_ns;
-        
+    Side side;
+    OrderType order_type;
+    TIF tif; // time in force
+    std::string ticker; 
+    uint64_t price;
+    uint64_t qty; 
+    uint64_t cid; // client id 
+    uint64_t oid; // order (specific) id (just sequencer id internally)
+    uint64_t recv_time; // time order was placed
 
-        Order(
-            uint64_t client,
-            uint64_t oid,
-            Side s,
-            OrderType t,
-            std::string tick,
-            uint64_t p,
-            uint64_t q,
-            uint64_t r,
-            uint64_t ns
-        )
-        : sequence_id(0),
-          client_id(client),
-          order_id(oid),
-          side(s),
-          type(t),
-          ticker(tick),
-          price(p),
-          quantity(q),
-          remaining(r),
-          received_time_ns(ns)
-        {}
-    };
+    // used internally 
+    uint8_t status; // see docs/order.md 
+};
 
 }
