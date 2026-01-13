@@ -12,13 +12,13 @@ target_include_directories(matching_engine
         ${CMAKE_SOURCE_DIR}/include
 )
 
-target_precompile_headers(matching_engine PRIVATE pch.h)
+target_precompile_headers(matching_engine PRIVATE ${CMAKE_SOURCE_DIR}/pch.h)
 
 #sequencer stuff
 find_package(concurrentqueue CONFIG REQUIRED)
 find_package(Threads REQUIRED)
 
-target_link_libraries(sequencer
+target_link_libraries(matching_engine
     PRIVATE concurrentqueue::concurrentqueue Threads::Threads
 )
 

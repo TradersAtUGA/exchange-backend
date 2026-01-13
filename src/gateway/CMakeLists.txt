@@ -5,7 +5,7 @@ target_include_directories(gateway
         ${CMAKE_SOURCE_DIR}/include
 )
 
-target_precompile_headers(gateway PRIVATE pch.h)
+target_precompile_headers(gateway PRIVATE ${CMAKE_SOURCE_DIR}/pch.h)
 
 find_package(quickfix CONFIG REQUIRED)
 target_link_libraries(gateway PRIVATE quickfix)
