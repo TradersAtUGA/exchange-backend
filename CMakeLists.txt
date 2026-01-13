@@ -14,6 +14,18 @@ if (NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE Debug CACHE STRING "Build type" FORCE)
 endif()
 
+option(BUILD_UNIT_TESTING "Build unit test executable")
+
+if(BUILD_UNIT_TESTING)
+  enable_testing()
+  add_subdirectory(tests/unit/)
+endif()
+
+option(BUILD_PERF_TESTING "Build performance test executable")
+
+if(BUILD_PERF_TESTING)
+  add_subdirectory(tests/perf/)
+endif()
 
 #
 ## Unit Tests

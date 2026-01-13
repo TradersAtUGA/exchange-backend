@@ -34,6 +34,10 @@ Trade exchange::MatchingEngine::create_trade_(
     );
 }
 
+void exchange::MatchingEngine::on_partial_fill_aggressive_limit_(exchange::Order& order) { 
+    if (order.qty > 0) orderbook_.add_order(order);
+}
+
 void exchange::MatchingEngine::match_IOC_buy_(exchange::Order& order) { 
     
     auto it{ orderbook_.asks().begin() };
