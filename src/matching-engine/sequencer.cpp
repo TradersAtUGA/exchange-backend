@@ -1,4 +1,6 @@
-#include "sequencer/sequencer.hpp"
+#include "../../pch.h"
+
+#include "matching-engine/sequencer.hpp"
 #include <iostream>
 #include <unordered_map>
 #include "shared/debug.hpp"
@@ -16,7 +18,7 @@ void Sequencer::operator()() {
     while(running_.load(std::memory_order_acquire)) { 
         exchange::Order order;
         if (inbound_.try_dequeue(order)) {
-            DEBUG_PRINT("Got order: " + std::to_string(order.order_id));
+            DEBUG_PRINT("Got order: " + std::to_string(order.oid));
 
             // Handle logic 
             /* 

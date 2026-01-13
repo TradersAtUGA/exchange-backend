@@ -57,3 +57,6 @@ exchange-gateway-store
 
 gateway-log/*
 gateway-store/*
+
+# cmake user presets
+CMakeUserPresets.json

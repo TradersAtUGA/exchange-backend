@@ -26,21 +26,18 @@ endif()
 #endif()
 #
 
-add_subdirectory(src/engine)
 add_subdirectory(src/gateway)
 add_subdirectory(src/matching-engine)
-add_subdirectory(src/orchestration)
-add_subdirectory(src/orderbook)
-add_subdirectory(src/sequencer)
+# add_subdirectory(src/orchestration)
 
 # for executables
 add_subdirectory(apps/)
 
-
-add_executable(${PROJECT_NAME} src/main.cpp)
-
-target_link_libraries(${PROJECT_NAME}
-    PRIVATE
-        exchange_controller
-)
-
+# deprecated
+# add_executable(${PROJECT_NAME} src/main.cpp)
+#
+# target_link_libraries(${PROJECT_NAME}
+#     PRIVATE
+#         exchange_controller
+# )
+#
