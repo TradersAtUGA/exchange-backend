@@ -105,9 +105,6 @@ TEST(MATCH_ENG_limit_order_test, test_same_qty) {
     EXPECT_EQ(em.ledger()[0].qty, 10);
     EXPECT_EQ(em.ledger()[0].price, 10);
 
-    // std::cout << me.orderbook() << "\n";
-    // std::cout << em.orderbook() << "\n";
-
     // make sure orders erased from order book 
     EXPECT_EQ(me.orderbook().bids().at(10).order_count(), 0);
     EXPECT_EQ(em.orderbook().asks().at(10).order_count(),0);

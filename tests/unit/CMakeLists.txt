@@ -9,3 +9,4 @@ target_link_libraries(unit_tests PUBLIC
     matching_engine_tests
 )
 
+gtest_discover_tests(unit_tests)
