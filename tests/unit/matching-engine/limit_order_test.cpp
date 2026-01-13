@@ -99,7 +99,7 @@ TEST(MATCH_ENG_limit_order_test, test_same_qty) {
     EXPECT_EQ(em.ledger().size(), 1);
 
     // check if ledgers properly generated trade
-    EXPECT_EQ(me.ledger()[0].qty, 10);
+    EXPECT_EQ(me.ledger()[0].qty, 10);  
     EXPECT_EQ(me.ledger()[0].price, 10);
 
     EXPECT_EQ(em.ledger()[0].qty, 10);

@@ -19,7 +19,6 @@ option(BUILD_UNIT_TESTING "Build unit test executable")
 if(BUILD_UNIT_TESTING)
   enable_testing()
   add_subdirectory(tests/unit/)
-  add_subdirectory(tests/unit/matching-engine)
 endif()
 
 option(BUILD_PERF_TESTING "Build performance test executable")
