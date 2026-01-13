@@ -4,6 +4,7 @@
 #include <cstdint>
 #include <string>
 #include <array>
+#include <bitset>
 
 #include "shared/order.hpp"
 #include "shared/enums.hpp"
@@ -12,53 +13,31 @@
 
 namespace exchange {
 
-/*
-Dispatch tables to lookup valid values and conversions
-into internal enums
+consteval std::array<uint8_t, 128> valid_sides() { 
+    std::array<uint8_t, 128> arr; 
+    arr['1'] = 1; 
+    arr['2'] = 1; 
+    return arr; 
+}
 
-Note that fix values are char values and some fix 
-valuse begin at '1' or '0'. Depending on indexing 
-some arrays are accessed by ['1' - '0' - 1] if they 
-start at 1 and ['1' - '0'] if they start at 0. 
-*/
+consteval std::array<uint8_t, 128> valid_ord_types() { 
+    std::array<uint8_t, 128> arr; 
+    arr['1'] = 1; 
+    arr['2'] = 1; 
+    return arr; 
+}
 
-// VALID ARRAYS
+consteval std::array<uint8_t, 128> valid_tif() { 
+    std::array<uint8_t, 128> arr; 
+    arr['0'] = 1; // DAY 
+    arr['3'] = 1; // IOC 
+    arr['4'] = 1; // FOK
+    return arr; 
+}
 
-// NOTE: fix values start at 1!
-inline constexpr std::array<uint8_t, 17> VALID_SIDES = [] {
-    std::array<uint8_t, 17> arr; 
-    arr[0] = 1; // Side::BUY
-    arr[1] = 1; // Side::SELL
-    for (size_t i{ 2 }; i < 17; ++i) {
-        arr[i] = 0;
-    }
-    return arr;
-}();
-
-// NOTE: fix values DO NOT start at 1!
-inline constexpr std::array<uint8_t, 10> VALID_TIF = [] {
-    std::array<uint8_t, 10> arr; 
-    arr[0] = 1; // TIF::DAY
-    arr[1] = 0; // GTC (not impl)
-    arr[2] = 0; // at the open (not impl)
-    arr[3] = 1; // IOC
-    arr[4] = 1; // FOK 
-    for (size_t i{ 5 }; i < 10; ++i) {
-        arr[i] = 0;
-    }
-    return arr;
-}();
-
-// NOTE: fix values BEGIN at 1!
-inline constexpr std::array<uint8_t, 30> VALID_ORDER_TYPES = [] {
-    std::array<uint8_t, 30> arr; 
-    arr[0] = 1; // market
-    arr[1] = 1; // limit
-    for (size_t i{ 2 }; i < 30; ++i) {
-        arr[i] = 0;
-    }
-    return arr;
-}();
+constexpr std::array<uint8_t, 128> VALID_SIDES = valid_sides();
+constexpr std::array<uint8_t, 128> VALID_ORDER_TYPES = valid_ord_types(); 
+constexpr std::array<uint8_t, 128> VALID_TIF = valid_tif(); 
 
 // MAPPING ARRAYS 
 
@@ -107,7 +86,7 @@ inline exchange::Order generate_order(
     o.order_type = ORD_TYPE_MAP[static_cast<size_t>(order_type- '0' - 1)];
     o.tif = TIF_MAP[static_cast<size_t>(tif - '0')];
     o.price = exchange::double_to_uint64_t(price);
-    o.qty = static_cast<uint64_t>(qty); // avoid bit casts for qty
+    o.qty = static_cast<uint64_t>(qty); // avoid bit casts for qty  
     o.cid = std::stoull(client_id);
 
     // internally filled fields 
@@ -127,9 +106,9 @@ inline uint8_t validate_fix_values(
     double qty
 ) {
     return 
-    (VALID_SIDES[static_cast<size_t>(side - '0' - 1)] == 1)
-    && (VALID_ORDER_TYPES[static_cast<size_t>(order_type - '0' - 1)] == 1)
-    && (VALID_TIF[static_cast<size_t>(tif - '0')] == 1)
+    (VALID_SIDES[side] == 1)
+    && (VALID_ORDER_TYPES[order_type] == 1)
+    && (VALID_TIF[tif] == 1)
     && static_cast<uint8_t>(price > 0)
     && static_cast<uint8_t>(qty > 0);
 }
