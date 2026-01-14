@@ -8,13 +8,14 @@
 using std::uint64_t, std::uint8_t; 
 
 void exchange::OrderBook::add_order(exchange::Order order) {
-    if (order.side == Side::BUY) { // convert to branchless later (hashmap with ref to bids/asks)
+    if (order.side == Side::BUY) {
         // k, v: oid : last item in orderbook at that price in the ring buffer
-        orders_[order.oid] = bids_[order.price].back_ptr(); 
         bids_[order.price].push_back(std::forward<exchange::Order>(order)); // putting order into orderbook
+        orders_[order.oid] = bids_[order.price].back_ptr(); 
     } else {
-        orders_[order.oid] = asks_[order.price].back_ptr();
+       
         asks_[order.price].push_back(std::forward<exchange::Order>(order));
+        orders_[order.oid] = asks_[order.price].back_ptr();
     }
 }  
 
@@ -22,8 +23,6 @@ void exchange::OrderBook::cancel_order(exchange::Order& order) {
     if (order.status == 0) return; // order already dead or filled TODO(vikas): modify this to account for all possible order types 
     auto order_it = orders_.find(order.oid);
     if (order_it == orders_.end()) return; // order DNE
-
-
 
     order_it->second->status = 0; // set to dead 
     orders_.erase(order_it); // erase from lookup map 

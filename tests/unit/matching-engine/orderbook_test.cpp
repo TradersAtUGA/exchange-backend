@@ -119,8 +119,92 @@ TEST(orderbook_tests, cancel) {
     me.process(sellside);
     me.cancel(sellside);
 
-    EXPECT_EQ(me.orderbook().bids().at(10).front().status, 0); // order should be marked dead but still exist in the ob 
+    EXPECT_EQ(me.orderbook().bids().at(10).front().status, 0); // order should be marked dead but still exist in the ob
+    EXPECT_THROW(me.orderbook().orders().at(sellside.oid), std::out_of_range); // order ptr should not exist in orderbook anymore
 }
 
+TEST(orderbook_tests, best_ask) {
 
+    MatchingEngine me("XYZ");
 
+    Order o = Order(
+        Side::SELL, 
+        OrderType::LIMIT, // let order rest on ob
+        TIF::DAY,
+        "XYZ",
+        10, // price
+        10, // qty 
+        10,
+        123456789,
+        10,
+        1
+    );  
+
+    me.process(o);
+
+    EXPECT_EQ(me.orderbook().best_ask(), 10);
+}
+
+TEST(orderbook_tests, best_bid) {
+
+    MatchingEngine me("XYZ");
+
+    Order o = Order(
+        Side::BUY, 
+        OrderType::LIMIT, // let order rest on ob
+        TIF::DAY,
+        "XYZ",
+        10, // price
+        10, // qty 
+        10,
+        123456789,
+        10,
+        1
+    );  
+
+    me.process(o);
+
+    EXPECT_EQ(me.orderbook().best_bid(), 10);
+}
+
+TEST(orderbook_tests, bid_shares_ge) {
+    MatchingEngine me("XYZ");
+
+    Order o = Order(
+        Side::BUY, 
+        OrderType::LIMIT, // let order rest on ob
+        TIF::DAY,
+        "XYZ",
+        10, // price
+        10, // qty 
+        10,
+        123456789,
+        10,
+        1
+    );  
+
+    me.process(o);
+
+    EXPECT_EQ(me.orderbook().check_bid_shares_limit_ge(0, std::numeric_limits<uint64_t>::max()), 1);
+}
+
+TEST(orderbook_tests, ask_shares_ge) {
+    MatchingEngine me("XYZ");
+
+    Order o = Order(
+        Side::SELL, 
+        OrderType::LIMIT, // let order rest on ob
+        TIF::DAY,
+        "XYZ",
+        10, // price
+        10, // qty 
+        10,
+        123456789,
+        10,
+        1
+    );  
+
+    me.process(o);
+
+    EXPECT_EQ(me.orderbook().check_ask_shares_limit_ge(0, std::numeric_limits<uint64_t>::min()), 1);
+}

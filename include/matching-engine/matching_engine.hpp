@@ -46,7 +46,7 @@ public:
     /** @brief returns the current best bidding price */
     uint64_t bid() const { return orderbook_.best_bid(); }
 
-    /** @brief returns the last market price */
+    /** @brief returns the last market price */ 
     uint64_t last() const noexcept { return last_price_; }
 
     /** @brief returns the ledger containing all previous confirmed trades */
