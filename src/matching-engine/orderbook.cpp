@@ -27,8 +27,6 @@ void exchange::OrderBook::cancel_order(exchange::Order& order) {
     order_it->second->status = 0; // set to dead 
     orders_.erase(order_it); // erase from lookup map 
 
-    std::cout << "order stat is" << static_cast<int>(order.status) << "\n";
-
     if (order.side == Side::BUY) { // decrease qty at price level
         bids_.at(order.price).reduce_shares(order.qty);
     } else {
@@ -96,7 +94,7 @@ std::ostream& operator<<(std::ostream& os, const exchange::OrderBook& ob) {
     os << "\n";
 
     for (const auto& [k, v] : ob.bids()) {
-        if (k == 0) continue;
+        if (k == 0) continue; // sentinel order
         os << "For Price Level: " << k << "\n";
         os << "\n";
         os << v << "\n";
@@ -107,7 +105,7 @@ std::ostream& operator<<(std::ostream& os, const exchange::OrderBook& ob) {
     os << "\n";
 
     for (const auto& [k, v] : ob.asks()) {
-        if (k == std::numeric_limits<uint64_t>::max()) continue;
+        if (k == std::numeric_limits<uint64_t>::max()) continue; // sentinel order
         os << "Price Level: " << k << "\n";
         os << "\n";
         os << v << "\n";

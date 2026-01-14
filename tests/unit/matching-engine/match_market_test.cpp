@@ -3,7 +3,7 @@
 
 using namespace exchange; 
 
-TEST(MATCH_ENG_market_order_test, test_diff_qty) {
+TEST(matching_engine_tests, test_market_diff_qty) {
     MatchingEngine me("XYZ");
     MatchingEngine em("XYZ");
 
@@ -37,14 +37,42 @@ TEST(MATCH_ENG_market_order_test, test_diff_qty) {
     me.process(buyside);
     me.process(sellside);
 
-    sellside.qty = 5;
-    buyside.qty = 10;
+    
+    Order buyside2 = Order(
+        Side::BUY, 
+        OrderType::MARKET,
+        TIF::DAY,
+        "XYZ",
+        10, // price
+        5, // qty
+        10,
+        987654321,
+        10,
+        1
+    );
 
-    sellside.order_type = OrderType::LIMIT;
-    buyside.order_type = OrderType::MARKET;
+    Order sellside2 = Order(
+        Side::SELL, 
+        OrderType::LIMIT,
+        TIF::DAY,
+        "XYZ",
+        10, // price
+        5, // qty 
+        10,
+        123456789,
+        10,
+        1
+    );
+
 
     em.process(sellside);
     em.process(buyside);
+
+
+        
+    EXPECT_EQ(em.ledger().size(), 1);
+    EXPECT_EQ(em.ledger()[0].qty, 5);
+    EXPECT_EQ(em.ledger()[0].price, 10);
 
     // buyside order should fill entirely and be removed from the orderbook
     EXPECT_EQ(me.orderbook().bids().at(10).order_count(), 0);
@@ -57,14 +85,11 @@ TEST(MATCH_ENG_market_order_test, test_diff_qty) {
 
     // expect the market order is never added to the orderbook but is partially fillled
     //EXPECT_THROW(em.orderbook().bids().at(10).order_count(), std::out_of_range);
-    
-    EXPECT_EQ(em.ledger().size(), 1);
-    EXPECT_EQ(em.ledger()[0].qty, 5);
-    EXPECT_EQ(em.ledger()[0].price, 10);
+
 
 }
 
-TEST(MATCH_ENG_market_order_test, test_same_qty) {
+TEST(matching_engine_tests, test_market_same_qty) {
     
 }
 

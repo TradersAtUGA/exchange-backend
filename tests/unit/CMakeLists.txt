@@ -1,11 +1,8 @@
 add_executable(unit_tests
 
     # matching engine tests
-    matching-engine/limit_order_test.cpp
-    # matching-engine/market_order_test.cpp
-    # matching-engine/stress_test.cpp
-
-
+    matching-engine/match_limit_test.cpp
+    matching-engine/match_market_test.cpp
     matching-engine/orderbook_test.cpp
 
 )
