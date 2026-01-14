@@ -19,9 +19,6 @@ namespace exchange {
 class OrderBook {
 public:
 
-    static constexpr uint64_t MAX_PRICE = UINT64_MAX;
-    static constexpr uint64_t MIN_PRICE = 0;
-
     explicit OrderBook(const std::string& ticker) : ticker_(ticker) {
         // add a ask with max possible value just to init the orderbook
         Order max_ask;
@@ -47,7 +44,7 @@ public:
      * 
      * @param order order to remove
      */
-    void cancel_order(const Order& order);
+    void cancel_order(Order& order);
 
     /**
      * @brief removes the order pointer in the orders_

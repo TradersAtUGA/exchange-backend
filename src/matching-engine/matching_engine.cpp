@@ -8,7 +8,7 @@
 
 #include <iostream> // DEBUG 
 
-void exchange::MatchingEngine::process(exchange::Order& order) { 
+void exchange::MatchingEngine::process(exchange::Order& order) {
     mkt_to_lim_(order); // conv mkt -> lim 
     (this->*MATCH_FUNC_LUT
         [side_lut_converter_(order.side)]

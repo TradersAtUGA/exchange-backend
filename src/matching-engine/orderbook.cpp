@@ -18,13 +18,17 @@ void exchange::OrderBook::add_order(exchange::Order order) {
     }
 }  
 
-void exchange::OrderBook::cancel_order(const exchange::Order& order) {
-    if (order.status == 0) return; // order already dead or filled 
+void exchange::OrderBook::cancel_order(exchange::Order& order) {
+    if (order.status == 0) return; // order already dead or filled TODO(vikas): modify this to account for all possible order types 
     auto order_it = orders_.find(order.oid);
     if (order_it == orders_.end()) return; // order DNE
 
+
+
     order_it->second->status = 0; // set to dead 
     orders_.erase(order_it); // erase from lookup map 
+
+    std::cout << "order stat is" << static_cast<int>(order.status) << "\n";
 
     if (order.side == Side::BUY) { // decrease qty at price level
         bids_.at(order.price).reduce_shares(order.qty);
