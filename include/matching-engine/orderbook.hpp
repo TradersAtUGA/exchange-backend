@@ -77,7 +77,7 @@ public:
     const std::map<uint64_t, Order*>& orders() const { return orders_; }
 
     /** @brief returns the best asking price */
-    uint64_t best_ask() const { return asks_.begin()->first; }
+    uint64_t best_ask() const { return asks_.begin()->first; } // TODO(vikas): handle edge case if the order is canceled and the best ask is not updated to account for this need to check share count at every price level 
 
     /** @brief returns the best bidding price */
     uint64_t best_bid() const { return bids_.begin()->first; }
