@@ -167,6 +167,27 @@ TEST(orderbook_tests, best_bid) {
     EXPECT_EQ(me.orderbook().best_bid(), 10);
 }
 
+TEST(orderbook_tests, bid_shares_limit_ge) {
+    MatchingEngine me("XYZ");
+
+    Order o = Order(
+        Side::BUY, 
+        OrderType::LIMIT, // let order rest on ob
+        TIF::DAY,
+        "XYZ",
+        10, // price
+        10, // qty 
+        10,
+        123456789,
+        10,
+        1
+    );  
+
+    me.process(o);
+
+    EXPECT_EQ(me.orderbook().check_bid_shares_limit_ge(10, 5), 1);
+}
+
 TEST(orderbook_tests, bid_shares_ge) {
     MatchingEngine me("XYZ");
 
@@ -185,7 +206,28 @@ TEST(orderbook_tests, bid_shares_ge) {
 
     me.process(o);
 
-    EXPECT_EQ(me.orderbook().check_bid_shares_limit_ge(0, std::numeric_limits<uint64_t>::max()), 1);
+    EXPECT_EQ(me.orderbook().check_bid_shares_ge(10), 1);
+}
+
+TEST(orderbook_tests, ask_shares_limit_ge) {
+    MatchingEngine me("XYZ");
+
+    Order o = Order(
+        Side::SELL, 
+        OrderType::LIMIT, // let order rest on ob
+        TIF::DAY,
+        "XYZ",
+        10, // price
+        10, // qty 
+        10,
+        123456789,
+        10,
+        1
+    );  
+
+    me.process(o);
+
+    EXPECT_EQ(me.orderbook().check_ask_shares_limit_ge(10, 25), 1);
 }
 
 TEST(orderbook_tests, ask_shares_ge) {
@@ -206,5 +248,5 @@ TEST(orderbook_tests, ask_shares_ge) {
 
     me.process(o);
 
-    EXPECT_EQ(me.orderbook().check_ask_shares_limit_ge(0, std::numeric_limits<uint64_t>::min()), 1);
+    EXPECT_EQ(me.orderbook().check_ask_shares_ge(10), 1);
 }
