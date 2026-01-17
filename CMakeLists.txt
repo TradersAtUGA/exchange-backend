@@ -40,6 +40,7 @@ endif()
 
 add_subdirectory(src/gateway)
 add_subdirectory(src/matching-engine)
+add_subdirectory(src/outbound)
 # add_subdirectory(src/orchestration)
 
 # for executables

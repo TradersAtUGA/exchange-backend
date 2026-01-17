@@ -61,6 +61,7 @@ void exchange::MatchingEngine::match_IOC_buy_(exchange::Order& order) {
 
             const uint64_t filled_qty{ std::min(order.qty, match.qty) };
             const uint64_t fill_price{ match.price };
+            volume_ += filled_qty; 
 
             ledger_.emplace_back(
                 create_trade_(order, match, filled_qty, fill_price)
@@ -105,6 +106,7 @@ void exchange::MatchingEngine::match_FOK_buy_(exchange::Order& order) {
 
             const uint64_t filled_qty{ std::min(order.qty, match.qty) };
             const uint64_t fill_price{ match.price };
+            volume_ += filled_qty; 
 
             ledger_.emplace_back(
                 create_trade_(order, match, filled_qty, fill_price)
@@ -146,6 +148,7 @@ void exchange::MatchingEngine::match_IOC_sell_(exchange::Order& order) {
 
             const uint64_t filled_qty{ std::min(order.qty, match.qty) };
             const uint64_t fill_price{ match.price };
+            volume_ += filled_qty; 
 
             ledger_.emplace_back(
                 create_trade_(order, match, filled_qty, fill_price)
@@ -190,6 +193,7 @@ void exchange::MatchingEngine::match_FOK_sell_(exchange::Order& order) {
 
             const uint64_t filled_qty{ std::min(order.qty, match.qty) };
             const uint64_t fill_price{ match.price };
+            volume_ += filled_qty; 
 
             ledger_.emplace_back(
                 create_trade_(order, match, filled_qty, fill_price)
@@ -236,6 +240,7 @@ void exchange::MatchingEngine::match_DAY_buy_(exchange::Order& order) {
 
             const uint64_t filled_qty{ std::min(order.qty, match.qty) };
             const uint64_t fill_price{ match.price };
+            volume_ += filled_qty; 
 
             ledger_.emplace_back(
                 create_trade_(order, match, filled_qty, fill_price)
@@ -281,6 +286,7 @@ void exchange::MatchingEngine::match_DAY_sell_(exchange::Order& order) {
 
             const uint64_t filled_qty{ std::min(order.qty, match.qty) };
             const uint64_t fill_price{ match.price };
+            volume_ += filled_qty;
 
             ledger_.emplace_back(
                 create_trade_(order, match, filled_qty, fill_price)

@@ -5,6 +5,7 @@
     "concurrentqueue",
     "gtest",
     "benchmark",
-    "quickfix"
+    "quickfix", 
+    "nlohmann-json"
   ]
 }

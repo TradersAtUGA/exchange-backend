@@ -58,6 +58,9 @@ public:
     /** @brief returns the inbound ring buffer */
     const OrderbookRingBuffer<exchange::Order, config::RING_BUFFER_SIZE>& orders() const { return orders_; }
 
+    /** @brief returns the total volume to this point in the matching engine */
+    uint64_t volume() const noexcept { return volume_; }
+
 private:
 
     //====deprecated use quickfix method for execution report 
@@ -137,6 +140,7 @@ private:
     }
 
     uint64_t last_price_; // last market trade price 
+    uint64_t volume_; // monotonically increasing volume counter for the lifetime of the matching engine 
 
     // ledger might be removed and the matching engine may 
     // just use a different data structure to feed the 
@@ -146,6 +150,7 @@ private:
     
     OrderbookRingBuffer<exchange::Order, config::RING_BUFFER_SIZE> orders_; // incoming orders 
     exchange::OrderBook orderbook_; 
+
     
 // forced to put public so look up table can see private method prototypes
 public: 

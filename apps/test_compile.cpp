@@ -2,6 +2,7 @@
 
 #include "gateway/gateway.hpp"
 #include "matching-engine/matching_engine.hpp"
+#include "outbound/public_broadcaster.hpp"
 
 #define NL "\n"
 using std::cout;
@@ -13,17 +14,21 @@ using std::cout;
 
 int main(int argc, char** argv) {
 
-    // try to make a matching engine
-    exchange::MatchingEngine me("XYZ");
+    exchange::PublicBroadcaster pub;
 
-    FIX::SessionSettings settings("gateway.cfg");
-    Gateway app;
-    FIX::FileStoreFactory storeFactory(settings);
-    FIX::FileLogFactory logFactory(settings);
-    FIX::SocketAcceptor acceptor(app, storeFactory, settings, logFactory);
+    pub.start();
 
-    acceptor.start();
-    std::cout << "Exchange acceptor running..." << std::endl;
-    std::cin.get();  // wait for Enter
-    acceptor.stop();
+   
+    
+
+    // FIX::SessionSettings settings("gateway.cfg");
+    // Gateway app;
+    // FIX::FileStoreFactory storeFactory(settings);
+    // FIX::FileLogFactory logFactory(settings);
+    // FIX::SocketAcceptor acceptor(app, storeFactory, settings, logFactory);
+
+    // acceptor.start();
+    // std::cout << "Exchange acceptor running..." << std::endl;
+    // std::cin.get();  // wait for Enter
+    // acceptor.stop();
 }
