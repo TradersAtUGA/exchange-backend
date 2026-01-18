@@ -4,6 +4,7 @@
 #include <quickfix/SessionID.h>
 #include <quickfix/fix44/NewOrderSingle.h>
 #include <quickfix/fix44/OrderCancelRequest.h>
+#include <quickfix/fix44/ExecutionReport.h>
 #include <iostream>
 #include <string>
 #include <cstdint>
@@ -11,6 +12,7 @@
 #include "shared/order.hpp"
 #include "shared/utilities.hpp"
 #include "shared/cancel.hpp"
+#include "shared/trade.hpp"
 
 class Gateway: public FIX::Application, public FIX::MessageCracker
 {
@@ -37,5 +39,9 @@ public:
     // not implemented
     // void onMessage(const FIX44::ExecutionReport&, const FIX::SessionID&) override;
 
+
+    void static send_filled_trade(const Trade& t, const FIX::SessionID& sessionID); 
+
+    void send_cancel_confirmation(const Cancel& c);
 
 };

@@ -2,6 +2,7 @@
 
 #include <cstdint>
 #include <string>
+#include <ostream>
 #include <nlohmann/json.hpp>
 
 #include "shared/utilities.hpp"
@@ -20,6 +21,14 @@ struct Quote {
         return j.dump(); 
     }
 
+    friend std::ostream& operator<<(std::ostream& os, const Quote& q) {
+        os << "ticker: " << q.ticker << "\n";
+        os << "price: " << q.price << "\n";
+        os << "bid price: " << q.bid << "\n";
+        os << "ask price: " << q.ask << "\n";
+        os << "volume: " << q.volume << "\n";
+        return os; 
+    }
 
     std::string ticker;
     uint64_t price; // last price 

@@ -2,7 +2,7 @@
 
 #include "gateway/gateway.hpp"
 #include "matching-engine/matching_engine.hpp"
-#include "outbound/public_broadcaster.hpp"
+#include "outbound/broadcaster.hpp"
 
 #define NL "\n"
 using std::cout;
@@ -14,12 +14,13 @@ using std::cout;
 
 int main(int argc, char** argv) {
 
-    exchange::PublicBroadcaster pub;
+    Gateway app; 
+
+    exchange::Broadcaster pub(&app);
 
     pub.start();
 
-   
-    
+    std::this_thread::sleep_for(std::chrono::seconds(5));
 
     // FIX::SessionSettings settings("gateway.cfg");
     // Gateway app;

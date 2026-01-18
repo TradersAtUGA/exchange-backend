@@ -95,18 +95,14 @@ void Gateway::onMessage(const FIX44::NewOrderSingle& msg, const FIX::SessionID&)
     msg.getField(tif);
     msg.getField(price);
 
-    // invariants required 
-
-    /*
-    - for market orders price must be supplied it can be whatever
-    */
-
     if (exchange::validate_fix_values(
         side.getValue(),
         ordType.getValue(),
         tif.getValue(), 
         price.getValue(),
-        qty.getValue()) == 0) return; // ill formed order
+        qty.getValue()) == 0) return; 
+    // TODO(vikas): this should call another method that rejects the order
+    // since the order was malformed back to the broker 
 
     exchange::Order o = exchange::generate_order(
         side.getValue(),
@@ -155,4 +151,31 @@ void Gateway::onMessage(const FIX44::OrderCancelRequest& msg, const FIX::Session
     //           << std::endl;
 
     // TODO: submit cancel to sequencer / matching engine
+}
+
+void Gateway::send_filled_trade(const Trade& trade, const FIX::SessionID& sessionID) {
+    // FIX44::ExecutionReport execReport(
+    //     FIX::OrderID(trade.bcid),
+    //     FIX::ExecID(trade.tid),
+    //     FIX::ExecType(FIX::ExecType_FILL),
+    //     FIX::OrdStatus(FIX::OrdStatus_FILLED),
+    //     FIX::Side(trade.side),
+    //     FIX::LeavesQty(0),
+    //     FIX::CumQty(trade.qty),
+    //     FIX::AvgPx(trade.price)
+    // )
+
+    // // Required / common fields
+    // execReport.set(FIX::ClOrdID(trade.cl_ord_id));
+    // execReport.set(FIX::Symbol(trade.symbol));
+    // execReport.set(FIX::LastQty(trade.qty));
+    // execReport.set(FIX::LastPx(trade.price));
+    // execReport.set(FIX::OrderQty(trade.qty));
+    // execReport.set(FIX::TransactTime());
+    // execReport.set(FIX::Account(trade.account));
+
+    // FIX::Session::sendToTarget(execReport, sessionID);
+
+    // STUB
+    return; 
 }

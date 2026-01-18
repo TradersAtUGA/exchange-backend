@@ -1,7 +1,5 @@
 #pragma once 
 
-#include "outbound/public_broadcaster.hpp"
-
 #include <cstdint> 
 #include <array>
 #include <arpa/inet.h>
@@ -9,6 +7,10 @@
 #include <unistd.h>
 #include <string>
 #include <atomic>
+#include <thread>
+#include <chrono>
+
+#include "gateway/gateway.hpp"
 
 #include "shared/quote.hpp"
 #include "shared/trade.hpp"
@@ -16,16 +18,29 @@
 #include "config.hpp"
 
 namespace exchange {
-    
-class PublicBroadcaster {
+
+/**  
+ * @brief handles transmission of quotes, trades, and cancel confirmations
+ * to both public and private clients 
+ */
+class Broadcaster {
 public:
 
-    PublicBroadcaster() { 
+    /** 
+     * @brief creates a new Broadcaster object
+     * 
+     * @param gateway the main Gateway the exchange is relying on 
+     * to handle FIX related issues
+     * @return a new Broadcaster object 
+     */
+    Broadcaster(Gateway* gateway) : gate_ptr(gateway) { 
         setup_socket_(trade_socket_, 
             trade_dest_addr_, trade_addr_, trade_port_);
         setup_socket_(quote_socket_, 
             quote_dest_addr_, quote_addr_, quote_port_);
     }
+
+    ~Broadcaster(); 
 
     /** @brief starts consuming and publishing data */
     void start(); 
@@ -50,7 +65,7 @@ private:
         int32_t port);
 
     /**
-     * @brief publishes JSON as a string to receiver
+     * @brief begins publishing threads
      * 
      * @param socket the socket to send from 
      * @param dest_addr sockaddr_in struct associated with the socket
@@ -61,6 +76,30 @@ private:
         const sockaddr_in& dest_addr_,
         const std::string& msg
     );
+
+    /** 
+     * @brief (on a new thread) consumes and publishes trade
+     * data from the inbound trade buffer, to both public and private
+     * clients via multicast and the gateway, respectively
+     */
+    void publish_trades_(std::atomic<uint8_t>& running); 
+
+    /**
+     * @brief (on a new thread) consumes and publishes quote
+     * data from the inbound quote buffer, to public clients via 
+     * multicast
+     */
+    void publish_quotes_(std::atomic<uint8_t>& running); 
+
+    /** 
+     * @brief (on a new thread) consumes and publishes cancel 
+     * confirmation from the inbound cancel buffer, to private
+     * clients via the gateway 
+     */
+    void publish_cancels_(std::atomic<uint8_t>& running); 
+
+    /** @brief joins all threads that were created in start() */
+    void join_threads_(); 
 
     // sockets
     int32_t trade_socket_;
@@ -73,15 +112,22 @@ private:
     const char * quote_addr_ = config::PUBLIC_QUOTE_IP_ADDR.c_str();
     const int32_t trade_port_ = config::PUBLIC_TRADE_PORT; 
     const int32_t quote_port_ = config::PUBLIC_QUOTE_PORT;
+    unsigned char ttl_; // time to live for multi cast
 
-    unsigned char ttl_; 
-
+    // UNUSED
     std::array<char, 2048> trade_buffer_; 
     std::array<char, 2048> quote_buffer_;
 
+    // flag for all running threads
     std::atomic<uint8_t> running_; 
+
+    // pointer to exchange gateway (needed to call FIX hooks)
+    Gateway* gate_ptr; 
+
+    // worker threads
+    std::thread trade_thread_;
+    std::thread quote_thread_;
+    std::thread cancel_thread_;
 };
-
-
 
 }
