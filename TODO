@@ -14,3 +14,9 @@ Write some basic unit test
 Fix the ring buffer and multi ring buffer
 
 Build out matching engine
+
+# Vikas
+
+- refactor orderbook/matching engine relationship
+- write tests
+- potentially switch to fix8 for fix protocol impl

@@ -8,7 +8,7 @@
 
 #include <iostream> // DEBUG 
 
-void exchange::MatchingEngine::process(exchange::Order& order) { 
+void exchange::MatchingEngine::process(exchange::Order& order) {
     mkt_to_lim_(order); // conv mkt -> lim 
     (this->*MATCH_FUNC_LUT
         [side_lut_converter_(order.side)]
@@ -28,7 +28,7 @@ Trade exchange::MatchingEngine::create_trade_(
         ask_order.cid,
         static_cast<uint64_t>(1), // this is the trade id we will need some static increment variable
         filled_qty,
-        exchange::uint64_t_to_double(trade_price), // price was originally bitcasted 
+        trade_price, // this was bitcasted so represents the bits inside the trade object
         static_cast<int8_t>(1), // trade obj return code; check docs for more info
         bid_order.ticker
     );

@@ -1,5 +1,10 @@
 add_executable(unit_tests
-    matching-engine/limit_order_test.cpp
+
+    # matching engine tests
+    matching-engine/match_limit_test.cpp
+    matching-engine/match_market_test.cpp
+    matching-engine/orderbook_test.cpp
+
 )
 
 target_include_directories(unit_tests PRIVATE ${CMAKE_SOURCE_DIR}/include)

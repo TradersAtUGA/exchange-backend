@@ -16,14 +16,31 @@ int main(int argc, char** argv) {
     // try to make a matching engine
     exchange::MatchingEngine me("XYZ");
 
-    FIX::SessionSettings settings("gateway.cfg");
-    Gateway app;
-    FIX::FileStoreFactory storeFactory(settings);
-    FIX::FileLogFactory logFactory(settings);
-    FIX::SocketAcceptor acceptor(app, storeFactory, settings, logFactory);
+    auto buyside = exchange::Order(
+        Side::BUY, 
+        OrderType::MARKET,
+        TIF::DAY,
+        "XYZ",
+        10, // price
+        5, // qty
+        10,
+        987654321,
+        10,
+        1
+    );
 
-    acceptor.start();
-    std::cout << "Exchange acceptor running..." << std::endl;
-    std::cin.get();  // wait for Enter
-    acceptor.stop();
+    std::cout << "before processing" << NL;
+
+    me.process(buyside);
+
+    // FIX::SessionSettings settings("gateway.cfg");
+    // Gateway app;
+    // FIX::FileStoreFactory storeFactory(settings);
+    // FIX::FileLogFactory logFactory(settings);
+    // FIX::SocketAcceptor acceptor(app, storeFactory, settings, logFactory);
+
+    // acceptor.start();
+    // std::cout << "Exchange acceptor running..." << std::endl;
+    // std::cin.get();  // wait for Enter
+    // acceptor.stop();
 }
