@@ -9,9 +9,9 @@
  * to hold metadata in addition to the message type. 
  */
 template <typename T> 
-struct MessageWrapper { 
+struct Message { 
     T payload; 
-    FIX44::SessionID session_id;
-    uint64_t recv_time;     
+    const FIX44::SessionID session_id;
+    const uint64_t recv_time;     
 };  
 

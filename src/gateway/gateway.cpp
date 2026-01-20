@@ -3,6 +3,7 @@
 #include "quickfix/fix44/ExecutionReport.h"
 #include "shared/cancel.hpp"
 #include "gateway/validation.hpp"
+#include "shared/message.hpp"
 
 void Gateway::onCreate(const FIX::SessionID& sessionID) {
     std::cout << "Session created: " << sessionID.toString() << std::endl;
@@ -78,7 +79,7 @@ void Gateway::fromApp(const FIX::Message& message, const FIX::SessionID& session
 }
 
 // ---- NewOrderSingle handler ----
-void Gateway::onMessage(const FIX44::NewOrderSingle& msg, const FIX::SessionID&) {
+void Gateway::onMessage(const FIX44::NewOrderSingle& msg, const FIX::SessionID& sessionID) {
     FIX::ClOrdID clOrdID;
     FIX::Symbol symbol;
     FIX::Side side;
@@ -121,6 +122,8 @@ void Gateway::onMessage(const FIX44::NewOrderSingle& msg, const FIX::SessionID&)
               << " tif=" << static_cast<int>(o.tif)
               << std::endl;
 
+    Message<exchange::Order> msg = {o, sessionID, exchange::get_time_ms()};
+
     // TODO: send to order ring buffer that feeds to matching engines
 }
 
@@ -153,7 +156,7 @@ void Gateway::onMessage(const FIX44::OrderCancelRequest& msg, const FIX::Session
     // TODO: submit cancel to sequencer / matching engine
 }
 
-void Gateway::send_filled_trade(const Trade& trade, const FIX::SessionID& sessionID) {
+void Gateway::send_trade(const Trade& trade, const FIX::SessionID& sessionID) {
     // FIX44::ExecutionReport execReport(
     //     FIX::OrderID(trade.bcid),
     //     FIX::ExecID(trade.tid),

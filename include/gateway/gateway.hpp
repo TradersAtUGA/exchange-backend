@@ -40,8 +40,8 @@ public:
     // void onMessage(const FIX44::ExecutionReport&, const FIX::SessionID&) override;
 
 
-    void static send_filled_trade(const Trade& t, const FIX::SessionID& sessionID); 
+    void send_trade(const Trade& t, const FIX::SessionID& session_id); 
 
-    void send_cancel_confirmation(const Cancel& c);
+    void send_cancel_confirmation(const Cancel& c, const FIX::SessionID& session_id);
 
 };

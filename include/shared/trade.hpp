@@ -55,8 +55,9 @@ struct Trade {
     std::string to_json() {
         json j; 
         j["ticker"] = ticker; 
-        j["qty"] = qty;
-        j["price"] = price;
+        j["filled_qty"] = qty;
+        j["fill_price"] = price;
+        j["time"] = time; 
         return j.dump(); 
     }
 
@@ -67,4 +68,7 @@ struct Trade {
     uint64_t price;
     int8_t return_code; // internal
     std::string ticker;
+
+    // NEW 
+    uint64_t time; 
 };  
