@@ -32,9 +32,6 @@ public:
      *  
      * @param order the order to process inside the matching engine
      */
-    void process(exchange::Order& order);
-
-    // NEW
     void process(Message<Order>& msg); 
 
     /**
@@ -64,24 +61,6 @@ public:
 
 private:
 
-    //====deprecated use quickfix method for execution report 
-    /**
-     * @brief creates a trade object given a bid and ask order that 
-     * have been matched
-     * 
-     * @param bid_order the order on the bidding side
-     * @param ask_order the order on the asking side
-     * @param filled_qty the number of shares that were filled from this trade
-     * @param trade_price the price at which the trade occurred
-     * @return Trade object based on given information 
-     */
-    Trade create_trade_(
-        const exchange::Order& bid_order, 
-        const exchange::Order& ask_order,
-        uint64_t filled_qty, 
-        uint64_t trade_price
-    );
-
     // new handle for creating and pushing trades out to the 
     // shared mem 
     Message<Trade> generate_trade_(
@@ -103,25 +82,6 @@ private:
     ) { return {ticker, fill_price, bid, ask, volume}; }
     
     // MATCHING ALGOS
-    /** @brief matching algo for an buy side IOC order */
-    void match_IOC_buy_(exchange::Order& order); 
-
-    /** @brief matching algo for an sell side IOC order */
-    void match_IOC_sell_(exchange::Order& order);
-
-    /** @brief matching algo for an buy side FOK order */
-    void match_FOK_buy_(exchange::Order& order);
-
-    /** @brief matching algo for an sell side FOK order */
-    void match_FOK_sell_(exchange::Order& order);
-
-    /** @brief matching algo for an buy side DAY order */
-    void match_DAY_buy_(exchange::Order& order);
-
-    /** @brief matching algo for an sell side DAY order */
-    void match_DAY_sell_(exchange::Order& order);
-
-    //
 
     void match_IOC_buy_(Message<exchange::Order>& order); 
 
@@ -136,9 +96,6 @@ private:
     void match_DAY_sell_(Message<exchange::Order>& order);
 
     // HELPERS
-
-    /** @brief adds a partially filled aggressive LMT order back to the orderbook */
-    void on_partial_fill_aggressive_limit_(exchange::Order& order);
 
     /** @brief adds a partially filled aggressive LMT order back to the orderbook */
     void on_partial_fill_aggressive_limit_(Message<Order>& order);
@@ -186,16 +143,7 @@ private:
     exchange::OrderBook orderbook_; 
     std::string ticker_;
 
-    using MATCH_LUT_ =  
-            std::array<
-                std::array<
-                    std::array<
-                        void(exchange::MatchingEngine::*)(exchange::Order& order), 
-                    3>, // num order tifs
-                2>, // num order types
-            2>; // num order sides 
-        
-    using MATCH_LUT__ = 
+    using MATCH_LUT_ = 
         std::array<
                 std::array<
                     std::array<
@@ -207,8 +155,8 @@ private:
 
     // lookup table for matching methods 
     // avoids chopped if else(s) and handlers 
-    static constexpr MATCH_LUT__ MATCH_FUNC_LUT = [] {
-            MATCH_LUT__ arr; 
+    static constexpr MATCH_LUT_ MATCH_FUNC_LUT = [] {
+            MATCH_LUT_ arr; 
 
             // BUY MARKET DAY 
             arr[0][0][0] = &exchange::MatchingEngine::match_DAY_buy_;
