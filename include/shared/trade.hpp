@@ -3,6 +3,7 @@
 #include <string>
 #include <ostream>
 #include <nlohmann/json.hpp>
+#include <quickfix/SessionID.h>
 
 #include "enums.hpp"
 
@@ -52,12 +53,12 @@ struct Trade {
         return os;
     }
 
+    /** @brief generates a trade json to be sent publicly */
     std::string to_json() {
         json j; 
         j["ticker"] = ticker; 
         j["filled_qty"] = qty;
         j["fill_price"] = price;
-        j["time"] = time; 
         return j.dump(); 
     }
 
@@ -69,6 +70,6 @@ struct Trade {
     int8_t return_code; // internal
     std::string ticker;
 
-    // NEW 
-    uint64_t time; 
+    // may need a sessionID for both sides 
+
 };  

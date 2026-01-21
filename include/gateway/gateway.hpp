@@ -34,14 +34,14 @@ public:
     // Handles new inbound cancel requests -- validates and pushes matching engine queue
     void onMessage(const FIX44::OrderCancelRequest&, const FIX::SessionID&) override;
 
-    // Handles new outbound trade reports 
-
-    // not implemented
-    // void onMessage(const FIX44::ExecutionReport&, const FIX::SessionID&) override;
-
-
+    // Handles sending trades back to the broker 
     void send_trade(const Trade& t, const FIX::SessionID& session_id); 
 
+    // Handles sending cancel confirmations back to the broker 
     void send_cancel_confirmation(const Cancel& c, const FIX::SessionID& session_id);
+
+    void send_rejection(const exchange::Order& o, const FIX::SessionID& session_id);
+    
+    
 
 };
