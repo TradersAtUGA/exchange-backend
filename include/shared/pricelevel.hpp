@@ -23,9 +23,9 @@ public:
      * 
      * @param order the order to push back 
      */
-    void push_back(Message<exchange::Order>&& order) { 
+    void push_back(Message<exchange::Order> order) { 
         qty_count_ += order.payload.qty;
-        rb_.enqueue(std::move(order)); 
+        rb_.enqueue(order); 
     }
 
     /** @brief removes the first order  */
