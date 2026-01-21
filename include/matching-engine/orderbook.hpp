@@ -5,6 +5,7 @@
 #include <utility>
 #include <cstdint>
 #include <limits>
+#include <quickfix/SessionID.h>
 
 #include "shared/order.hpp"
 #include "shared/trade.hpp"
@@ -25,13 +26,14 @@ public:
         Order max_ask;
         max_ask.price = std::numeric_limits<uint64_t>::max();
         max_ask.side = Side::SELL;
-        Message<Order> max_ask_msg = {max_ask, 0, 0};
+        FIX::SessionID dummy; 
+        Message<Order> max_ask_msg = Message<Order>(max_ask, dummy);
         add_order(max_ask_msg);
 
         Order min_ask;
         min_ask.price = 0;
         min_ask.side = Side::BUY;
-        Message<Order> min_bid_msg = {min_ask, 0, 0};
+        Message<Order> min_bid_msg = Message<Order>(min_ask, dummy);
         add_order(min_bid_msg);
     };
     
@@ -40,8 +42,6 @@ public:
      * 
      * @param order order to add
      */
-    void add_order(Order order);
-    // NEW
     void add_order(Message<Order> msg); 
 
     /**

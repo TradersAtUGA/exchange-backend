@@ -14,24 +14,7 @@ using std::cout;
 
 int main(int argc, char** argv) {
 
-    Gateway app; 
-
-    auto buyside = exchange::Order(
-        Side::BUY, 
-        OrderType::MARKET,
-        TIF::DAY,
-        "XYZ",
-        10, // price
-        5, // qty
-        10,
-        987654321,
-        10,
-        1
-    );
-
-    std::cout << "before processing" << NL;
-
-    me.process(buyside);
+    std::cout << "hello" << "\n";
 
     // FIX::SessionSettings settings("gateway.cfg");
     // Gateway app;

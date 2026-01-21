@@ -122,7 +122,7 @@ void Gateway::onMessage(const FIX44::NewOrderSingle& msg, const FIX::SessionID& 
               << " tif=" << static_cast<int>(o.tif)
               << std::endl;
 
-    Message<exchange::Order> msg = {o, sessionID, exchange::get_time_ms()};
+    Message<exchange::Order> order = Message<exchange::Order>(o, sessionID);
 
     // TODO: send to order ring buffer that feeds to matching engines
 }

@@ -25,9 +25,9 @@ public:
      * 
      * @param item the item to enqueue
      */
-    void enqueue(T&& item) {
+    void enqueue(T item) {
         if (item_count_ + 1 > SIZE) return;
-        buf_[tail_] = std::move(item);
+        buf_[tail_] = item;
         tail_ = (tail_ + 1) % SIZE;
         ++item_count_;
     }

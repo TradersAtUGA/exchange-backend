@@ -34,7 +34,10 @@ Message<Trade> exchange::MatchingEngine::generate_trade_(
         bid_order.ticker
     );
 
-    return {t, 1, 2}; // STUB fix matching engine to use message<Order> to target
+    // TODO: IMPLEMENT ACTUAL LOGIC 
+    FIX::SessionID dummy;
+    Message<Trade> msg = Message<Trade>(t, dummy);
+    return msg; 
     // proper sessionID
 
 }
