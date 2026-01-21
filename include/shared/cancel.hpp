@@ -4,7 +4,7 @@
 
 struct Cancel {
 
-    Cancel();
+    Cancel() : cancel_id(0), order_id(0), client_id(0) {}
 
     Cancel(
         uint64_t cancel_id,

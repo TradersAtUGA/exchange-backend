@@ -2,10 +2,13 @@
 #include <cstdint>
 #include <string>
 #include <ostream>
+#include <nlohmann/json.hpp>
+#include <quickfix/SessionID.h>
 
 #include "enums.hpp"
 
 using std::uint64_t, std::int8_t;
+using json = nlohmann::json;
 
 struct Trade {
 
@@ -50,11 +53,23 @@ struct Trade {
         return os;
     }
 
-    uint64_t bcid; // bidder client id
-    uint64_t acid; // asker client id
-    uint64_t tid; // trade id
+    /** @brief generates a trade json to be sent publicly */
+    std::string to_json() {
+        json j; 
+        j["ticker"] = ticker; 
+        j["filled_qty"] = qty;
+        j["fill_price"] = price;
+        return j.dump(); 
+    }
+
+    uint64_t bcid; // bidder client id (private)
+    uint64_t acid; // asker client id (private)
+    uint64_t tid; // trade id (internal)
     uint64_t qty; 
     uint64_t price;
     int8_t return_code; // internal
     std::string ticker;
+
+    // may need a sessionID for both sides 
+
 };  

@@ -6,4 +6,5 @@ target_link_libraries(test_comp PRIVATE
     matching_engine
     gateway
     quickfix
+    outbound
 )

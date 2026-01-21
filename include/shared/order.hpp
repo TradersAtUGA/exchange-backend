@@ -76,6 +76,10 @@ struct Order {
 
     // used internally 
     uint8_t status; // see docs/order.md 
+
+    // NEW fields needed
+    uint64_t orig_qty; // original qty passed from broker
+    uint64_t iid; // internally assigned (broker) id 
 };
 
 }

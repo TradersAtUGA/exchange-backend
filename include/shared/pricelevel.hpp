@@ -6,9 +6,12 @@
 
 #include "shared/orderbook_ringbuffer.hpp"
 #include "shared/order.hpp"
+#include "shared/message.hpp"
 #include "config.hpp"
 
 using std::uint64_t, std::uint8_t;
+
+//TODO modify the contain Message<Order> instead of raw orders
 
 class PriceLevel {
 public:
@@ -20,14 +23,14 @@ public:
      * 
      * @param order the order to push back 
      */
-    void push_back(exchange::Order&& order) { 
-        qty_count_ += order.qty;
+    void push_back(Message<exchange::Order>&& order) { 
+        qty_count_ += order.payload.qty;
         rb_.enqueue(std::move(order)); 
     }
 
     /** @brief removes the first order  */
     void pop_front() noexcept { 
-        qty_count_ -= front().qty;
+        qty_count_ -= front().payload.qty;
         rb_.dequeue(); 
     }
 
@@ -59,10 +62,10 @@ public:
      * 
      * @return the first order at this price level
      * */
-    [[nodiscard]] exchange::Order& front() noexcept { return rb_.peek(); } 
-    [[nodiscard]] const exchange::Order& front() const noexcept { return rb_.peek(); }
+    [[nodiscard]] Message<exchange::Order>& front() noexcept { return rb_.peek(); } 
+    [[nodiscard]] const Message<exchange::Order>& front() const noexcept { return rb_.peek(); }
 
-    exchange::Order* back_ptr() noexcept { return rb_.back_ptr(); }
+    Message<exchange::Order>* back_ptr() noexcept { return rb_.back_ptr(); }
 
     /** @brief returns the total number of orders */
     uint64_t order_count() const noexcept { return rb_.item_count(); }
@@ -92,7 +95,7 @@ public:
     }
 
 private:
-    OrderbookRingBuffer<exchange::Order, config::RING_BUFFER_SIZE> rb_;
+    OrderbookRingBuffer<Message<exchange::Order>, config::RING_BUFFER_SIZE> rb_;
     uint64_t qty_count_;
     
 };

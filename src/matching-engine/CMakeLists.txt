@@ -14,12 +14,16 @@ target_include_directories(matching_engine
 
 target_precompile_headers(matching_engine PRIVATE ${CMAKE_SOURCE_DIR}/pch.h)
 
-#sequencer stuff
+# external libraries
 find_package(concurrentqueue CONFIG REQUIRED)
 find_package(Threads REQUIRED)
+find_package(nlohmann_json CONFIG REQUIRED)
 
 target_link_libraries(matching_engine
-    PRIVATE concurrentqueue::concurrentqueue Threads::Threads
+    PRIVATE 
+        concurrentqueue::concurrentqueue 
+        Threads::Threads 
+        nlohmann_json
 )
 
 

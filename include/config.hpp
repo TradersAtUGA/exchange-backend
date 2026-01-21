@@ -6,6 +6,7 @@
 
 #pragma once
 #include <cstdint>
+#include <string>
 
 namespace config {
     /*
@@ -14,12 +15,12 @@ namespace config {
     */
 
     // Network inbound
-    inline constexpr uint32_t NETWORK_INBOUND_PORT_NUMBER = 11000;
-    inline constexpr uint8_t NETWORK_INBOUND_THREAD_COUNT = 4;
+    [[deprecated]] inline constexpr uint32_t NETWORK_INBOUND_PORT_NUMBER = 11000;
+    [[deprecated]] inline constexpr uint8_t NETWORK_INBOUND_THREAD_COUNT = 4;
 
     // Network outbound
-    inline constexpr uint32_t NETWORK_OUTBOUND_PORT_NUMBER = 12000;
-    inline constexpr uint8_t NETWORK_OUTBOUND_THREAD_COUNT = 4;
+    [[deprecated]] inline constexpr uint32_t NETWORK_OUTBOUND_PORT_NUMBER = 12000;
+    [[deprecated]] inline constexpr uint8_t NETWORK_OUTBOUND_THREAD_COUNT = 4;
 
     // Ring buffer
     inline constexpr uint32_t RING_BUFFER_SIZE = 1024;
@@ -27,4 +28,14 @@ namespace config {
     // Ring buffer number of consumers
     inline constexpr uint8_t NUM_CONSUMERS = 2;
 
-}
+    // Outbound
+    // PUBLIC broadcaster 
+
+    // NOTE: IP addresses should be class D for multicast
+    constexpr std::string PUBLIC_TRADE_IP_ADDR = "239.255.0.1";
+    constexpr std::string PUBLIC_QUOTE_IP_ADDR = "239.255.0.2";
+
+    constexpr int32_t PUBLIC_TRADE_PORT = 30001; 
+    constexpr int32_t PUBLIC_QUOTE_PORT = 30002; 
+
+}   

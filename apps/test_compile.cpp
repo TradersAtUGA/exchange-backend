@@ -2,6 +2,7 @@
 
 #include "gateway/gateway.hpp"
 #include "matching-engine/matching_engine.hpp"
+#include "outbound/broadcaster.hpp"
 
 #define NL "\n"
 using std::cout;
@@ -13,8 +14,7 @@ using std::cout;
 
 int main(int argc, char** argv) {
 
-    // try to make a matching engine
-    exchange::MatchingEngine me("XYZ");
+    Gateway app; 
 
     auto buyside = exchange::Order(
         Side::BUY, 
