@@ -6,7 +6,7 @@
 
 using namespace exchange; 
 
-TEST(MATCH_ENG_limit_order_test, test_diff_qty) {
+TEST(matching_engine_tests, test_limit_diff_qty) {
 
     MatchingEngine me("XYZ");
     MatchingEngine em("XYZ");
@@ -50,9 +50,20 @@ TEST(MATCH_ENG_limit_order_test, test_diff_qty) {
     EXPECT_EQ(me.orderbook().asks().at(10).order_count(), 1);
     EXPECT_EQ(em.orderbook().bids().at(10).order_count(), 1);
     EXPECT_EQ(em.orderbook().asks().at(10).order_count(), 0);
+
+     // check if ledger contains trade
+    EXPECT_EQ(me.ledger().size(), 1);
+    EXPECT_EQ(em.ledger().size(), 1);
+
+    // check if ledgers properly generated trade
+    EXPECT_EQ(me.ledger()[0].qty, 5);  
+    EXPECT_EQ(me.ledger()[0].price, 10);
+
+    EXPECT_EQ(em.ledger()[0].qty, 5);
+    EXPECT_EQ(em.ledger()[0].price, 10);
 }
 
-TEST(MATCH_ENG_limit_order_test, test_same_qty) {
+TEST(matching_engine_tests, test_limit_same_qty) {
 
     MatchingEngine me("XYZ");
     MatchingEngine em("XYZ");

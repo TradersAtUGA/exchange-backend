@@ -16,11 +16,22 @@ int main(int argc, char** argv) {
 
     Gateway app; 
 
-    exchange::Broadcaster pub(&app);
+    auto buyside = exchange::Order(
+        Side::BUY, 
+        OrderType::MARKET,
+        TIF::DAY,
+        "XYZ",
+        10, // price
+        5, // qty
+        10,
+        987654321,
+        10,
+        1
+    );
 
-    pub.start();
+    std::cout << "before processing" << NL;
 
-    std::this_thread::sleep_for(std::chrono::seconds(5));
+    me.process(buyside);
 
     // FIX::SessionSettings settings("gateway.cfg");
     // Gateway app;

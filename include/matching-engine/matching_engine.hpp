@@ -42,7 +42,7 @@ public:
      * 
      * @param order the order to cancel
      */
-    void cancel(const exchange::Order& order) {orderbook_.cancel_order(order); }
+    void cancel(exchange::Order& order) {orderbook_.cancel_order(order); }
 
     // NEW 
     void cancel(const Message<Cancel>& msg) { orderbook_.cancel_order(msg); } 
@@ -53,7 +53,7 @@ public:
     /** @brief returns the current best bidding price */
     uint64_t bid() const { return orderbook_.best_bid(); }
 
-    /** @brief returns the last market price */
+    /** @brief returns the last market price */ 
     uint64_t last() const noexcept { return last_price_; }
 
     /** @brief returns the orderbook */
@@ -103,17 +103,22 @@ private:
     ) { return {ticker, fill_price, bid, ask, volume}; }
     
     // MATCHING ALGOS
-
+    /** @brief matching algo for an buy side IOC order */
     void match_IOC_buy_(exchange::Order& order); 
 
+    /** @brief matching algo for an sell side IOC order */
     void match_IOC_sell_(exchange::Order& order);
 
+    /** @brief matching algo for an buy side FOK order */
     void match_FOK_buy_(exchange::Order& order);
 
+    /** @brief matching algo for an sell side FOK order */
     void match_FOK_sell_(exchange::Order& order);
 
+    /** @brief matching algo for an buy side DAY order */
     void match_DAY_buy_(exchange::Order& order);
 
+    /** @brief matching algo for an sell side DAY order */
     void match_DAY_sell_(exchange::Order& order);
 
     //
@@ -148,14 +153,12 @@ private:
     }
 
     /** @brief order type enum conversion for main lookup table  */
-    uint8_t order_type_lut_converter_(OrderType ot) const noexcept {
-        // switch(ot) { 
-        //     case OrderType::MARKET: return 0;
-        //     case OrderType::LIMIT: return 1;
-        // }
-        return 0; 
-        // if more ordertypes are supported in the future 
-        // then an actual conversion can be used 
+    uint8_t order_type_lut_converter_(OrderType ot) noexcept {
+        switch(ot) { 
+            case OrderType::MARKET: return 0;
+            case OrderType::LIMIT: return 1;
+        }
+        exchange::unreachable();
     }
 
     /** @brief tif enum conversion for main lookup table */
@@ -168,13 +171,14 @@ private:
         exchange::unreachable();
     }
 
-    void mkt_to_lim_(exchange::Order& order) const noexcept {
-        switch(order.order_type) {
-            case OrderType::LIMIT: return; 
-            case OrderType::MARKET: (order.side == Side::BUY) 
-                ? UINT64_MAX : 0; 
+    /** @brief converts a market order into a limit order  */
+    void mkt_to_lim_(exchange::Order& order) noexcept {
+        if (order.order_type == OrderType::MARKET) {
+            // price converted to max/min depending on side
+            // conventional way to limit a marketable order
+            order.price = (order.side == Side::BUY) 
+                ? std::numeric_limits<uint64_t>::max() : 0; 
         }
-        exchange::unreachable(); 
     }
 
     uint64_t last_price_; // last market trade price 
@@ -209,19 +213,19 @@ private:
             // BUY MARKET DAY 
             arr[0][0][0] = &exchange::MatchingEngine::match_DAY_buy_;
 
-            // BUY MARKET IOC = MARKET DAY 
+            // BUY MARKET IOC
             arr[0][0][1] = &exchange::MatchingEngine::match_IOC_buy_;
 
-            // BUY MARKET FOK (uses special handle)
+            // BUY MARKET FOK
             arr[0][0][2] = &exchange::MatchingEngine::match_FOK_buy_;
 
             // SELL MARKET DAY 
             arr[1][0][0] = &exchange::MatchingEngine::match_DAY_sell_;
 
-            // SELL MARKET IOC = MARKET DAY --------->vvvvvvvvvvvvvv
+            // SELL MARKET IOC
             arr[1][0][1] = &exchange::MatchingEngine::match_IOC_sell_;
 
-            // SELL MARKET FOK (uses special handle)
+            // SELL MARKET FOK 
             arr[1][0][2] = &exchange::MatchingEngine::match_FOK_sell_;
 
             // BUY LIMIT DAY 
@@ -230,7 +234,7 @@ private:
             // BUY LIMIT IOC
             arr[0][1][1] = &exchange::MatchingEngine::match_IOC_buy_;
 
-            // BUY LIMIT FOK (uses special handle)
+            // BUY LIMIT FOK 
             arr[0][1][2] = &exchange::MatchingEngine::match_FOK_buy_;
 
             // SELL LIMIT DAY 
@@ -239,7 +243,7 @@ private:
             // SELL LIMIT IOC
             arr[1][1][1] = &exchange::MatchingEngine::match_IOC_sell_;
 
-            // SELL LIMIT FOK (uses special handle)
+            // SELL LIMIT FOK 
             arr[1][1][2] = &exchange::MatchingEngine::match_FOK_sell_;
 
             return arr; 
