@@ -25,12 +25,11 @@ Message<Trade> exchange::MatchingEngine::generate_trade_(
 ) {
 
     Trade t = Trade(
-         bid_order.cid,
-        ask_order.cid,
+        bid_order.coid, // TODO: change later for actual val
+        ask_order.coid,
         static_cast<uint64_t>(1), // this is the trade id we will need some static increment variable
         filled_qty,
         exchange::uint64_t_to_double(trade_price), // price was originally bitcasted 
-        static_cast<int8_t>(1), // trade obj return code; check docs for more info
         bid_order.ticker
     );
 
@@ -62,7 +61,7 @@ void exchange::MatchingEngine::match_DAY_sell_(Message<exchange::Order>& msg) {
             Message<exchange::Order>& match = it->second.front(); // first order at this price 
             PriceLevel& level = it->second;
 
-            if (msg.payload.status == 0) { // if order dead (canceled)
+            if (msg.payload.status == Status::CANCELED) { // if order dead (canceled)
                 // should be renamed to canceled since cancel order already had their qty removed from the orderbook so it makes more sense we are just dequeueing
                 level.consume_front(0);
                 continue;
@@ -116,7 +115,7 @@ void exchange::MatchingEngine::match_DAY_buy_(Message<exchange::Order>& msg) {
             Message<exchange::Order>& match = it->second.front(); // first order at this price 
             PriceLevel& level = it->second;
 
-            if (msg.payload.status == 0) { // if order dead (canceled)
+            if (msg.payload.status == Status::CANCELED) { // if order dead (canceled)
                 // should be renamed to canceled since cancel order already had their qty removed from the orderbook so it makes more sense we are just dequeueing
                 level.consume_front(0);
                 continue;
@@ -171,7 +170,7 @@ void exchange::MatchingEngine::match_IOC_sell_(Message<exchange::Order>& msg) {
             Message<exchange::Order>& match = it->second.front(); // first order at this price 
             PriceLevel& level = it->second;
 
-            if (msg.payload.status == 0) { // if order dead (canceled)
+            if (msg.payload.status == Status::CANCELED) { // if order dead (canceled)
                 // should be renamed to canceled since cancel order already had their qty removed from the orderbook so it makes more sense we are just dequeueing
                 level.consume_front(0);
                 continue;
@@ -219,7 +218,7 @@ void exchange::MatchingEngine::match_IOC_buy_(Message<exchange::Order>& msg) {
             Message<exchange::Order>& match = it->second.front(); // first order at this price 
             PriceLevel& level = it->second;
 
-            if (msg.payload.status == 0) { // if order dead (canceled)
+            if (msg.payload.status == Status::CANCELED) { // if order dead (canceled)
                 // should be renamed to canceled since cancel order already had their qty removed from the orderbook so it makes more sense we are just dequeueing
                 level.consume_front(0);
                 continue;
@@ -271,7 +270,7 @@ void exchange::MatchingEngine::match_FOK_buy_(Message<exchange::Order>& msg) {
             Message<exchange::Order>& match = it->second.front(); // first order at this price 
             PriceLevel& level = it->second;
 
-            if (msg.payload.status == 0) { // if order dead (canceled)
+            if (msg.payload.status == Status::CANCELED) { // if order dead (canceled)
                 // should be renamed to canceled since cancel order already had their qty removed from the orderbook so it makes more sense we are just dequeueing
                 level.consume_front(0);
                 continue;
@@ -323,7 +322,7 @@ void exchange::MatchingEngine::match_FOK_sell_(Message<exchange::Order>& msg) {
             Message<exchange::Order>& match = it->second.front(); // first order at this price 
             PriceLevel& level = it->second;
 
-            if (msg.payload.status == 0) { // if order dead (canceled)
+            if (msg.payload.status == Status::CANCELED) { // if order dead (canceled)
                 // should be renamed to canceled since cancel order already had their qty removed from the orderbook so it makes more sense we are just dequeueing
                 level.consume_front(0);
                 continue;

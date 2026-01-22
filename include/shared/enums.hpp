@@ -36,10 +36,9 @@ enum struct Trigger : uint8_t {
 // Order status 
 // not being used in implementation right now 
 enum struct Status : uint8_t {
-    DEAD = 0, 
-    NO_FILL_YET = 1, 
-    PARTIAL_FILL = 2, 
-    CANNOT_FILL = 3,
-    FILLED = 4,
-    REJECTED = 5, 
+    CANCELED = 4, 
+    FILLED = 2, 
+    PARTIALLY_FILLED = 1, 
+    REJECTED = 8,
+    NEW = 0
 };

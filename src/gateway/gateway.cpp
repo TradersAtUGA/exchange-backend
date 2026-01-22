@@ -157,16 +157,16 @@ void Gateway::onMessage(const FIX44::OrderCancelRequest& msg, const FIX::Session
 }
 
 void Gateway::send_trade(const Trade& trade, const FIX::SessionID& sessionID) {
-    // FIX44::ExecutionReport execReport(
-    //     FIX::OrderID(trade.bcid),
-    //     FIX::ExecID(trade.tid),
-    //     FIX::ExecType(FIX::ExecType_FILL),
-    //     FIX::OrdStatus(FIX::OrdStatus_FILLED),
-    //     FIX::Side(trade.side),
-    //     FIX::LeavesQty(0),
-    //     FIX::CumQty(trade.qty),
-    //     FIX::AvgPx(trade.price)
-    // )
+    FIX44::ExecutionReport execReport(
+        FIX::OrderID(trade.bcid),
+        FIX::ExecID(trade.tid),
+        FIX::ExecType(FIX::ExecType_FILL),
+        FIX::OrdStatus(FIX::OrdStatus_FILLED),
+        FIX::Side(),
+        FIX::LeavesQty(0),
+        FIX::CumQty(trade.qty),
+        FIX::AvgPx(trade.price)
+    );
 
     // // Required / common fields
     // execReport.set(FIX::ClOrdID(trade.cl_ord_id));

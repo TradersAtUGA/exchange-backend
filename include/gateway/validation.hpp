@@ -87,11 +87,9 @@ inline exchange::Order generate_order(
     o.tif = TIF_MAP[static_cast<size_t>(tif - '0')];
     o.price = exchange::double_to_uint64_t(price);
     o.qty = static_cast<uint64_t>(qty); // avoid bit casts for qty  
-    o.cid = std::stoull(client_id);
 
     // internally filled fields 
-    o.recv_time = exchange::get_time_ns();
-    o.status = 1; // order is alive/valid
+    o.status = Status::NEW; // order is alive/valid
     o.oid = 0; // TODO: SEQUENCER MUST ASSIGN HERE
 
     return o;

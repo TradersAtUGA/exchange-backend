@@ -21,9 +21,9 @@ void exchange::OrderBook::add_order(Message<exchange::Order> msg) {
 void exchange::OrderBook::cancel_order(const Message<Cancel>& msg) { 
     auto order_it = order_map_.find(msg.payload.order_id);
     if (order_it == order_map_.end()) return; // order DNE 
-    if (order_it->second->payload.status == 0) return; // order dead
+    if (order_it->second->payload.status == Status::CANCELED) return; // order dead
 
-    order_it->second->payload.status = 0; 
+    order_it->second->payload.status = Status::CANCELED; 
     if (order_it->second->payload.side == Side::BUY) { 
         bids_.at(order_it->second->payload.price)
             .reduce_shares(order_it->second->payload.qty);

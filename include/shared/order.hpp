@@ -18,14 +18,12 @@ struct Order {
     Order() 
     : price(0),
       qty(0),
-      cid(0),
       oid(0),
-      recv_time(0),
       side(Side::BUY),
       order_type(OrderType::MARKET),
       tif(TIF::DAY),
       ticker(),
-      status(0)
+      status(Status::REJECTED)
     {}
 
     Order(
@@ -35,10 +33,8 @@ struct Order {
         std::string ticker, 
         uint64_t price, 
         uint64_t quantity,
-        uint64_t client_id, 
         uint64_t order_id, 
-        uint64_t order_time_placed,
-        uint8_t status
+        Status status
     ) :
         side(side),
         order_type(order_type),
@@ -46,10 +42,8 @@ struct Order {
         ticker(ticker),
         price(price),
         qty(quantity),
-        cid(client_id),
         oid(order_id),
-        recv_time(order_time_placed),
-        status(1)
+        status(Status::NEW)
     {} 
 
     friend std::ostream& operator<<(std::ostream& os, const Order& order) {
@@ -57,9 +51,7 @@ struct Order {
         std::cout << "Order Type: " << static_cast<int>(order.order_type) << std::endl;
         std::cout << "Price: " << order.price << std::endl;
         std::cout << "Quantity: " << order.qty << std::endl;
-        std::cout << "Client ID: " << order.cid << std::endl;
         std::cout << "Order ID: " << order.oid << std::endl;
-        std::cout << "Received: " << order.recv_time << std::endl;
         std::cout << "Status code" << static_cast<int>(order.status) << std::endl;
         return os;
     }
@@ -70,16 +62,14 @@ struct Order {
     std::string ticker; 
     uint64_t price;
     uint64_t qty; 
-    uint64_t cid; // client id 
     uint64_t oid; // order (specific) id (just sequencer id internally)
-    uint64_t recv_time; // time order was placed
 
     // used internally 
-    uint8_t status; // see docs/order.md 
+    Status status; // see docs/order.md 
 
     // NEW fields needed
     uint64_t orig_qty; // original qty passed from broker
-    uint64_t iid; // internally assigned (broker) id 
+    uint64_t coid; // internally assigned (broker) id 
 };
 
 }
