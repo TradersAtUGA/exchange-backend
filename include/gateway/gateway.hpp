@@ -8,6 +8,7 @@
 #include <iostream>
 #include <string>
 #include <cstdint>
+#include <map> 
 
 #include "shared/order.hpp"
 #include "shared/utilities.hpp"
@@ -46,7 +47,10 @@ public:
     void send_cancel(const Cancel& c, const FIX::SessionID& session_id);
 
     void send_rejection(const exchange::Order& o, const FIX::SessionID& session_id);
+
+private: 
     
-    
+    // stores clientside id the internal order id 
+    std::map<uint64_t, uint64_t> clord_to_ord;
 
 };

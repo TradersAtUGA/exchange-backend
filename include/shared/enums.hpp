@@ -18,6 +18,10 @@ enum struct Side : uint8_t {
 enum struct OrderType : uint8_t {
     MARKET = 1, 
     LIMIT = 2,
+    // NOTE: this is not an actual order type associated with FIX
+    // but a result from combining cancel and orders into a
+    // single struct 
+    CANCEL = 0 
 };
 
 // Order's Time In Force

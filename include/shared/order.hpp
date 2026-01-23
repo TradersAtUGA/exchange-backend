@@ -46,6 +46,14 @@ struct Order {
         status(Status::NEW)
     {} 
 
+
+    /**  @brief creates a new order struct */
+    Order create_cancel(uint64_t order_id) { 
+        Order o = Order(); 
+        o.cancel_order_id = order_id; 
+        return o; 
+    }
+
     friend std::ostream& operator<<(std::ostream& os, const Order& order) {
         std::cout << "Order Side: "<< static_cast<int>(order.side) << std::endl;
         std::cout << "Order Type: " << static_cast<int>(order.order_type) << std::endl;
@@ -59,7 +67,7 @@ struct Order {
     Side side;
     OrderType order_type;
     TIF tif; // time in force
-    std::string ticker; 
+    std::string ticker; // replace with char buffer 
     uint64_t price;
     uint64_t qty; 
     uint64_t oid; // order (specific) id (just sequencer id internally)
@@ -70,6 +78,9 @@ struct Order {
     // NEW fields needed
     uint64_t orig_qty; // original qty passed from broker
     uint64_t coid; // internally assigned (broker) id 
+
+    uint64_t cancel_id; // sequencer assigned cancel id 
+    uint64_t cancel_order_id; // cancel order id 
 };
 
 }
