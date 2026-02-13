@@ -83,7 +83,7 @@ inline exchange::Order generate_order(
     exchange::Order o; 
     // FIX provided fields 
     o.side = SIDE_MAP[static_cast<size_t>(side - '0' - 1)];
-    o.order_type = ORD_TYPE_MAP[static_cast<size_t>(order_type- '0' - 1)];
+    o.ord_type = ORD_TYPE_MAP[static_cast<size_t>(order_type- '0' - 1)];
     o.tif = TIF_MAP[static_cast<size_t>(tif - '0')];
     o.price = exchange::double_to_uint64_t(price);
     o.qty = static_cast<uint64_t>(qty); // avoid bit casts for qty  

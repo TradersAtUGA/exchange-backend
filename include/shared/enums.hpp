@@ -1,5 +1,6 @@
 #pragma once
 #include <cstdint>
+#include <cstring>
 
 /*
     Note that the integer values in the enums are mapped

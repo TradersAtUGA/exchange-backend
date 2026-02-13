@@ -12,7 +12,7 @@ void exchange::MatchingEngine::process(Message<Order>& msg) {
     mkt_to_lim_(msg.payload); // conv mkt -> lim 
     (this->*MATCH_FUNC_LUT
         [side_lut_converter_(msg.payload.side)]
-        [order_type_lut_converter_(msg.payload.order_type)]
+        [order_type_lut_converter_(msg.payload.ord_type)]
         [tif_lut_converter_(msg.payload.tif)]
     )(msg);
 }
@@ -49,7 +49,7 @@ void exchange::MatchingEngine::match_DAY_sell_(Message<exchange::Order>& msg) {
 
     while (it != orderbook_.bids().end() && msg.payload.qty > 0) { 
         if (it->first < msg.payload.price 
-                && msg.payload.order_type != OrderType::MARKET) {  
+                && msg.payload.ord_type != OrderType::MARKET) {  
             // add what ever is left on the order
             // useful for init of orderbook if this is the first order coming in 
             on_partial_fill_aggressive_limit_(msg);
@@ -92,7 +92,7 @@ void exchange::MatchingEngine::match_DAY_sell_(Message<exchange::Order>& msg) {
 
         ++it; // move to next price
     } 
-    if (msg.payload.order_type != OrderType::MARKET) on_partial_fill_aggressive_limit_(msg);
+    if (msg.payload.ord_type != OrderType::MARKET) on_partial_fill_aggressive_limit_(msg);
 }
 
 void exchange::MatchingEngine::match_DAY_buy_(Message<exchange::Order>& msg) {
@@ -103,7 +103,7 @@ void exchange::MatchingEngine::match_DAY_buy_(Message<exchange::Order>& msg) {
 
     while (it != orderbook_.asks().end() && msg.payload.qty > 0) { 
         if (it->first < msg.payload.price 
-                && msg.payload.order_type != OrderType::MARKET) {  
+                && msg.payload.ord_type != OrderType::MARKET) {  
             // add what ever is left on the order
             // useful for init of orderbook if this is the first order coming in 
             on_partial_fill_aggressive_limit_(msg);
@@ -146,7 +146,7 @@ void exchange::MatchingEngine::match_DAY_buy_(Message<exchange::Order>& msg) {
 
         ++it; // move to next price
     } 
-    if (msg.payload.order_type != OrderType::MARKET) on_partial_fill_aggressive_limit_(msg);
+    if (msg.payload.ord_type != OrderType::MARKET) on_partial_fill_aggressive_limit_(msg);
 }
 
 void exchange::MatchingEngine::on_partial_fill_aggressive_limit_(Message<Order>& o) {

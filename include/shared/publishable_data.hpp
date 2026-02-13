@@ -24,6 +24,8 @@ struct PublishableData {
     /** @brief contains information about trade information between both orders */
     Trade trade; 
 
+
     
+
 
 };

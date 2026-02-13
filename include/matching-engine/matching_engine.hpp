@@ -130,7 +130,7 @@ private:
 
     /** @brief converts a market order into a limit order  */
     void mkt_to_lim_(exchange::Order& order) noexcept {
-        if (order.order_type == OrderType::MARKET) {
+        if (order.ord_type == OrderType::MARKET) {
             // price converted to max/min depending on side
             // conventional way to limit a marketable order
             order.price = (order.side == Side::BUY) 
@@ -155,7 +155,7 @@ private:
 
     // lookup table for matching methods 
     // avoids chopped if else(s) and handlers 
-    static constexpr MATCH_LUT_ MATCH_FUNC_LUT = [] {
+    static constexpr MATCH_LUT_ MATCH_FUNC_LUT = []() {
             MATCH_LUT_ arr; 
 
             // BUY MARKET DAY 
