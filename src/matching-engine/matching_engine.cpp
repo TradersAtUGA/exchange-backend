@@ -89,7 +89,7 @@ void exchange::MatchingEngine::match_DAY_sell_(Message<exchange::Order>& msg) {
             if (match.payload.qty == 0) { 
                 orderbook_.remove_order_ptr(match.payload.oid);
                 level.consume_front(filled_qty);    
-                // SET STATUS TO FILLED 
+                match.payload.status = Status::FILLED; 
             } else level.reduce_shares(filled_qty);
 
             Quote q = generate_quote_(
@@ -131,7 +131,7 @@ void exchange::MatchingEngine::match_DAY_buy_(Message<exchange::Order>& msg) {
                 // should be renamed to canceled since cancel order already had their qty removed from the orderbook so it makes more sense we are just dequeueing
                 level.consume_front(0);
                 continue;
-            }
+            } 
 
             const uint64_t filled_qty{ std::min(msg.payload.qty, match.payload.qty) };
             const uint64_t fill_price{ match.payload.price };
@@ -143,8 +143,8 @@ void exchange::MatchingEngine::match_DAY_buy_(Message<exchange::Order>& msg) {
             if (match.payload.qty == 0) { 
                 orderbook_.remove_order_ptr(match.payload.oid);
                 level.consume_front(filled_qty);    
-                // SET STATUS TO FILLED 
-            }
+                match.payload.status = Status::FILLED; 
+            } else level.reduce_shares(filled_qty);
 
             Quote q = generate_quote_(
                 ticker_, fill_price, orderbook_.best_bid(), orderbook_.best_ask(), volume_
@@ -198,8 +198,8 @@ void exchange::MatchingEngine::match_IOC_sell_(Message<exchange::Order>& msg) {
             if (match.payload.qty == 0) { 
                 orderbook_.remove_order_ptr(match.payload.oid);
                 level.consume_front(filled_qty);    
-                // SET STATUS TO FILLED 
-            }
+                match.payload.status = Status::FILLED; 
+            }  else level.reduce_shares(filled_qty);
 
             Quote q = generate_quote_(
                 ticker_, fill_price, orderbook_.best_bid(), orderbook_.best_ask(), volume_
@@ -246,8 +246,8 @@ void exchange::MatchingEngine::match_IOC_buy_(Message<exchange::Order>& msg) {
             if (match.payload.qty == 0) { 
                 orderbook_.remove_order_ptr(match.payload.oid);
                 level.consume_front(filled_qty);    
-                // SET STATUS TO FILLED 
-            }
+                match.payload.status = Status::FILLED; 
+            } else level.reduce_shares(filled_qty);
 
             Quote q = generate_quote_(
                 ticker_, fill_price, orderbook_.best_bid(), orderbook_.best_ask(), volume_
@@ -298,8 +298,8 @@ void exchange::MatchingEngine::match_FOK_buy_(Message<exchange::Order>& msg) {
             if (match.payload.qty == 0) { 
                 orderbook_.remove_order_ptr(match.payload.oid);
                 level.consume_front(filled_qty);    
-                // SET STATUS TO FILLED 
-            }
+                match.payload.status = Status::FILLED; 
+            } else level.reduce_shares(filled_qty);
 
             Quote q = generate_quote_(
                 ticker_, fill_price, orderbook_.best_bid(), orderbook_.best_ask(), volume_
@@ -350,8 +350,8 @@ void exchange::MatchingEngine::match_FOK_sell_(Message<exchange::Order>& msg) {
             if (match.payload.qty == 0) { 
                 orderbook_.remove_order_ptr(match.payload.oid);
                 level.consume_front(filled_qty);    
-                // SET STATUS TO FILLED 
-            }
+                match.payload.status = Status::FILLED; 
+            } else level.reduce_shares(filled_qty);
 
             Quote q = generate_quote_(
                 ticker_, fill_price, orderbook_.best_bid(), orderbook_.best_ask(), volume_
