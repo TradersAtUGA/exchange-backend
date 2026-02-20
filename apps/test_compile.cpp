@@ -12,18 +12,34 @@ using std::cout;
 #include "quickfix/FileLog.h"
 #include "quickfix/SessionSettings.h"
 
+using namespace exchange; 
+
 int main(int argc, char** argv) {
 
-    std::cout << "hello" << "\n";
+    MatchingEngine me("XYZ"); 
 
-    // FIX::SessionSettings settings("gateway.cfg");
-    // Gateway app;
-    // FIX::FileStoreFactory storeFactory(settings);
-    // FIX::FileLogFactory logFactory(settings);
-    // FIX::SocketAcceptor acceptor(app, storeFactory, settings, logFactory);
+    Order sellside_ = Order::create_new_order(
+        Side::BUY, 
+        OrderType::LIMIT, 
+        TIF::DAY, 
+        const_cast<char *>("XYZ"), 
+        10, 
+        10, 
+        123456789, 
+        1
+    );
 
-    // acceptor.start();
-    // std::cout << "Exchange acceptor running..." << std::endl;
-    // std::cin.get();  // wait for Enter
-    // acceptor.stop();
+    std::cout << sellside_ << "<- the sellside_ order price" << std::endl;
+    Message<Order> sellside(sellside_); 
+
+    std::cout << sellside << std::endl;
+
+    me.process(sellside); 
+
+    std::cout << me.orderbook() << std::endl;
+
+   
+    return 0; 
+    
+
 }

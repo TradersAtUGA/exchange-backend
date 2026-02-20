@@ -111,7 +111,8 @@ void Gateway::onMessage(const FIX44::NewOrderSingle& msg, const FIX::SessionID& 
         tif.getValue(),
         price.getValue(),
         qty.getValue(),
-        clOrdID.getValue()
+        clOrdID.getValue(),
+        symbol.getValue()
     );
 
     std::cout << "Received NewOrderSingle: order_id=" << o.oid

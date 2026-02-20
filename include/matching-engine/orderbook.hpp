@@ -54,6 +54,9 @@ public:
     // new (use can.payload.order_id)
     void cancel_order(const Message<Cancel>& msg); 
 
+
+    void cancel_order(const Message<Order>& msg); 
+
     /**
      * @brief removes the order pointer in the orders_
      * variable
@@ -65,7 +68,29 @@ public:
 
 
     /** @brief operator overload for std::cout */
-    friend std::ostream& operator<<(std::ostream& os, const OrderBook& ob);
+    friend std::ostream& operator<<(std::ostream& os, const OrderBook& ob) {
+        os << "BIDS" << "\n";
+        os << "\n";
+
+        for (const auto& [k, v] : ob.bids()) {
+            if (k == 0) continue; // sentinel order
+            os << "For Price Level: " << k << "\n";
+            os << "\n";
+            os << v << "\n";
+            os << "\n";
+        }  
+
+        os << "ASKS" << "\n";
+        os << "\n";
+
+        for (const auto& [k, v] : ob.asks()) {
+            if (k == std::numeric_limits<uint64_t>::max()) continue; // sentinel order
+            os << "Price Level: " << k << "\n";
+            os << "\n";
+            os << v << "\n";
+        }
+        return os;
+    }
 
     /** @brief return orderbook ticker */
     std::string& ticker() { return ticker_; }

@@ -10,6 +10,13 @@
 
 void exchange::MatchingEngine::process(Message<Order>& msg) { 
     mkt_to_lim_(msg.payload); // conv mkt -> lim 
+
+    std::cout << "MATCHING FUNCTION CALL: " << 
+    static_cast<int>(side_lut_converter_(msg.payload.side)) 
+    << ", " << static_cast<int>(order_type_lut_converter_(msg.payload.ord_type)) 
+    << ", " << static_cast<int>(tif_lut_converter_(msg.payload.tif)) 
+    << "\n";
+
     (this->*MATCH_FUNC_LUT
         [side_lut_converter_(msg.payload.side)]
         [order_type_lut_converter_(msg.payload.ord_type)]
@@ -67,18 +74,23 @@ void exchange::MatchingEngine::match_DAY_sell_(Message<exchange::Order>& msg) {
                 continue;
             }
 
-            const uint64_t filled_qty{ std::min(msg.payload.qty, msg.payload.qty) };
+            const uint64_t filled_qty{ std::min(msg.payload.qty, match.payload.qty) };
             const uint64_t fill_price{ match.payload.price };
 
+        
             volume_ += filled_qty;
             match.payload.qty -= filled_qty;
-            msg.payload.qty -= filled_qty;
+            msg.payload.qty -= filled_qty; 
+
+            std::cout << 
+            level.total_shares() << " - " << filled_qty << " = " << 
+            level.total_shares() - filled_qty << std::endl;
 
             if (match.payload.qty == 0) { 
                 orderbook_.remove_order_ptr(match.payload.oid);
                 level.consume_front(filled_qty);    
                 // SET STATUS TO FILLED 
-            }
+            } else level.reduce_shares(filled_qty);
 
             Quote q = generate_quote_(
                 ticker_, fill_price, orderbook_.best_bid(), orderbook_.best_ask(), volume_
@@ -102,7 +114,7 @@ void exchange::MatchingEngine::match_DAY_buy_(Message<exchange::Order>& msg) {
     // it->second = PriceLevel&
 
     while (it != orderbook_.asks().end() && msg.payload.qty > 0) { 
-        if (it->first < msg.payload.price 
+        if (it->first > msg.payload.price 
                 && msg.payload.ord_type != OrderType::MARKET) {  
             // add what ever is left on the order
             // useful for init of orderbook if this is the first order coming in 
@@ -121,7 +133,7 @@ void exchange::MatchingEngine::match_DAY_buy_(Message<exchange::Order>& msg) {
                 continue;
             }
 
-            const uint64_t filled_qty{ std::min(msg.payload.qty, msg.payload.qty) };
+            const uint64_t filled_qty{ std::min(msg.payload.qty, match.payload.qty) };
             const uint64_t fill_price{ match.payload.price };
 
             volume_ += filled_qty;
@@ -176,7 +188,7 @@ void exchange::MatchingEngine::match_IOC_sell_(Message<exchange::Order>& msg) {
                 continue;
             }
 
-            const uint64_t filled_qty{ std::min(msg.payload.qty, msg.payload.qty) };
+            const uint64_t filled_qty{ std::min(msg.payload.qty, match.payload.qty) };
             const uint64_t fill_price{ match.payload.price };
 
             volume_ += filled_qty;
@@ -224,7 +236,7 @@ void exchange::MatchingEngine::match_IOC_buy_(Message<exchange::Order>& msg) {
                 continue;
             }
 
-            const uint64_t filled_qty{ std::min(msg.payload.qty, msg.payload.qty) };
+            const uint64_t filled_qty{ std::min(msg.payload.qty, match.payload.qty) };
             const uint64_t fill_price{ match.payload.price };
 
             volume_ += filled_qty;
@@ -276,7 +288,7 @@ void exchange::MatchingEngine::match_FOK_buy_(Message<exchange::Order>& msg) {
                 continue;
             }
 
-            const uint64_t filled_qty{ std::min(msg.payload.qty, msg.payload.qty) };
+            const uint64_t filled_qty{ std::min(msg.payload.qty, match.payload.qty) };
             const uint64_t fill_price{ match.payload.price };
 
             volume_ += filled_qty;
@@ -328,7 +340,7 @@ void exchange::MatchingEngine::match_FOK_sell_(Message<exchange::Order>& msg) {
                 continue;
             }
 
-            const uint64_t filled_qty{ std::min(msg.payload.qty, msg.payload.qty) };
+            const uint64_t filled_qty{ std::min(msg.payload.qty, match.payload.qty) };
             const uint64_t fill_price{ match.payload.price };
 
             volume_ += filled_qty;

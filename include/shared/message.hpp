@@ -52,7 +52,10 @@ struct Message {
 
     // i dont think we can just print this out because the payload being printable is not known
     friend std::ostream& operator<<(std::ostream& os, const Message& m) {
-        os << "temp" << "\n";
+        os << "Session ID: " << m.session_id << "\n";
+        os << "Timestamp: " << m.recv_time << "\n";
+        os << "==Payload==" << "\n";
+        os << m.payload << "\n";
         return os;
     }
 

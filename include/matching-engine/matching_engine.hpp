@@ -44,6 +44,8 @@ public:
     // NEW 
     void cancel(const Message<Cancel>& msg) { orderbook_.cancel_order(msg); } 
 
+    void cancel(const Message<Order>& msg) { orderbook_.cancel_order(msg); }
+
     /** @brief returns the current best asking price */
     uint64_t ask() const { return orderbook_.best_ask(); }
 

@@ -39,11 +39,19 @@ enum struct Trigger : uint8_t {
 };
 
 // Order status 
-// not being used in implementation right now 
 enum struct Status : uint8_t {
     CANCELED = 4, 
     FILLED = 2, 
     PARTIALLY_FILLED = 1, 
     REJECTED = 8,
     NEW = 0
+};
+
+// Payload Type
+// We need this since the Order Struct is shared for 
+// Cancel and actual Orders and the cancel constructor 
+// does not fill out order related methods
+enum struct PayloadType : uint8_t { 
+    ORDER = 0,
+    CANCEL = 1
 };
