@@ -8,11 +8,13 @@
 #include <iostream>
 #include <string>
 #include <cstdint>
+#include <map> 
 
 #include "shared/order.hpp"
 #include "shared/utilities.hpp"
 #include "shared/cancel.hpp"
 #include "shared/trade.hpp"
+#include "shared/message.hpp"
 
 class Gateway: public FIX::Application, public FIX::MessageCracker
 {
@@ -34,14 +36,21 @@ public:
     // Handles new inbound cancel requests -- validates and pushes matching engine queue
     void onMessage(const FIX44::OrderCancelRequest&, const FIX::SessionID&) override;
 
-    // Handles sending trades back to the broker 
+    // Handles sending trades back to the broker  
     void send_trade(const Trade& t, const FIX::SessionID& session_id); 
 
+    // Handles orders in the matching engine that cannot be filled 
+    // can also be called if a order reaches the bottom of the orderbook side that it was walking down 
+    void send_order_cancel(const Message<exchange::Order> msg, const FIX::SessionID& session_id); 
+
     // Handles sending cancel confirmations back to the broker 
-    void send_cancel_confirmation(const Cancel& c, const FIX::SessionID& session_id);
+    void send_cancel(const Cancel& c, const FIX::SessionID& session_id);
 
     void send_rejection(const exchange::Order& o, const FIX::SessionID& session_id);
+
+private: 
     
-    
+    // stores clientside id the internal order id 
+    std::map<uint64_t, uint64_t> clord_to_ord;
 
 };

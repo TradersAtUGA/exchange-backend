@@ -23,11 +23,28 @@ struct Message {
         recv_time = 0;
     }
 
+    /** @brief constructor of a message that needs a session ID, i.e.
+     * needs to be sent back to the gateway via fix back to the broker  
+     * 
+     * @param payload the payload this message should contain 
+     * @param session_id the session_id associated with this message
+     */
     Message(T& payload, const FIX::SessionID& session_id)
         : payload(payload),
         session_id(session_id),
         recv_time(exchange::get_time_ms()) {}
 
+    /** 
+     * @brief constructor of a message that DOES NOT need a session ID,
+     * i.e. does not need to go back to gateway and can be publicly broadcasted
+     * 
+     * @param payload the payload this message should contain 
+     */
+    Message(T& payload) : 
+    payload(payload), recv_time(exchange::get_time_ms()) {
+        FIX::SessionID dummy; 
+        session_id = dummy;
+    }
 
     T payload; 
     FIX::SessionID session_id; // i.e. which broker this came from
@@ -35,7 +52,10 @@ struct Message {
 
     // i dont think we can just print this out because the payload being printable is not known
     friend std::ostream& operator<<(std::ostream& os, const Message& m) {
-        os << "temp" << "\n";
+        os << "Session ID: " << m.session_id << "\n";
+        os << "Timestamp: " << m.recv_time << "\n";
+        os << "==Payload==" << "\n";
+        os << m.payload << "\n";
         return os;
     }
 

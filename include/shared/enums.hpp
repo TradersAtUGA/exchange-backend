@@ -1,5 +1,6 @@
 #pragma once
 #include <cstdint>
+#include <cstring>
 
 /*
     Note that the integer values in the enums are mapped
@@ -18,6 +19,10 @@ enum struct Side : uint8_t {
 enum struct OrderType : uint8_t {
     MARKET = 1, 
     LIMIT = 2,
+    // NOTE: this is not an actual order type associated with FIX
+    // but a result from combining cancel and orders into a
+    // single struct 
+    CANCEL = 0 
 };
 
 // Order's Time In Force
@@ -34,12 +39,19 @@ enum struct Trigger : uint8_t {
 };
 
 // Order status 
-// not being used in implementation right now 
 enum struct Status : uint8_t {
-    DEAD = 0, 
-    NO_FILL_YET = 1, 
-    PARTIAL_FILL = 2, 
-    CANNOT_FILL = 3,
-    FILLED = 4,
-    REJECTED = 5, 
+    CANCELED = 4, 
+    FILLED = 2, 
+    PARTIALLY_FILLED = 1, 
+    REJECTED = 8,
+    NEW = 0
+};
+
+// Payload Type
+// We need this since the Order Struct is shared for 
+// Cancel and actual Orders and the cancel constructor 
+// does not fill out order related methods
+enum struct PayloadType : uint8_t { 
+    ORDER = 0,
+    CANCEL = 1
 };

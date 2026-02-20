@@ -111,7 +111,8 @@ void Gateway::onMessage(const FIX44::NewOrderSingle& msg, const FIX::SessionID& 
         tif.getValue(),
         price.getValue(),
         qty.getValue(),
-        clOrdID.getValue()
+        clOrdID.getValue(),
+        symbol.getValue()
     );
 
     std::cout << "Received NewOrderSingle: order_id=" << o.oid
@@ -162,11 +163,11 @@ void Gateway::send_trade(const Trade& trade, const FIX::SessionID& sessionID) {
     //     FIX::ExecID(trade.tid),
     //     FIX::ExecType(FIX::ExecType_FILL),
     //     FIX::OrdStatus(FIX::OrdStatus_FILLED),
-    //     FIX::Side(trade.side),
+    //     FIX::Side(),
     //     FIX::LeavesQty(0),
     //     FIX::CumQty(trade.qty),
     //     FIX::AvgPx(trade.price)
-    // )
+    // );
 
     // // Required / common fields
     // execReport.set(FIX::ClOrdID(trade.cl_ord_id));

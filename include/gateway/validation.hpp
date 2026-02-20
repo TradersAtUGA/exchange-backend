@@ -78,21 +78,21 @@ inline exchange::Order generate_order(
     char tif,
     double price,
     double qty,
-    std::string client_id
+    std::string client_id,
+    const std::string ticker 
 ) {
-    exchange::Order o; 
-    // FIX provided fields 
-    o.side = SIDE_MAP[static_cast<size_t>(side - '0' - 1)];
-    o.order_type = ORD_TYPE_MAP[static_cast<size_t>(order_type- '0' - 1)];
-    o.tif = TIF_MAP[static_cast<size_t>(tif - '0')];
-    o.price = exchange::double_to_uint64_t(price);
-    o.qty = static_cast<uint64_t>(qty); // avoid bit casts for qty  
-    o.cid = std::stoull(client_id);
+    Order o = Order::create_new_order(
+        SIDE_MAP[static_cast<size_t>(side - '0' - 1)],
+        ORD_TYPE_MAP[static_cast<size_t>(order_type - '0' - 1)],
+        TIF_MAP[static_cast<size_t>(tif - '0')],  
+        const_cast<char *>(ticker.c_str()), 
+        exchange::double_to_uint64_t(price), 
+        static_cast<uint64_t>(qty), 
+        1, // sequencer must assign this value
+        0  // this is the client side id idk why the types are diff 
+    );
 
-    // internally filled fields 
-    o.recv_time = exchange::get_time_ns();
-    o.status = 1; // order is alive/valid
-    o.oid = 0; // TODO: SEQUENCER MUST ASSIGN HERE
+    o.status = Status::NEW; 
 
     return o;
 }

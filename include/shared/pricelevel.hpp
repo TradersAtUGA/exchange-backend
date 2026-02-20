@@ -25,12 +25,14 @@ public:
      */
     void push_back(Message<exchange::Order> order) { 
         qty_count_ += order.payload.qty;
+        ++order_count_;
         rb_.enqueue(order); 
     }
 
     /** @brief removes the first order  */
     void pop_front() noexcept { 
         qty_count_ -= front().payload.qty;
+        --order_count_; 
         rb_.dequeue(); 
     }
 
@@ -42,6 +44,7 @@ public:
      */
     void consume_front(uint64_t filled) noexcept {
         qty_count_ -= filled;
+        --order_count_;
         rb_.dequeue();
     }
 
@@ -56,6 +59,16 @@ public:
         qty_count_ -= shares;
     }
 
+    /**
+     * @brief reduces the number of orders 
+     * 
+     * @param orders the number of orders to 
+     * reduce from this price level
+     */
+    void reduce_order_count(uint64_t orders) { 
+        if (orders > order_count_) order_count_ = 0; 
+        order_count_ -= orders;
+    }
 
     /** 
      * @brief returns the first order 
@@ -68,7 +81,7 @@ public:
     Message<exchange::Order>* back_ptr() noexcept { return rb_.back_ptr(); }
 
     /** @brief returns the total number of orders */
-    uint64_t order_count() const noexcept { return rb_.item_count(); }
+    uint64_t order_count() const noexcept { return order_count_; }
 
 
     /** @brief returns the total number of shares */
@@ -97,5 +110,5 @@ public:
 private:
     OrderbookRingBuffer<Message<exchange::Order>, config::RING_BUFFER_SIZE> rb_;
     uint64_t qty_count_;
-    
+    uint64_t order_count_; 
 };

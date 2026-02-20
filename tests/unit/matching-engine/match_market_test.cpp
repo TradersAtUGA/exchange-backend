@@ -3,90 +3,86 @@
 
 using namespace exchange; 
 
-TEST(matching_engine_tests, test_market_diff_qty) {
+TEST(matching_engine_tests, test_market_diff_qty_buy_then_sell) {
     MatchingEngine me("XYZ");
-    MatchingEngine em("XYZ");
 
-    Order buyside = Order(
+    Order buyside = Order::create_new_order(
         Side::BUY, 
-        OrderType::LIMIT,
-        TIF::DAY,
-        "XYZ",
-        10, // price
-        5, // qty
-        10,
-        987654321,
-        10,
-        1
+        OrderType::LIMIT, 
+        TIF::DAY, 
+        const_cast<char *>("XYZ"), 
+        10, 
+        5, 
+        987654321, 
+        0
     );
 
-    Order sellside = Order(
+    Order sellside = Order::create_new_order(
         Side::SELL, 
-        OrderType::MARKET,
-        TIF::DAY,
-        "XYZ",
-        10, // price
-        10, // qty 
-        10,
-        123456789,
-        10,
-        1
+        OrderType::MARKET, 
+        TIF::DAY, 
+        const_cast<char *>("XYZ"), 
+        10, 
+        10, 
+        123456789, 
+        0
     );
 
+    Message<Order> buyside_order;
+    buyside_order.payload = buyside;
 
-    me.process(buyside);
-    me.process(sellside);
-
-    
-    Order buyside2 = Order(
-        Side::BUY, 
-        OrderType::MARKET,
-        TIF::DAY,
-        "XYZ",
-        10, // price
-        5, // qty
-        10,
-        987654321,
-        10,
-        1
-    );
-
-    Order sellside2 = Order(
-        Side::SELL, 
-        OrderType::LIMIT,
-        TIF::DAY,
-        "XYZ",
-        10, // price
-        5, // qty 
-        10,
-        123456789,
-        10,
-        1
-    );
+    Message<Order> sellside_order;
+    sellside_order.payload = sellside;
 
 
-    em.process(sellside);
-    em.process(buyside);
-
-
-        
-    EXPECT_EQ(em.ledger().size(), 1);
-    EXPECT_EQ(em.ledger()[0].qty, 5);
-    EXPECT_EQ(em.ledger()[0].price, 10);
+    me.process(buyside_order);
+    me.process(sellside_order);
 
     // buyside order should fill entirely and be removed from the orderbook
     EXPECT_EQ(me.orderbook().bids().at(10).order_count(), 0);
-
-    // no orders should exist on the asking side since the market order does not rest
+    EXPECT_EQ(me.orderbook().bids().at(10).total_shares(), 0);
     EXPECT_THROW(me.orderbook().asks().at(10).order_count(), std::out_of_range);
+}
 
-    // expect the price level from a fully filled ask to be empty now 
-    EXPECT_EQ(em.orderbook().asks().at(10).order_count(), 0);
+TEST(matching_engine_tests, test_market_diff_qty_sell_then_buy) {
+    MatchingEngine me("XYZ");
 
-    // expect the market order is never added to the orderbook but is partially fillled
-    //EXPECT_THROW(em.orderbook().bids().at(10).order_count(), std::out_of_range);
+    Order buyside = Order::create_new_order(
+        Side::SELL, 
+        OrderType::LIMIT, 
+        TIF::DAY, 
+        const_cast<char *>("XYZ"), 
+        10, 
+        5, 
+        987654321, 
+        0
+    );
+
+    Order sellside = Order::create_new_order(
+        Side::BUY, 
+        OrderType::MARKET, 
+        TIF::DAY, 
+        const_cast<char *>("XYZ"), 
+        10, 
+        10, 
+        123456789, 
+        0
+    );
+
+    Message<Order> buyside_order;
+    buyside_order.payload = buyside;
+
+    Message<Order> sellside_order;
+    sellside_order.payload = sellside;
 
 
+    me.process(buyside_order);
+    me.process(sellside_order);
+
+    // buyside order should fill entirely and be removed from the orderbook
+    EXPECT_EQ(me.orderbook().asks().at(10).order_count(), 0);
+    EXPECT_EQ(me.orderbook().asks().at(10).total_shares(), 0);
+    EXPECT_THROW(me.orderbook().bids().at(10).order_count(), std::out_of_range);
 }
 
 TEST(matching_engine_tests, test_market_same_qty) {

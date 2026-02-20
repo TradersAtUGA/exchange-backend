@@ -20,7 +20,6 @@ struct Trade {
         tid(0),
         qty(0),
         price(0),
-        return_code(0),
         ticker() 
     {}
 
@@ -30,7 +29,7 @@ struct Trade {
         uint64_t trade_id, 
         uint64_t quantity,
         uint64_t price,
-        int8_t return_code,
+
         std::string ticker
     ) : 
         bcid(bidder_id),
@@ -38,7 +37,7 @@ struct Trade {
         tid(trade_id),
         qty(quantity),
         price(price),
-        return_code(return_code),
+
         ticker(ticker)
     {}
 
@@ -48,7 +47,6 @@ struct Trade {
         os << "trade id " << trade.tid << "\n";
         os << "qty filled " << trade.qty << "\n";
         os << "price filled " << trade.price << "\n";
-        os << "return code " << static_cast<int>(trade.return_code) << "\n";
         os << "ticker " << trade.ticker << "\n";
         return os;
     }
@@ -67,7 +65,6 @@ struct Trade {
     uint64_t tid; // trade id (internal)
     uint64_t qty; 
     uint64_t price;
-    int8_t return_code; // internal
     std::string ticker;
 
     // may need a sessionID for both sides 

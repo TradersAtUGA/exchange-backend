@@ -10,9 +10,16 @@
 
 void exchange::MatchingEngine::process(Message<Order>& msg) { 
     mkt_to_lim_(msg.payload); // conv mkt -> lim 
+
+    std::cout << "MATCHING FUNCTION CALL: " << 
+    static_cast<int>(side_lut_converter_(msg.payload.side)) 
+    << ", " << static_cast<int>(order_type_lut_converter_(msg.payload.ord_type)) 
+    << ", " << static_cast<int>(tif_lut_converter_(msg.payload.tif)) 
+    << "\n";
+
     (this->*MATCH_FUNC_LUT
         [side_lut_converter_(msg.payload.side)]
-        [order_type_lut_converter_(msg.payload.order_type)]
+        [order_type_lut_converter_(msg.payload.ord_type)]
         [tif_lut_converter_(msg.payload.tif)]
     )(msg);
 }
@@ -25,12 +32,11 @@ Message<Trade> exchange::MatchingEngine::generate_trade_(
 ) {
 
     Trade t = Trade(
-         bid_order.cid,
-        ask_order.cid,
+        bid_order.coid, // TODO: change later for actual val
+        ask_order.coid,
         static_cast<uint64_t>(1), // this is the trade id we will need some static increment variable
         filled_qty,
         exchange::uint64_t_to_double(trade_price), // price was originally bitcasted 
-        static_cast<int8_t>(1), // trade obj return code; check docs for more info
         bid_order.ticker
     );
 
@@ -50,7 +56,7 @@ void exchange::MatchingEngine::match_DAY_sell_(Message<exchange::Order>& msg) {
 
     while (it != orderbook_.bids().end() && msg.payload.qty > 0) { 
         if (it->first < msg.payload.price 
-                && msg.payload.order_type != OrderType::MARKET) {  
+                && msg.payload.ord_type != OrderType::MARKET) {  
             // add what ever is left on the order
             // useful for init of orderbook if this is the first order coming in 
             on_partial_fill_aggressive_limit_(msg);
@@ -62,24 +68,29 @@ void exchange::MatchingEngine::match_DAY_sell_(Message<exchange::Order>& msg) {
             Message<exchange::Order>& match = it->second.front(); // first order at this price 
             PriceLevel& level = it->second;
 
-            if (msg.payload.status == 0) { // if order dead (canceled)
+            if (msg.payload.status == Status::CANCELED) { // if order dead (canceled)
                 // should be renamed to canceled since cancel order already had their qty removed from the orderbook so it makes more sense we are just dequeueing
                 level.consume_front(0);
                 continue;
             }
 
-            const uint64_t filled_qty{ std::min(msg.payload.qty, msg.payload.qty) };
+            const uint64_t filled_qty{ std::min(msg.payload.qty, match.payload.qty) };
             const uint64_t fill_price{ match.payload.price };
 
+        
             volume_ += filled_qty;
             match.payload.qty -= filled_qty;
-            msg.payload.qty -= filled_qty;
+            msg.payload.qty -= filled_qty; 
+
+            std::cout << 
+            level.total_shares() << " - " << filled_qty << " = " << 
+            level.total_shares() - filled_qty << std::endl;
 
             if (match.payload.qty == 0) { 
                 orderbook_.remove_order_ptr(match.payload.oid);
                 level.consume_front(filled_qty);    
                 // SET STATUS TO FILLED 
-            }
+            } else level.reduce_shares(filled_qty);
 
             Quote q = generate_quote_(
                 ticker_, fill_price, orderbook_.best_bid(), orderbook_.best_ask(), volume_
@@ -93,7 +104,7 @@ void exchange::MatchingEngine::match_DAY_sell_(Message<exchange::Order>& msg) {
 
         ++it; // move to next price
     } 
-    if (msg.payload.order_type != OrderType::MARKET) on_partial_fill_aggressive_limit_(msg);
+    if (msg.payload.ord_type != OrderType::MARKET) on_partial_fill_aggressive_limit_(msg);
 }
 
 void exchange::MatchingEngine::match_DAY_buy_(Message<exchange::Order>& msg) {
@@ -103,8 +114,8 @@ void exchange::MatchingEngine::match_DAY_buy_(Message<exchange::Order>& msg) {
     // it->second = PriceLevel&
 
     while (it != orderbook_.asks().end() && msg.payload.qty > 0) { 
-        if (it->first < msg.payload.price 
-                && msg.payload.order_type != OrderType::MARKET) {  
+        if (it->first > msg.payload.price 
+                && msg.payload.ord_type != OrderType::MARKET) {  
             // add what ever is left on the order
             // useful for init of orderbook if this is the first order coming in 
             on_partial_fill_aggressive_limit_(msg);
@@ -116,13 +127,13 @@ void exchange::MatchingEngine::match_DAY_buy_(Message<exchange::Order>& msg) {
             Message<exchange::Order>& match = it->second.front(); // first order at this price 
             PriceLevel& level = it->second;
 
-            if (msg.payload.status == 0) { // if order dead (canceled)
+            if (msg.payload.status == Status::CANCELED) { // if order dead (canceled)
                 // should be renamed to canceled since cancel order already had their qty removed from the orderbook so it makes more sense we are just dequeueing
                 level.consume_front(0);
                 continue;
             }
 
-            const uint64_t filled_qty{ std::min(msg.payload.qty, msg.payload.qty) };
+            const uint64_t filled_qty{ std::min(msg.payload.qty, match.payload.qty) };
             const uint64_t fill_price{ match.payload.price };
 
             volume_ += filled_qty;
@@ -147,7 +158,7 @@ void exchange::MatchingEngine::match_DAY_buy_(Message<exchange::Order>& msg) {
 
         ++it; // move to next price
     } 
-    if (msg.payload.order_type != OrderType::MARKET) on_partial_fill_aggressive_limit_(msg);
+    if (msg.payload.ord_type != OrderType::MARKET) on_partial_fill_aggressive_limit_(msg);
 }
 
 void exchange::MatchingEngine::on_partial_fill_aggressive_limit_(Message<Order>& o) {
@@ -171,13 +182,13 @@ void exchange::MatchingEngine::match_IOC_sell_(Message<exchange::Order>& msg) {
             Message<exchange::Order>& match = it->second.front(); // first order at this price 
             PriceLevel& level = it->second;
 
-            if (msg.payload.status == 0) { // if order dead (canceled)
+            if (msg.payload.status == Status::CANCELED) { // if order dead (canceled)
                 // should be renamed to canceled since cancel order already had their qty removed from the orderbook so it makes more sense we are just dequeueing
                 level.consume_front(0);
                 continue;
             }
 
-            const uint64_t filled_qty{ std::min(msg.payload.qty, msg.payload.qty) };
+            const uint64_t filled_qty{ std::min(msg.payload.qty, match.payload.qty) };
             const uint64_t fill_price{ match.payload.price };
 
             volume_ += filled_qty;
@@ -219,13 +230,13 @@ void exchange::MatchingEngine::match_IOC_buy_(Message<exchange::Order>& msg) {
             Message<exchange::Order>& match = it->second.front(); // first order at this price 
             PriceLevel& level = it->second;
 
-            if (msg.payload.status == 0) { // if order dead (canceled)
+            if (msg.payload.status == Status::CANCELED) { // if order dead (canceled)
                 // should be renamed to canceled since cancel order already had their qty removed from the orderbook so it makes more sense we are just dequeueing
                 level.consume_front(0);
                 continue;
             }
 
-            const uint64_t filled_qty{ std::min(msg.payload.qty, msg.payload.qty) };
+            const uint64_t filled_qty{ std::min(msg.payload.qty, match.payload.qty) };
             const uint64_t fill_price{ match.payload.price };
 
             volume_ += filled_qty;
@@ -271,13 +282,13 @@ void exchange::MatchingEngine::match_FOK_buy_(Message<exchange::Order>& msg) {
             Message<exchange::Order>& match = it->second.front(); // first order at this price 
             PriceLevel& level = it->second;
 
-            if (msg.payload.status == 0) { // if order dead (canceled)
+            if (msg.payload.status == Status::CANCELED) { // if order dead (canceled)
                 // should be renamed to canceled since cancel order already had their qty removed from the orderbook so it makes more sense we are just dequeueing
                 level.consume_front(0);
                 continue;
             }
 
-            const uint64_t filled_qty{ std::min(msg.payload.qty, msg.payload.qty) };
+            const uint64_t filled_qty{ std::min(msg.payload.qty, match.payload.qty) };
             const uint64_t fill_price{ match.payload.price };
 
             volume_ += filled_qty;
@@ -323,13 +334,13 @@ void exchange::MatchingEngine::match_FOK_sell_(Message<exchange::Order>& msg) {
             Message<exchange::Order>& match = it->second.front(); // first order at this price 
             PriceLevel& level = it->second;
 
-            if (msg.payload.status == 0) { // if order dead (canceled)
+            if (msg.payload.status == Status::CANCELED) { // if order dead (canceled)
                 // should be renamed to canceled since cancel order already had their qty removed from the orderbook so it makes more sense we are just dequeueing
                 level.consume_front(0);
                 continue;
             }
 
-            const uint64_t filled_qty{ std::min(msg.payload.qty, msg.payload.qty) };
+            const uint64_t filled_qty{ std::min(msg.payload.qty, match.payload.qty) };
             const uint64_t fill_price{ match.payload.price };
 
             volume_ += filled_qty;

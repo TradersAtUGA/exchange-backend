@@ -1,4 +1,4 @@
-#include "../../pch.h"
+    #include "../../pch.h"
 
 #include "matching-engine/orderbook.hpp"
 
@@ -10,7 +10,7 @@ using std::uint64_t, std::uint8_t;
 
 void exchange::OrderBook::add_order(Message<exchange::Order> msg) { 
     if (msg.payload.side == Side::BUY) { 
-        bids_[msg.payload.price].push_back(std::forward<Message<exchange::Order>>(msg));
+        bids_[msg.payload.price].push_back(msg);
         order_map_[msg.payload.oid] = bids_[msg.payload.price].back_ptr();
     } else { 
         asks_[msg.payload.price].push_back(std::forward<Message<exchange::Order>>(msg));
@@ -21,9 +21,9 @@ void exchange::OrderBook::add_order(Message<exchange::Order> msg) {
 void exchange::OrderBook::cancel_order(const Message<Cancel>& msg) { 
     auto order_it = order_map_.find(msg.payload.order_id);
     if (order_it == order_map_.end()) return; // order DNE 
-    if (order_it->second->payload.status == 0) return; // order dead
+    if (order_it->second->payload.status == Status::CANCELED) return; // order dead
 
-    order_it->second->payload.status = 0; 
+    order_it->second->payload.status = Status::CANCELED; 
     if (order_it->second->payload.side == Side::BUY) { 
         bids_.at(order_it->second->payload.price)
             .reduce_shares(order_it->second->payload.qty);
@@ -33,6 +33,34 @@ void exchange::OrderBook::cancel_order(const Message<Cancel>& msg) {
     }
     order_map_.erase(order_it);
 }
+
+void exchange::OrderBook::cancel_order(const Message<Order>& msg) { 
+    auto order_it = order_map_.find(msg.payload.cancel_order_id);
+
+    if (order_it == order_map_.end()) return; // order DNE 
+    if (order_it->second->payload.status == Status::CANCELED) return; // order dead
+    
+    const uint64_t price = order_it->second->payload.price; 
+
+    order_it->second->payload.status = Status::CANCELED; 
+    if (order_it->second->payload.side == Side::BUY) { 
+        bids_.at(price)
+            .reduce_shares(order_it->second->payload.qty);
+        bids_.at(price)
+            .reduce_order_count(1);
+    } else { 
+        asks_.at(price)
+            .reduce_shares(order_it->second->payload.qty);
+        asks_.at(price)
+            .reduce_order_count(1);
+    }
+    order_map_.erase(order_it);
+}
+
+void exchange::OrderBook::cancel_order(Order& order) { 
+    // deprecated -- i put this back for linker 
+}   
+
 
 void exchange::OrderBook::remove_order_ptr(uint64_t id) { 
     auto it = orders_.find(id);
@@ -89,26 +117,4 @@ uint8_t exchange::OrderBook::check_bid_shares_limit_ge(uint64_t shares, uint64_t
     return 0;
 }
 
-std::ostream& operator<<(std::ostream& os, const exchange::OrderBook& ob) {
-    os << "BIDS" << "\n";
-    os << "\n";
 
-    for (const auto& [k, v] : ob.bids()) {
-        if (k == 0) continue; // sentinel order
-        os << "For Price Level: " << k << "\n";
-        os << "\n";
-        os << v << "\n";
-        os << "\n";
-    }  
-
-    os << "ASKS" << "\n";
-    os << "\n";
-
-    for (const auto& [k, v] : ob.asks()) {
-        if (k == std::numeric_limits<uint64_t>::max()) continue; // sentinel order
-        os << "Price Level: " << k << "\n";
-        os << "\n";
-        os << v << "\n";
-    }
-    return os;
-}
