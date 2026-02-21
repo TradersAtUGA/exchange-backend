@@ -45,16 +45,13 @@ public:
     void add_order(Message<Order> msg); 
 
     /**
-     * @brief cancels an order that was already placed
+     * @brief cancels an order by marking it as canceled
      * 
-     * @param order order to remove
+     * @param msg the Message<Order> object that 
+     * has a payload type of CANCEL that contains
+     * the order id information on which order to 
+     * cancel 
      */
-    void cancel_order(Order& order);
-
-    // new (use can.payload.order_id)
-    void cancel_order(const Message<Cancel>& msg); 
-
-
     void cancel_order(const Message<Order>& msg); 
 
     /**
@@ -64,8 +61,6 @@ public:
      * @param id the id of the order, must exist 
      */
     void remove_order_ptr(uint64_t id); 
-
-
 
     /** @brief operator overload for std::cout */
     friend std::ostream& operator<<(std::ostream& os, const OrderBook& ob) {
@@ -165,4 +160,4 @@ private:
     std::string ticker_; // orderbook identifier    
 };
 
-}
+} // namespace exchange 

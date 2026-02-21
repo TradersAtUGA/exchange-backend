@@ -8,6 +8,21 @@
 
 #include <iostream> // DEBUG 
 
+/*
+
+The implementation of the matching algorithms are nearly 
+identical 
+
+The differences are 
+
+- DAY matching methods have checks to add partially filled 
+    orders on the orderbook 
+- IOC is identical to DAY but partially filled orders 
+    DO NOT go on the orderbook 
+- FOK is identical to IOC but there is a share count precheck 
+    before attempting to match 
+*/
+
 void exchange::MatchingEngine::process(Message<Order>& msg) { 
     mkt_to_lim_(msg.payload); // conv mkt -> lim 
 
@@ -265,8 +280,11 @@ void exchange::MatchingEngine::match_IOC_buy_(Message<exchange::Order>& msg) {
 
 void exchange::MatchingEngine::match_FOK_buy_(Message<exchange::Order>& msg) {
 
-    if (orderbook_.check_ask_shares_limit_ge(msg.payload.qty, msg.payload.price) == 0) 
-        return; // TODO MARK incoming order as canceled and inform client on the broker side 
+    if (orderbook_.check_ask_shares_limit_ge(msg.payload.qty, msg.payload.price) == 0) {
+        msg.payload.status = Status::CANCELED;
+        // TODO call a FIX hook to inform the client that their order failed to be filled
+        return;
+    }
 
     auto it{ orderbook_.asks().begin() };
     // it->first = price
@@ -317,8 +335,12 @@ void exchange::MatchingEngine::match_FOK_buy_(Message<exchange::Order>& msg) {
 
 void exchange::MatchingEngine::match_FOK_sell_(Message<exchange::Order>& msg) {
 
-    if (orderbook_.check_bid_shares_limit_ge(msg.payload.qty, msg.payload.price) == 0) 
-        return; // TODO MARK incoming order as canceled and inform client on the broker side 
+    if (orderbook_.check_bid_shares_limit_ge(msg.payload.qty, msg.payload.price) == 0) {
+        msg.payload.status = Status::CANCELED;
+        // TODO call a FIX hook to inform the client that their order failed to be filled
+        return;
+    }
+        
 
     auto it{ orderbook_.bids().begin() };
     // it->first = price

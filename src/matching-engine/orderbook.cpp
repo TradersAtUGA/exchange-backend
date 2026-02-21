@@ -1,4 +1,4 @@
-    #include "../../pch.h"
+#include "../../pch.h"
 
 #include "matching-engine/orderbook.hpp"
 
@@ -16,22 +16,6 @@ void exchange::OrderBook::add_order(Message<exchange::Order> msg) {
         asks_[msg.payload.price].push_back(std::forward<Message<exchange::Order>>(msg));
         order_map_[msg.payload.oid] = asks_[msg.payload.price].back_ptr();
     }
-}
-
-void exchange::OrderBook::cancel_order(const Message<Cancel>& msg) { 
-    auto order_it = order_map_.find(msg.payload.order_id);
-    if (order_it == order_map_.end()) return; // order DNE 
-    if (order_it->second->payload.status == Status::CANCELED) return; // order dead
-
-    order_it->second->payload.status = Status::CANCELED; 
-    if (order_it->second->payload.side == Side::BUY) { 
-        bids_.at(order_it->second->payload.price)
-            .reduce_shares(order_it->second->payload.qty);
-    } else { 
-        asks_.at(order_it->second->payload.price)
-            .reduce_shares(order_it->second->payload.qty);
-    }
-    order_map_.erase(order_it);
 }
 
 void exchange::OrderBook::cancel_order(const Message<Order>& msg) { 
@@ -56,11 +40,6 @@ void exchange::OrderBook::cancel_order(const Message<Order>& msg) {
     }
     order_map_.erase(order_it);
 }
-
-void exchange::OrderBook::cancel_order(Order& order) { 
-    // deprecated -- i put this back for linker 
-}   
-
 
 void exchange::OrderBook::remove_order_ptr(uint64_t id) { 
     auto it = orders_.find(id);
