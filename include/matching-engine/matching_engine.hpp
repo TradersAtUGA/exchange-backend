@@ -13,6 +13,7 @@
 #include "shared/utilities.hpp"
 #include "shared/message.hpp"
 #include "shared/quote.hpp"
+#include "shared/publishable_data.hpp"
 
 
 
@@ -34,16 +35,13 @@ public:
      */
     void process(Message<Order>& msg); 
 
-    /**
-     * @brief cancels an order that was already placed
+    /** 
+     * @brief cancel an order in the orderbook 
      * 
-     * @param order the order to cancel
+     * @param msg a Message<Order> object with Payload Type 
+     * of Cancel that contains the order id of the order to 
+     * cancel 
      */
-    void cancel(exchange::Order& order) {orderbook_.cancel_order(order); }
-
-    // NEW 
-    void cancel(const Message<Cancel>& msg) { orderbook_.cancel_order(msg); } 
-
     void cancel(const Message<Order>& msg) { orderbook_.cancel_order(msg); }
 
     /** @brief returns the current best asking price */
@@ -82,6 +80,18 @@ private:
         const uint64_t ask,  
         const uint64_t volume 
     ) { return {ticker, fill_price, bid, ask, volume}; }
+
+    /**
+     * @brief creates a new PublishableData object on a match 
+     * 
+     * @return
+     */
+    PublishableData generate_fill_info_(
+        Message<Order>& bid_order, 
+        Message<Order>& ask_order, 
+        Quote quote, 
+        Trade trade
+    );
     
     // MATCHING ALGOS
 
