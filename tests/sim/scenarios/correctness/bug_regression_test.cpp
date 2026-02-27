@@ -16,6 +16,7 @@ using namespace exchange;
 // Test: Send a MARKET BUY when asks exist. If mkt_to_lim_ doesn't set price
 // to UINT64_MAX, the buy's original price (0) won't cross the ask.
 // ============================================================================
+// Scenario: Mkt To Lim No Op.
 TEST(BugRegression, MktToLimNoOp) {
     // BUG: mkt_to_lim_() discards result — market orders keep price=0
     MatchingEngine me("TEST");
@@ -55,6 +56,7 @@ TEST(BugRegression, MktToLimNoOp) {
 // Test: Place a large sell, then a smaller buy. The sell should have remaining
 // qty and still be on the book.
 // ============================================================================
+// Scenario: Day Match Kills Partial Fill.
 TEST(BugRegression, DayMatchKillsPartialFill) {
     // BUG: DAY matching may incorrectly handle partially-filled resting orders
     MatchingEngine me("TEST");
@@ -98,6 +100,7 @@ TEST(BugRegression, DayMatchKillsPartialFill) {
 //   client_id(client_id)  // should be cid
 // This means order_id and client_id get their own uninitialized/default values.
 // ============================================================================
+// Scenario: Cancel Self Assign.
 TEST(BugRegression, CancelSelfAssign) {
     // BUG: Cancel(cancel_id, oid, cid) self-assigns order_id and client_id
     Cancel c(42, 100, 200);
@@ -116,6 +119,7 @@ TEST(BugRegression, CancelSelfAssign) {
 // result gets implicitly converted back to double, losing the bit pattern.
 // uint64_t_to_double() is declared returning uint64_t — same issue in reverse.
 // ============================================================================
+// Scenario: Util Return Type Swap.
 TEST(BugRegression, UtilReturnTypeSwap) {
     // BUG: double_to_uint64_t returns double, uint64_t_to_double returns uint64_t
 
@@ -150,6 +154,7 @@ TEST(BugRegression, UtilReturnTypeSwap) {
 // RING_BUFFER_SIZE is 1024. Adding a 1025th order at the same price is silently
 // dropped with no error.
 // ============================================================================
+// Scenario: Price Level Silent Drop.
 TEST(BugRegression, PriceLevelSilentDrop) {
     // BUG: PriceLevel ring buffer silently drops orders when full (capacity 1024)
     MatchingEngine me("TEST");

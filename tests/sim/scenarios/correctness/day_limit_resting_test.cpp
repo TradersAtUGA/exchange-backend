@@ -3,6 +3,7 @@
 
 using namespace exchange;
 
+// Scenario: Buy Below Ask Rests On Book.
 TEST(DayLimitResting, BuyBelowAskRestsOnBook) {
     MatchingEngine me("TEST");
 
@@ -25,6 +26,7 @@ TEST(DayLimitResting, BuyBelowAskRestsOnBook) {
     EXPECT_EQ(me.orderbook().bids().at(9).order_count(), 1);
 }
 
+// Scenario: Sell Above Bid Rests On Book.
 TEST(DayLimitResting, SellAboveBidRestsOnBook) {
     MatchingEngine me("TEST");
 
@@ -41,6 +43,7 @@ TEST(DayLimitResting, SellAboveBidRestsOnBook) {
     EXPECT_EQ(me.orderbook().asks().at(11).total_shares(), 30);
 }
 
+// Scenario: Resting Order Then Crossing Match.
 TEST(DayLimitResting, RestingOrderThenCrossingMatch) {
     MatchingEngine me("TEST");
 

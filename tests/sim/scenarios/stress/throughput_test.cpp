@@ -5,6 +5,7 @@
 
 using namespace exchange;
 
+// Scenario: Throughput One Million Orders.
 TEST(Stress, ThroughputOneMillionOrders) {
     MatchingEngine me("TEST");
     sim::PerfTimer timer;
@@ -38,6 +39,7 @@ TEST(Stress, ThroughputOneMillionOrders) {
     EXPECT_GT(ops_per_sec, 100'000.0) << "Throughput below 100K orders/sec";
 }
 
+// Scenario: Per Order Latency.
 TEST(Stress, PerOrderLatency) {
     MatchingEngine me("TEST");
     sim::PerfTimer timer;

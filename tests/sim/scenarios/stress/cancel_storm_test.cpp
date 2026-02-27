@@ -5,6 +5,7 @@
 
 using namespace exchange;
 
+// Scenario: Cancel Storm.
 TEST(Stress, CancelStorm) {
     MatchingEngine me("TEST");
 

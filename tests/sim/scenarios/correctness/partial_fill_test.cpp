@@ -3,6 +3,7 @@
 
 using namespace exchange;
 
+// Scenario: Buy Consumes Multiple Sells.
 TEST(PartialFill, BuyConsumesMultipleSells) {
     MatchingEngine me("TEST");
 
@@ -33,6 +34,7 @@ TEST(PartialFill, BuyConsumesMultipleSells) {
     EXPECT_EQ(me.volume(), 100);
 }
 
+// Scenario: Sell Consumes Multiple Bids.
 TEST(PartialFill, SellConsumesMultipleBids) {
     MatchingEngine me("TEST");
 
@@ -56,6 +58,7 @@ TEST(PartialFill, SellConsumesMultipleBids) {
     EXPECT_EQ(me.volume(), 100);
 }
 
+// Scenario: Partial Buy Rests On Book.
 TEST(PartialFill, PartialBuyRestsOnBook) {
     MatchingEngine me("TEST");
 
@@ -72,6 +75,7 @@ TEST(PartialFill, PartialBuyRestsOnBook) {
     EXPECT_EQ(me.volume(), 30);
 }
 
+// Scenario: Partial Sell Rests On Book.
 TEST(PartialFill, PartialSellRestsOnBook) {
     MatchingEngine me("TEST");
 

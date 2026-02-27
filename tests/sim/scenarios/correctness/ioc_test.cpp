@@ -3,6 +3,7 @@
 
 using namespace exchange;
 
+// Scenario: Partial Fill Does Not Rest.
 TEST(IOC, PartialFillDoesNotRest) {
     MatchingEngine me("TEST");
 
@@ -32,6 +33,7 @@ TEST(IOC, PartialFillDoesNotRest) {
     }
 }
 
+// Scenario: No Match Discards Entire Order.
 TEST(IOC, NoMatchDiscardsEntireOrder) {
     MatchingEngine me("TEST");
 
@@ -48,6 +50,7 @@ TEST(IOC, NoMatchDiscardsEntireOrder) {
     }
 }
 
+// Scenario: Sell Side IOC.
 TEST(IOC, SellSideIOC) {
     MatchingEngine me("TEST");
 

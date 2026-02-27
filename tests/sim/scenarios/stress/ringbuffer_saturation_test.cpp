@@ -4,6 +4,7 @@
 
 using namespace exchange;
 
+// Scenario: Ring Buffer Exact Capacity.
 TEST(Stress, RingBufferExactCapacity) {
     MatchingEngine me("TEST");
 
@@ -20,6 +21,7 @@ TEST(Stress, RingBufferExactCapacity) {
     EXPECT_TRUE(me.orderbook().asks().at(10).full());
 }
 
+// Scenario: Ring Buffer Overflow.
 TEST(Stress, RingBufferOverflow) {
     MatchingEngine me("TEST");
 
@@ -46,6 +48,7 @@ TEST(Stress, RingBufferOverflow) {
     EXPECT_EQ(me.orderbook().asks().at(10).total_shares(), capacity - 10);
 }
 
+// Scenario: Ring Buffer Bid Side Saturation.
 TEST(Stress, RingBufferBidSideSaturation) {
     MatchingEngine me("TEST");
 

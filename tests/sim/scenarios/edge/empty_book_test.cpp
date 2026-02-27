@@ -4,6 +4,7 @@
 
 using namespace exchange;
 
+// Scenario: Aggressive Buy On Empty Book.
 TEST(EdgeCase, AggressiveBuyOnEmptyBook) {
     MatchingEngine me("TEST");
 
@@ -19,6 +20,7 @@ TEST(EdgeCase, AggressiveBuyOnEmptyBook) {
     EXPECT_TRUE(inv.empty()) << inv;
 }
 
+// Scenario: Aggressive Sell On Empty Book.
 TEST(EdgeCase, AggressiveSellOnEmptyBook) {
     MatchingEngine me("TEST");
 
@@ -32,6 +34,7 @@ TEST(EdgeCase, AggressiveSellOnEmptyBook) {
     EXPECT_TRUE(inv.empty()) << inv;
 }
 
+// Scenario: Market Order On Empty Book.
 TEST(EdgeCase, MarketOrderOnEmptyBook) {
     MatchingEngine me("TEST");
 
@@ -45,6 +48,7 @@ TEST(EdgeCase, MarketOrderOnEmptyBook) {
     EXPECT_TRUE(inv.empty()) << inv;
 }
 
+// Scenario: Market Sell On Empty Book.
 TEST(EdgeCase, MarketSellOnEmptyBook) {
     MatchingEngine me("TEST");
 

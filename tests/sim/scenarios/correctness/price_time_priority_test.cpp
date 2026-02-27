@@ -3,6 +3,7 @@
 
 using namespace exchange;
 
+// Scenario: Fifo Within Same Price Level.
 TEST(PriceTimePriority, FifoWithinSamePriceLevel) {
     MatchingEngine me("TEST");
 
@@ -30,6 +31,7 @@ TEST(PriceTimePriority, FifoWithinSamePriceLevel) {
     EXPECT_EQ(me.volume(), 50);
 }
 
+// Scenario: Better Price Matches First.
 TEST(PriceTimePriority, BetterPriceMatchesFirst) {
     MatchingEngine me("TEST");
 
@@ -55,6 +57,7 @@ TEST(PriceTimePriority, BetterPriceMatchesFirst) {
     EXPECT_EQ(me.volume(), 25);
 }
 
+// Scenario: Bid Side Price Time Priority.
 TEST(PriceTimePriority, BidSidePriceTimePriority) {
     MatchingEngine me("TEST");
 

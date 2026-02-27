@@ -3,6 +3,7 @@
 
 using namespace exchange;
 
+// Scenario: Cancel Resting Sell Then Buy Crosses Empty.
 TEST(CancelOrder, CancelRestingSellThenBuyCrossesEmpty) {
     MatchingEngine me("TEST");
 
@@ -32,6 +33,7 @@ TEST(CancelOrder, CancelRestingSellThenBuyCrossesEmpty) {
         << "Buy should rest since the sell was cancelled";
 }
 
+// Scenario: Cancel Non Existent Order No Crash.
 TEST(CancelOrder, CancelNonExistentOrderNoCrash) {
     MatchingEngine me("TEST");
 
@@ -45,6 +47,7 @@ TEST(CancelOrder, CancelNonExistentOrderNoCrash) {
     EXPECT_EQ(me.orderbook().asks().at(10).total_shares(), 10);
 }
 
+// Scenario: Double Cancel No Crash.
 TEST(CancelOrder, DoubleCancelNoCrash) {
     MatchingEngine me("TEST");
 
@@ -62,6 +65,7 @@ TEST(CancelOrder, DoubleCancelNoCrash) {
     EXPECT_EQ(me.orderbook().asks().at(10).total_shares(), 0);
 }
 
+// Scenario: Cancel Bid Order.
 TEST(CancelOrder, CancelBidOrder) {
     MatchingEngine me("TEST");
 

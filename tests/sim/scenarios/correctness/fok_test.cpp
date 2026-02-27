@@ -3,6 +3,7 @@
 
 using namespace exchange;
 
+// Scenario: Reject When Insufficient Shares.
 TEST(FOK, RejectWhenInsufficientShares) {
     MatchingEngine me("TEST");
 
@@ -27,6 +28,7 @@ TEST(FOK, RejectWhenInsufficientShares) {
     }
 }
 
+// Scenario: Fill When Exact Shares Available.
 TEST(FOK, FillWhenExactSharesAvailable) {
     MatchingEngine me("TEST");
 
@@ -44,6 +46,7 @@ TEST(FOK, FillWhenExactSharesAvailable) {
     EXPECT_EQ(me.orderbook().asks().at(10).total_shares(), 0);
 }
 
+// Scenario: Fill When More Than Enough Shares.
 TEST(FOK, FillWhenMoreThanEnoughShares) {
     MatchingEngine me("TEST");
 
@@ -59,6 +62,7 @@ TEST(FOK, FillWhenMoreThanEnoughShares) {
     EXPECT_EQ(me.orderbook().asks().at(10).total_shares(), 50);
 }
 
+// Scenario: Sell Side FOKReject.
 TEST(FOK, SellSideFOKReject) {
     MatchingEngine me("TEST");
 
@@ -74,6 +78,7 @@ TEST(FOK, SellSideFOKReject) {
     EXPECT_EQ(me.orderbook().bids().at(10).total_shares(), 50);
 }
 
+// Scenario: Limit Price Restriction.
 TEST(FOK, LimitPriceRestriction) {
     MatchingEngine me("TEST");
 

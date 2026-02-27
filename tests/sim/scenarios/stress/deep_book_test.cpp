@@ -6,6 +6,7 @@
 
 using namespace exchange;
 
+// Scenario: Deep Book Build.
 TEST(Stress, DeepBookBuild) {
     MatchingEngine me("TEST");
     sim::PerfTimer timer;

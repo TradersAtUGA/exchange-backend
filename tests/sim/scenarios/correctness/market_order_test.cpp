@@ -3,6 +3,7 @@
 
 using namespace exchange;
 
+// Scenario: Buy Sweeps Multiple Ask Levels.
 TEST(MarketOrder, BuySweepsMultipleAskLevels) {
     MatchingEngine me("TEST");
 
@@ -24,6 +25,7 @@ TEST(MarketOrder, BuySweepsMultipleAskLevels) {
     EXPECT_EQ(me.volume(), 25);
 }
 
+// Scenario: Sell Sweeps Multiple Bid Levels.
 TEST(MarketOrder, SellSweepsMultipleBidLevels) {
     MatchingEngine me("TEST");
 
@@ -44,6 +46,7 @@ TEST(MarketOrder, SellSweepsMultipleBidLevels) {
     EXPECT_EQ(me.volume(), 25);
 }
 
+// Scenario: Market Order On Empty Book Does Not Crash.
 TEST(MarketOrder, MarketOrderOnEmptyBookDoesNotCrash) {
     MatchingEngine me("TEST");
 

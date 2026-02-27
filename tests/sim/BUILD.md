@@ -11,13 +11,14 @@ sudo apt install -y git cmake ninja-build g++-13 pkg-config curl zip unzip tar
 # sudo dnf install -y git cmake ninja-build gcc-c++ pkgconf curl zip unzip tar
 ```
 
-## Set up vcpkg
+## Set up vcpkg at `~/vcpkg`
 
 ```bash
-git clone https://github.com/microsoft/vcpkg.git /opt/vcpkg
-cd /opt/vcpkg
+# If you already downloaded it, skip clone and only bootstrap.
+# git clone https://github.com/microsoft/vcpkg.git ~/vcpkg
+cd ~/vcpkg
 ./bootstrap-vcpkg.sh
-export VCPKG_ROOT=/opt/vcpkg
+export VCPKG_ROOT="$HOME/vcpkg"
 ```
 
 ## Build simulation tests
@@ -27,7 +28,7 @@ cd exchange-backend
 
 # Configure — only builds simulation tests + matching_engine dependency
 cmake -S . -B build -G Ninja \
-  -DCMAKE_TOOLCHAIN_FILE=/opt/vcpkg/scripts/buildsystems/vcpkg.cmake \
+  -DCMAKE_TOOLCHAIN_FILE="$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake" \
   -DCMAKE_CXX_COMPILER=g++-13 \
   -DBUILD_SIMULATION=ON
 
@@ -42,11 +43,12 @@ cd build && ctest --output-on-failure
 
 ```bash
 sudo apt install -y git cmake ninja-build g++-13 curl zip unzip tar \
-  && git clone https://github.com/microsoft/vcpkg.git /opt/vcpkg \
-  && /opt/vcpkg/bootstrap-vcpkg.sh \
+  && [ -d "$HOME/vcpkg" ] || git clone https://github.com/microsoft/vcpkg.git "$HOME/vcpkg" \
+  && "$HOME/vcpkg/bootstrap-vcpkg.sh" \
+  && export VCPKG_ROOT="$HOME/vcpkg" \
   && cd exchange-backend \
   && cmake -S . -B build -G Ninja \
-       -DCMAKE_TOOLCHAIN_FILE=/opt/vcpkg/scripts/buildsystems/vcpkg.cmake \
+       -DCMAKE_TOOLCHAIN_FILE="$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake" \
        -DCMAKE_CXX_COMPILER=g++-13 \
        -DBUILD_SIMULATION=ON \
   && cmake --build build --target sim_tests \

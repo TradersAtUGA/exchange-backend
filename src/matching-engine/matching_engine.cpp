@@ -11,12 +11,6 @@
 void exchange::MatchingEngine::process(Message<Order>& msg) { 
     mkt_to_lim_(msg.payload); // conv mkt -> lim 
 
-    std::cout << "MATCHING FUNCTION CALL: " << 
-    static_cast<int>(side_lut_converter_(msg.payload.side)) 
-    << ", " << static_cast<int>(order_type_lut_converter_(msg.payload.ord_type)) 
-    << ", " << static_cast<int>(tif_lut_converter_(msg.payload.tif)) 
-    << "\n";
-
     (this->*MATCH_FUNC_LUT
         [side_lut_converter_(msg.payload.side)]
         [order_type_lut_converter_(msg.payload.ord_type)]
@@ -82,9 +76,9 @@ void exchange::MatchingEngine::match_DAY_sell_(Message<exchange::Order>& msg) {
             match.payload.qty -= filled_qty;
             msg.payload.qty -= filled_qty; 
 
-            std::cout << 
-            level.total_shares() << " - " << filled_qty << " = " << 
-            level.total_shares() - filled_qty << std::endl;
+            // std::cout << 
+            // level.total_shares() << " - " << filled_qty << " = " << 
+            // level.total_shares() - filled_qty << std::endl;
 
             if (match.payload.qty == 0) { 
                 orderbook_.remove_order_ptr(match.payload.oid);

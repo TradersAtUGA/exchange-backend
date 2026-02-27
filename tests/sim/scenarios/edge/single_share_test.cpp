@@ -4,6 +4,7 @@
 
 using namespace exchange;
 
+// Scenario: Single Share Orders.
 TEST(EdgeCase, SingleShareOrders) {
     MatchingEngine me("TEST");
 

@@ -3,6 +3,7 @@
 
 using namespace exchange;
 
+// Scenario: Duplicate Oid Overwrites Order Map.
 TEST(EdgeCase, DuplicateOidOverwritesOrderMap) {
     MatchingEngine me("TEST");
 
@@ -22,6 +23,7 @@ TEST(EdgeCase, DuplicateOidOverwritesOrderMap) {
     // Cancelling oid=42 should affect the second order (last write wins).
 }
 
+// Scenario: Duplicate Oid Different Sides.
 TEST(EdgeCase, DuplicateOidDifferentSides) {
     MatchingEngine me("TEST");
 

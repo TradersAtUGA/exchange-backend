@@ -9,6 +9,7 @@
 
 using namespace exchange;
 
+// Scenario: Full Simulation10 KTicks.
 TEST(MultiAgent, FullSimulation10KTicks) {
     MatchingEngine me("TEST");
 

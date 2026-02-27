@@ -5,6 +5,7 @@
 
 using namespace exchange;
 
+// Scenario: Minimum Real Price.
 TEST(EdgeCase, MinimumRealPrice) {
     MatchingEngine me("TEST");
 
@@ -20,6 +21,7 @@ TEST(EdgeCase, MinimumRealPrice) {
     EXPECT_EQ(me.volume(), 10);
 }
 
+// Scenario: Maximum Real Price.
 TEST(EdgeCase, MaximumRealPrice) {
     MatchingEngine me("TEST");
 
@@ -37,6 +39,7 @@ TEST(EdgeCase, MaximumRealPrice) {
     EXPECT_EQ(me.volume(), 10);
 }
 
+// Scenario: Price At Ask Sentinel.
 TEST(EdgeCase, PriceAtAskSentinel) {
     MatchingEngine me("TEST");
 
@@ -52,6 +55,7 @@ TEST(EdgeCase, PriceAtAskSentinel) {
     EXPECT_GE(me.orderbook().asks().at(sentinel_price).total_shares(), 10);
 }
 
+// Scenario: Price At Bid Sentinel.
 TEST(EdgeCase, PriceAtBidSentinel) {
     MatchingEngine me("TEST");
 
