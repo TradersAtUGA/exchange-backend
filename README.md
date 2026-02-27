@@ -11,16 +11,31 @@ Prototype exchange backend for order matching, market data, and simulation.
 
 ## Getting Started
 
-### Build with Docker
-```bash
-docker build -f docker/Dockerfile.matcher -t exchange-backend .
-docker run --network host exchange-backend
+### Release mode
+```sh
+cmake --list-presets                    # list configure presets
+cmake --preset release                  # configure
+cmake --build --preset release-build      # build
+./build/release/apps/test_comp            # run
 ```
 
-## Build locally with Cmake
-mkdir build && cd build
-cmake ..
-make
+### Debug mode
+```sh
+cmake --list-presets                    # list configure presets
+cmake --preset debug                    # configure
+cmake --build --preset debug-build      # build
+./build/debug/apps/test_comp            # run
+```
+
+### Unit test
+```sh
+cmake --list-presets                   # list configure presets
+cmake --preset unit-config             # configure
+cmake --build --preset unit-build      # build
+ctest --preset run-unit-test           # test
+```
+
+
 
 ## Requirements
 - Cmake 

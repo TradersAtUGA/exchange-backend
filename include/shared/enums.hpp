@@ -55,3 +55,10 @@ enum struct PayloadType : uint8_t {
     ORDER = 0,
     CANCEL = 1
 };
+
+// IPC RingBuffer Selection
+enum class IPCKey : uint8_t {
+    INBOUND_TO_MATCHING_ENGINE     = 1,
+    MATCHING_ENGINE_TO_BROADCASTER = 2,
+    MATHCING_ENGINE_TO_INDIVIDUAL  = 3
+};

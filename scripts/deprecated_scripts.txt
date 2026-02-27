@@ -1,0 +1,73 @@
+If you need these scripts remove them from this file
+
+# build_dev.sh
+docker build -f Dockerfile.dev -t exchange-dev .
+
+# build_prod.sh
+docker build -t exchange-prod .
+
+# cmake_testing.sh
+cmake -S /app -B /app/build -G Ninja \
+  -DCMAKE_TOOLCHAIN_FILE=/opt/vcpkg/scripts/buildsystems/vcpkg.cmake \
+  && cmake --build /app/build --target test_comp \
+  && ./build/apps/test_comp
+
+# configure_dev.sh
+cmake -G Ninja -B build -DCMAKE_BUILD_TYPE=Debug \
+    -DCMAKE_TOOLCHAIN_FILE=/opt/vcpkg/scripts/buildsystems/vcpkg.cmake \
+
+# run_dev.sh 
+docker run --rm -it -v $(pwd):/app exchange-dev
+
+# run_prod.sh 
+docker run --rm -p 11000:11000 exchange-prod
+
+# server_test.sh 
+URL="http://localhost:11000/order-send"
+count=0
+# Function to run when Ctrl+C (SIGINT) is pressed
+cleanup() {
+  echo -e "\nStopped. Total requests sent: $count"
+  exit 0
+}
+# Trap SIGINT and call cleanup
+trap cleanup SIGINT
+# Infinite loop
+while true; do
+  JSON=$(cat <<EOF
+{
+  "client_id": 10,
+  "order_id": $count,
+  "side": "buy",
+  "type": "market",
+  "ticker": "XYZ",
+  "price": 10,
+  "quantity": 10,
+  "timestamp": 10,
+  "remaining": 10
+}
+EOF
+)
+  curl -s -X POST "$URL" \
+    -H "Content-Type: application/json" \
+    -d "$JSON"
+  ((count++))
+  # sleep 1  
+done
+
+
+# test.sh
+docker run --rm -v "$(pwd)":/workspace exchange_backend_image \
+bash -c "mkdir -p /workspace/build && cd /workspace/build \
+&& cmake -DCMAKE_TOOLCHAIN_FILE=/vcpkg/scripts/buildsystems/vcpkg.cmake -DBUILD_TESTING=ON .. \
+&& cmake --build . --target all && ctest --output-on-failure"
+# ngl the --target all is literally compiling everything so running tests kinda slow
+
+# tests_unit.sh 
+cmake -S /app -B /app/build -G Ninja \
+  -DCMAKE_TOOLCHAIN_FILE=/vcpkg/scripts/buildsystems/vcpkg.cmake \
+  -DBUILD_UNIT_TESTING=ON \
+  -DBUILD_PERF_TESTING=OFF \
+  && cmake --build /app/build --target unit_tests \
+  && cd /app/build \
+  && ctest --output-on-failure
