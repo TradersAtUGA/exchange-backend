@@ -1,0 +1,77 @@
+{
+    "version": 6,
+    "cmakeMinimumRequired": {
+        "major": 3,
+        "minor": 25,
+        "patch": 0
+    },
+    "configurePresets": [
+        {
+            "name": "base",
+            "hidden": true,
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build/${presetName}",
+            "toolchainFile": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake"
+        },
+        {
+            "name": "debug",
+            "inherits": "base",
+            "displayName": "Dev Debug (all test)",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug",
+                "BUILD_UNIT_TESTING": "ON",
+                "BUILD_PERF_TESTING": "ON",
+                "ENABLE_LOGGING": "ON"
+            }
+        },
+        {
+            "name": "release",
+            "inherits": "base",
+            "displayName": "Release (no test)",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release",
+                "BUILD_UNIT_TESTING": "OFF",
+                "BUILD_PERF_TESTING": "OFF",
+                "ENABLE_LOGGING": "OFF"
+            }
+        },
+        {
+            "name": "unit-config",
+            "inherits": "base",
+            "displayName": "unit tests",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release",
+                "BUILD_UNIT_TESTING": "ON",
+                "BUILD_PERF_TESTING": "OFF",
+                "ENABLE_LOGGING": "OFF"
+            }
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "debug-build",
+            "configurePreset": "debug",
+            "jobs": 8,
+            "targets": ["test_comp"]
+        },
+        {
+            "name": "release-build",
+            "configurePreset": "release",
+            "jobs": 8,
+            "targets": ["test_comp"]
+        },
+        {
+            "name": "unit-build",
+            "configurePreset": "unit-config",
+            "jobs": 8,
+            "targets": ["unit_tests", "test_comp"]
+        }
+    ],
+    "testPresets": [
+        {
+            "name": "run-unit-test",
+            "configurePreset": "unit-config",
+            "output": { "outputOnFailure": true }
+        }
+    ]
+}

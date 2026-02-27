@@ -24,9 +24,10 @@ namespace config {
 
     // Ring buffer
     inline constexpr uint32_t RING_BUFFER_SIZE = 1024;
+    inline constexpr const char* FILEPATH = "buffer";
 
     // Ring buffer number of consumers
-    inline constexpr uint8_t NUM_CONSUMERS = 2;
+    [[deprecated]] inline constexpr uint8_t NUM_CONSUMERS = 2;
 
     // Outbound
     // PUBLIC broadcaster 
