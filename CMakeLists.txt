@@ -27,6 +27,13 @@ if(BUILD_PERF_TESTING)
   add_subdirectory(tests/perf/)
 endif()
 
+option(BUILD_SIMULATION "Build simulation test suite" OFF)
+
+if(BUILD_SIMULATION)
+  enable_testing()
+  add_subdirectory(tests/sim/)
+endif()
+
 #
 ## Unit Tests
 #option(BUILD_TESTING "Build unit tests" ON)
